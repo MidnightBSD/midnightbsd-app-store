@@ -31,10 +31,13 @@ public class Package implements Serializable {
     @Column(name = "id", updatable = false)
     private int id;
 
+    @Column(name="name", nullable = false)
     private String name;
 
+    @Column(name="description",columnDefinition="TEXT",length = 65616)
     private String description;
 
+    @Column(name="url")
     private String url;
 
     @ManyToMany(cascade = CascadeType.ALL)

@@ -27,10 +27,11 @@ public class PackageInstance implements Serializable {
     @Column(name = "id", updatable = false)
     private int id;
 
+    @Column(name="version", nullable = false)
     private String version;
 
     @ManyToOne
-    @JoinColumn(name = "operating_system_id")
+    @JoinColumn(name = "os_id")
     private OperatingSystem operatingSystem;
 
     @ManyToOne

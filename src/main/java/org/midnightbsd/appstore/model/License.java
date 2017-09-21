@@ -34,6 +34,6 @@ public class License implements Serializable {
     @Column(name="description",columnDefinition="TEXT",length = 65616)
     private String description;
 
-    @Column(name="url", nullable = false)
+    @Column(name="url")
     private String url;
 }
