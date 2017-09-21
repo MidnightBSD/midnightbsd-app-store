@@ -14,4 +14,6 @@ import java.util.List;
 public interface OperatingSystemRepository extends JpaRepository<OperatingSystem,Integer> {
 
     List<OperatingSystem> findByName(@Param("name") String name);
+
+    OperatingSystem findByNameAndVersion(@Param("name") String name, @Param("version") String version);
 }
