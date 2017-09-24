@@ -91,7 +91,7 @@ public class MagusImportService {
            for (Port port : ports) {
                String catAndName = port.getPort();
                String name = catAndName.substring(catAndName.indexOf('/') + 1);
-               org.midnightbsd.appstore.model.Package pkg = packageRepository.findByName(name);
+               org.midnightbsd.appstore.model.Package pkg = packageRepository.findOneByName(name);
                if (pkg == null)
                    pkg = new org.midnightbsd.appstore.model.Package();
 
