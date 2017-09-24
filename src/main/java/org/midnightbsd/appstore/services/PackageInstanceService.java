@@ -17,9 +17,13 @@ import java.util.List;
 @Service
 public class PackageInstanceService implements AppService<PackageInstance> {
 
+    private final PackageInstanceRepository packageInstanceRepository;
+
     @Autowired
-    private PackageInstanceRepository packageInstanceRepository;
-    
+    public PackageInstanceService(final PackageInstanceRepository packageInstanceRepository) {
+        this.packageInstanceRepository = packageInstanceRepository;
+    }
+
     @Override
     public List<PackageInstance> list() {
         return packageInstanceRepository.findAll();

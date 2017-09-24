@@ -1,7 +1,6 @@
 package org.midnightbsd.appstore.services;
 
 import lombok.extern.slf4j.Slf4j;
-import org.midnightbsd.appstore.model.Architecture;
 import org.midnightbsd.appstore.model.OperatingSystem;
 import org.midnightbsd.appstore.repository.OperatingSystemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,15 +23,15 @@ public class OperatingSystemService implements AppService<OperatingSystem> {
         return repository.findAll();
     }
 
-    public Page<OperatingSystem> get(Pageable page) {
+    public Page<OperatingSystem> get(final Pageable page) {
         return repository.findAll(page);
     }
 
-    public OperatingSystem get(int id) {
+    public OperatingSystem get(final int id) {
         return repository.findOne(id);
     }
 
-    public OperatingSystem getByNameAndVersion(String name, String version) {
+    public OperatingSystem getByNameAndVersion(final String name, final String version) {
         return repository.findByNameAndVersion(name, version);
     }
 }

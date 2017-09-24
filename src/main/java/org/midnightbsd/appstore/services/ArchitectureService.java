@@ -17,22 +17,26 @@ import java.util.List;
 @Service
 public class ArchitectureService implements AppService<Architecture> {
 
+    private final ArchitectureRepository repository;
+
     @Autowired
-    private ArchitectureRepository repository;
+    public ArchitectureService(final ArchitectureRepository repository) {
+        this.repository = repository;
+    }
 
     public List<Architecture> list() {
         return repository.findAll();
     }
 
-    public Page<Architecture> get(Pageable page) {
+    public Page<Architecture> get(final Pageable page) {
         return repository.findAll(page);
     }
 
-    public Architecture get(int id) {
+    public Architecture get(final int id) {
         return repository.findOne(id);
     }
 
-    public Architecture getByName(String name) {
+    public Architecture getByName(final String name) {
         return repository.findOneByName(name);
     }
 }

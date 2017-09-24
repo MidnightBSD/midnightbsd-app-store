@@ -1,7 +1,6 @@
 package org.midnightbsd.appstore.services;
 
 import groovy.util.logging.Slf4j;
-import org.midnightbsd.appstore.model.Category;
 import org.midnightbsd.appstore.model.Package;
 import org.midnightbsd.appstore.repository.PackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +17,13 @@ import java.util.List;
 @Service
 public class PackageService implements AppService<Package> {
 
+    private final PackageRepository packageRepository;
+
     @Autowired
-    private PackageRepository packageRepository;
-    
+    public PackageService(final PackageRepository packageRepository) {
+        this.packageRepository = packageRepository;
+    }
+
     @Override
     public List<Package> list() {
         return packageRepository.findAll();
@@ -37,6 +40,6 @@ public class PackageService implements AppService<Package> {
     }
 
     public Package getByName(final String name) {
-           return packageRepository.findOneByName(name);
-       }
+        return packageRepository.findOneByName(name);
+    }
 }

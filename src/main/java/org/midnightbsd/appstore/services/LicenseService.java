@@ -1,7 +1,6 @@
 package org.midnightbsd.appstore.services;
 
 import lombok.extern.slf4j.Slf4j;
-import org.midnightbsd.appstore.model.Architecture;
 import org.midnightbsd.appstore.model.License;
 import org.midnightbsd.appstore.repository.LicenseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,22 +17,26 @@ import java.util.List;
 @Service
 public class LicenseService implements AppService<License> {
 
+    private final LicenseRepository repository;
+
     @Autowired
-    private LicenseRepository repository;
+    public LicenseService(final LicenseRepository repository) {
+        this.repository = repository;
+    }
 
     public List<License> list() {
         return repository.findAll();
     }
 
-    public Page<License> get(Pageable page) {
+    public Page<License> get(final Pageable page) {
         return repository.findAll(page);
     }
 
-    public License get(int id) {
+    public License get(final int id) {
         return repository.findOne(id);
     }
 
-    public License getByName(String name) {
+    public License getByName(final String name) {
         return repository.findOneByName(name);
     }
 }

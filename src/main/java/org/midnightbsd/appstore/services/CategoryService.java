@@ -17,8 +17,12 @@ import java.util.List;
 @Service
 public class CategoryService implements AppService<Category> {
 
+    private final CategoryRepository categoryRepository;
+
     @Autowired
-    private CategoryRepository categoryRepository;
+    public CategoryService(final CategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
+    }
 
     @Override
     public List<Category> list() {

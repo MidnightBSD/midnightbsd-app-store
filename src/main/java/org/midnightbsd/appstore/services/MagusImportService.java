@@ -87,10 +87,10 @@ public class MagusImportService {
                 os = operatingSystemRepository.saveAndFlush(os);
             }
 
-           List<Port> ports = getPorts(run.getId(), MAGUS_STATUS_PASS);
-           for (Port port : ports) {
-               String catAndName = port.getPort();
-               String name = catAndName.substring(catAndName.indexOf('/') + 1);
+           final List<Port> ports = getPorts(run.getId(), MAGUS_STATUS_PASS);
+           for (final Port port : ports) {
+               final String catAndName = port.getPort();
+               final String name = catAndName.substring(catAndName.indexOf('/') + 1);
                org.midnightbsd.appstore.model.Package pkg = packageRepository.findOneByName(name);
                if (pkg == null)
                    pkg = new org.midnightbsd.appstore.model.Package();
@@ -99,29 +99,28 @@ public class MagusImportService {
                // TODO: other metadata
                pkg = packageRepository.saveAndFlush(pkg);
 
-               List<PackageInstance> packageInstances = packageInstanceRepository.findByPackageAndOperatingSystemAndArchitecture(pkg, os, arch);
+               final List<PackageInstance> packageInstances = packageInstanceRepository.findByPackageAndOperatingSystemAndArchitecture(pkg, os, arch);
                if (packageInstances != null &&  ! packageInstances.isEmpty())
                {
                    // reload  TODO: update?
                   packageInstanceRepository.delete(packageInstances);
                }
 
-               PackageInstance packageInstance = new PackageInstance();
+               final PackageInstance packageInstance = new PackageInstance();
                packageInstance.setArchitecture(arch);
                packageInstance.setOperatingSystem(os);
                packageInstance.setVersion(port.getVersion());
                packageInstance.setPkg(pkg);
-               packageInstance = packageInstanceRepository.saveAndFlush(packageInstance);
+               packageInstanceRepository.saveAndFlush(packageInstance);
            }
         }
     }
 
     public List<Run> getFilteredRuns() {
-        List<Run> runs = getRuns().stream().filter( r -> r.getBlessed() == true && (
+        return getRuns().stream().filter( r -> r.getBlessed() && (
                         r.getStatus().equalsIgnoreCase("complete") ||
                         r.getStatus().equalsIgnoreCase("active")))
                         .sorted(Comparator.comparingInt(Run::getId)).collect(Collectors.toList());
-        return runs;
     }
 
     public List<Run> getRuns() {

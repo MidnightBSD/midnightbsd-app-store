@@ -16,9 +16,12 @@ import java.util.List;
 @Slf4j
 @Service
 public class RatingService implements AppService<Rating> {
-    @Autowired
-    private RatingRepository ratingRepository;
+    private final RatingRepository ratingRepository;
 
+    @Autowired
+    public RatingService(final RatingRepository ratingRepository) {
+        this.ratingRepository = ratingRepository;
+    }
 
     @Override
     public List<Rating> list() {
