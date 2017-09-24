@@ -13,5 +13,5 @@ import java.util.List;
  */
 @Repository
 public interface PackageRepository extends JpaRepository<org.midnightbsd.appstore.model.Package, Integer> {
-    org.midnightbsd.appstore.model.Package findByName(@Param("name") String name);
+    org.midnightbsd.appstore.model.Package findOneByName(@Param("name") String name);
 }

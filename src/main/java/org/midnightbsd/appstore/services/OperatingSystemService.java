@@ -1,6 +1,7 @@
 package org.midnightbsd.appstore.services;
 
 import lombok.extern.slf4j.Slf4j;
+import org.midnightbsd.appstore.model.Architecture;
 import org.midnightbsd.appstore.model.OperatingSystem;
 import org.midnightbsd.appstore.repository.OperatingSystemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import java.util.List;
  */
 @Slf4j
 @Service
-public class OperatingSystemService {
+public class OperatingSystemService implements AppService<OperatingSystem> {
     @Autowired
     private OperatingSystemRepository repository;
 

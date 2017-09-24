@@ -1,8 +1,7 @@
 package org.midnightbsd.appstore.ctl.api;
 
 import org.midnightbsd.appstore.model.Category;
-import org.midnightbsd.appstore.model.Package;
-import org.midnightbsd.appstore.services.PackageService;
+import org.midnightbsd.appstore.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,24 +15,24 @@ import java.util.List;
  * @author Lucas Holt
  */
 @RestController
-@RequestMapping("/api/package")
-public class PackageController {
-
+@RequestMapping("/api/category")
+public class CategoryController
+{
     @Autowired
-    private PackageService packageService;
+    private CategoryService categoryService;
 
     @GetMapping
-      public ResponseEntity<List<Package>> list() {
-          return ResponseEntity.ok(packageService.list());
+      public ResponseEntity<List<Category>> list() {
+          return ResponseEntity.ok(categoryService.list());
       }
 
       @GetMapping("/{id}")
-      public ResponseEntity<Package> get(@PathVariable("id") int id) {
-          return ResponseEntity.ok(packageService.get(id));
+      public ResponseEntity<Category> get(@PathVariable("id") int id) {
+          return ResponseEntity.ok(categoryService.get(id));
       }
 
       @GetMapping("/name/{name}")
-      public ResponseEntity<Package> get(@PathVariable("name") String name) {
-          return ResponseEntity.ok(packageService.getByName(name));
+      public ResponseEntity<Category> get(@PathVariable("name") String name) {
+          return ResponseEntity.ok(categoryService.getByName(name));
       }
 }

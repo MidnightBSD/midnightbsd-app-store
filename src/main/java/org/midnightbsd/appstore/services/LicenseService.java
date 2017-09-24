@@ -1,6 +1,7 @@
 package org.midnightbsd.appstore.services;
 
 import lombok.extern.slf4j.Slf4j;
+import org.midnightbsd.appstore.model.Architecture;
 import org.midnightbsd.appstore.model.License;
 import org.midnightbsd.appstore.repository.LicenseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import java.util.List;
  */
 @Slf4j
 @Service
-public class LicenseService {
+public class LicenseService implements AppService<License> {
 
     @Autowired
     private LicenseRepository repository;

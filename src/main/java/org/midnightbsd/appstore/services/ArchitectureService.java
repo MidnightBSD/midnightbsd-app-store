@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Slf4j
 @Service
-public class ArchitectureService {
+public class ArchitectureService implements AppService<Architecture> {
 
     @Autowired
     private ArchitectureRepository repository;
