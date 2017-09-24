@@ -15,11 +15,11 @@ import java.util.List;
  */
 @Repository
 public interface PackageInstanceRepository extends JpaRepository<PackageInstance, Integer> {
-    List<PackageInstance> findByPackageAndOperatingSystemAndArchitecture(@Param("package") Package pkg,
+    List<PackageInstance> findByPkgAndOperatingSystemAndArchitecture(@Param("pkg") Package pkg,
                                                                          @Param("operatingSystem") OperatingSystem operatingSystem,
                                                                          @Param("architecture") Architecture architecture);
 
-    PackageInstance findByPackageAndOperatingSystemAndArchitectureAndVersion(@Param("package") Package pkg,
+    PackageInstance findByPkgAndOperatingSystemAndArchitectureAndVersion(@Param("pkg") Package pkg,
                                                                                    @Param("operatingSystem") OperatingSystem operatingSystem,
                                                                                    @Param("architecture") Architecture architecture,
                                                                                    @Param("version") String version);

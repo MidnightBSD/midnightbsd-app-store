@@ -99,7 +99,7 @@ public class MagusImportService {
                // TODO: other metadata
                pkg = packageRepository.saveAndFlush(pkg);
 
-               final List<PackageInstance> packageInstances = packageInstanceRepository.findByPackageAndOperatingSystemAndArchitecture(pkg, os, arch);
+               final List<PackageInstance> packageInstances = packageInstanceRepository.findByPkgAndOperatingSystemAndArchitecture(pkg, os, arch);
                if (packageInstances != null &&  ! packageInstances.isEmpty())
                {
                    // reload  TODO: update?
