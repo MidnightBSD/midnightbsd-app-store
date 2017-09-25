@@ -1,0 +1,19 @@
+
+    <h2>Search</h2>
+    
+    <form name="bsearch" id="bsearch">
+        <fieldset>
+            <legend><strong>Search for</strong><br/></legend>
+            <p>
+                <input type="text" name="bquery" id="bquery" value="" data-ng-model="term">
+                <button data-ng-click="search()" class="btn btn-primary btn-md">Find</button>
+            </p>
+        </fieldset>
+
+        <div data-ng-repeat="entry in results.content">
+            <h4 style="color: orange;">{{ entry.date }}</h4>
+            <div>
+                <div class="ebody" ng-bind-html="entry.body"></div>
+            </div>
+        </div>
+    </form>
