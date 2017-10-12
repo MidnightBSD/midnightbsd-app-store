@@ -51,11 +51,13 @@ public class MagusImportService {
     @Autowired
     private PackageInstanceRepository packageInstanceRepository;
 
+    private static final int DELAY_ONE_MINUTE = 1000 * 60;
+
 
     /**
      * Synchronize with Magus, pull new package data
      */
-    @Scheduled(fixedDelay = 1000 * 60 * 120, initialDelay = 60000)
+    @Scheduled(fixedDelay = DELAY_ONE_MINUTE * 120, initialDelay = DELAY_ONE_MINUTE)
     public void sync() {
         final List<Run> runs = getFilteredRuns();
         final HashMap<String, Run> osRunMap = new HashMap<>();
@@ -74,6 +76,7 @@ public class MagusImportService {
             Architecture arch = architectureRepository.findOneByName(run.getArch());
             if (arch == null)
             {
+                log.info("Adding new architecture " + run.getArch());
                 arch = new Architecture();
                 arch.setName(run.getArch());
                 arch = architectureRepository.saveAndFlush(arch);
@@ -81,42 +84,45 @@ public class MagusImportService {
 
             OperatingSystem os = operatingSystemRepository.findByNameAndVersion("MidnightBSD", run.getOsVersion());
             if (os == null) {
+                log.info("Adding new operating system MidnightBSD " + run.getOsVersion());
                 os = new OperatingSystem();
                 os.setName("MidnightBSD");
                 os.setVersion(run.getOsVersion());
                 os = operatingSystemRepository.saveAndFlush(os);
             }
 
-           final List<Port> ports = getPorts(run.getId(), MAGUS_STATUS_PASS);
-           for (final Port port : ports) {
-               final String catAndName = port.getPort();
-               final String name = catAndName.substring(catAndName.indexOf('/') + 1);
-               org.midnightbsd.appstore.model.Package pkg = packageRepository.findOneByName(name);
-               if (pkg == null)
-                   pkg = new org.midnightbsd.appstore.model.Package();
+            final List<Port> ports = getPorts(run.getId(), MAGUS_STATUS_PASS);
+            log.info("Processing " + ports.size() + " ports");
+            for (final Port port : ports) {
+                final String catAndName = port.getPort();
+                final String name = catAndName.substring(catAndName.indexOf('/') + 1);
+                org.midnightbsd.appstore.model.Package pkg = packageRepository.findOneByName(name);
+                if (pkg == null)
+                    pkg = new org.midnightbsd.appstore.model.Package();
 
-               pkg.setName(name);
-               // TODO: other metadata
-               pkg = packageRepository.saveAndFlush(pkg);
+                pkg.setName(name);
+                // TODO: other metadata
+                pkg = packageRepository.saveAndFlush(pkg);
+                log.info("Saved package " + pkg.getName());
 
-               final List<PackageInstance> packageInstances = packageInstanceRepository.findByPkgAndOperatingSystemAndArchitecture(pkg, os, arch);
-               if (packageInstances != null &&  ! packageInstances.isEmpty())
-               {
-                   // reload  TODO: update?
-                  packageInstanceRepository.delete(packageInstances);
-               }
+                final List<PackageInstance> packageInstances = packageInstanceRepository.findByPkgAndOperatingSystemAndArchitecture(pkg, os, arch);
+                if (packageInstances != null && !packageInstances.isEmpty()) {
+                    // reload  TODO: update?
+                    packageInstanceRepository.delete(packageInstances);
+                }
 
-               final PackageInstance packageInstance = new PackageInstance();
-               packageInstance.setArchitecture(arch);
-               packageInstance.setOperatingSystem(os);
-               packageInstance.setVersion(port.getVersion());
-               packageInstance.setPkg(pkg);
-               packageInstanceRepository.saveAndFlush(packageInstance);
-           }
+                final PackageInstance packageInstance = new PackageInstance();
+                packageInstance.setArchitecture(arch);
+                packageInstance.setOperatingSystem(os);
+                packageInstance.setVersion(port.getVersion());
+                packageInstance.setPkg(pkg);
+                packageInstanceRepository.saveAndFlush(packageInstance);
+            }
         }
     }
 
     public List<Run> getFilteredRuns() {
+        log.info("Filtering runs to include only complete and active");
         return getRuns().stream().filter( r -> r.getBlessed() && (
                         r.getStatus().equalsIgnoreCase("complete") ||
                         r.getStatus().equalsIgnoreCase("active")))
@@ -124,11 +130,13 @@ public class MagusImportService {
     }
 
     public List<Run> getRuns() {
+        log.info("Fetching Magus runs");
         final Run[] runs = restTemplate.getForObject(magusBaseUrl + API_RUN_PATH, Run[].class);
         return Arrays.asList(runs);
     }
 
     public List<Port> getPorts(final int runId, final String status) {
+        log.info("Fetching Magus Ports");
         final String url = magusBaseUrl + API_RUN_PORTS_PATH + "?status=" + status + "&run=" + runId;
         final Port[] ports = restTemplate.getForObject(url, Port[].class);
         return Arrays.asList(ports);

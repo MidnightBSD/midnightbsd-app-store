@@ -17,8 +17,24 @@
 
 <!-- Header: Begin -->
 <header>
-    <div id="header">
-        <h1><a href="#!/"><img src="http://d2ibasrwfd3o7m.cloudfront.net/images/logo.jpg" alt="MidnightBSD" /></a></h1>
+    <div class="container">
+    <div id="header" class="row">
+        <div class="col-xs-12">
+        <h1><a href="#!/"><img src="http://d2ibasrwfd3o7m.cloudfront.net/art/logo/MidnightBSDLogoText.png" alt="MidnightBSD" /></a></h1>
+        </div>
+    </div>
+
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">App Store</a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#">Home</a></li>
+          <li><a href="#/search">Search</a></li>
+        </ul>
+      </div>
+    </nav>
     </div>
 </header>
 <!-- Header: End -->
@@ -27,15 +43,19 @@
 <div class="container" data-ng-view=""></div>
 
 <!-- Footer: Begin -->
+<div class="container">
 <footer>
-<div id="footer">
+<div id="footer" class="row">
+    <div class="col-xs-12">
     <p id="copyright">&#169; 2017 Lucas Holt. All rights reserved.</p>
 
     <p><a href="/#!/privacy" title="Privacy Policy">Privacy</a> |
         <a href="/#!/search" title="Search">Search</a> |
         <a href="/#!/sitemap" title="Sitemap">Sitemap</a></p>
+    </div>
 </div>
 </footer>
+</div>
 <!-- Footer: End -->
 
 <script type="text/javascript" src="static/components/jquery/dist/jquery.min.js" th:src="@{components/jquery/dist/jquery.min.js}"></script>
@@ -67,8 +87,8 @@
 <script type="text/javascript" src="static/scripts/controllers/sitemap.js" th:src="@{scripts/controllers/sitemap.js}"></script>
 
 <script type="text/javascript" src="static/scripts/services/AccountService.js" th:src="@{scripts/services/AccountService.js}"></script>
-<script type="text/javascript" src="static/scripts/services/BiographyService.js" th:src="@{scripts/services/BiographyService.js}"></script>
-<script type="text/javascript" src="static/scripts/services/CommentService.js" th:src="@{scripts/services/CommentService.js}"></script>
+<script type="text/javascript" src="static/scripts/services/CategoryService.js" th:src="@{scripts/services/CategoryService.js}"></script>
+<script type="text/javascript" src="static/scripts/services/OperatingSystemService.js" th:src="@{scripts/services/OperatingSystemService.js}"></script>
 <!-- endbuild -->
 
 </body>

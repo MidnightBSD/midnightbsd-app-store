@@ -52,6 +52,6 @@ public class Package implements Serializable {
 
     @JsonManagedReference(value = "package-instance")
     @JsonProperty("instances")
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pkg", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pkg", fetch = FetchType.LAZY)
     private Set<PackageInstance> instances;
 }

@@ -1,5 +1,6 @@
 package org.midnightbsd.appstore.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
@@ -41,6 +42,7 @@ public class PackageInstance implements Serializable {
                                                       inverseJoinColumns = @JoinColumn(name = "package_instance_id", referencedColumnName = "id"))
     private Set<License> licenses;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "package_id")
     private Package pkg;
