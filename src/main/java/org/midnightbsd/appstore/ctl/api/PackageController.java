@@ -1,6 +1,5 @@
 package org.midnightbsd.appstore.ctl.api;
 
-import org.midnightbsd.appstore.model.Category;
 import org.midnightbsd.appstore.model.Package;
 import org.midnightbsd.appstore.services.PackageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,4 +35,9 @@ public class PackageController {
       public ResponseEntity<Package> get(@PathVariable("name") String name) {
           return ResponseEntity.ok(packageService.getByName(name));
       }
+
+    @GetMapping("/category/{name}")
+    public ResponseEntity<List<Package>> getByCategoryName(@PathVariable("name") String name) {
+        return ResponseEntity.ok(packageService.getByCategoryName(name));
+    }
 }

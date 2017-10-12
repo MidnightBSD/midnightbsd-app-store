@@ -16,9 +16,9 @@ angular.module('wwwApp',
                         templateUrl: 'views/main.html',
                         controller: 'MainCtrl'
                     })
-                    .when('/entry/:entryId', {
-                        templateUrl: 'views/entry.html',
-                        controller: 'EntryCtrl'
+                    .when('/category/:id', {
+                        templateUrl: 'views/category.html',
+                        controller: 'CategoryCtrl'
                     })
                     .when('/entry', {
                         templateUrl: 'views/entry.html',
