@@ -1,6 +1,14 @@
 <div class="row">
-       <div class="col-xs-6">
-           <h2>{{category.name}}</h2>
-           <p>{{category.description}}</p>
-       </div>
+    <div class="col-xs-6">
+        <h2>{{category.name}}</h2>
+        <p>{{category.description}}</p>
+
+        <h3>Packages</h3>
+
+        <p ng-repeat="pkg in packages">
+        <h4>{{pkg.name}}</h4>
+            {{pkg.description}}
+        </p>
+
+    </div>
 </div>

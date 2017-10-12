@@ -2,5 +2,7 @@ angular.module('wwwApp').controller('CategoryCtrl', ['$scope', '$routeParams', '
     function ($scope, $routeParams, $location, CategoryService) {
         'use strict';
 
-        $scope.category = CategoryService.get({id:  $routeParams.id})
+        $scope.category = CategoryService.get({id: $routeParams.id}, function (cat) {
+            $scope.packages = PackageService.queryByCategoryName(cat.name);
+        })
     }]);
