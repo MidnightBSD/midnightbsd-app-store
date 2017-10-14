@@ -10,8 +10,6 @@
     <meta http-equiv="content-language" content="en-us" />
     <link rel="stylesheet" href="static/styles/bootstrap.min.css" th:href="@{static/styles/bootstrap.min.css}" />
     <link rel="stylesheet" href="static/components/angular-ui/build/angular-ui.css" th:href="@{components/angular-ui/build/angular-ui.css}"/>
-    <link rel="stylesheet" href="static/styles/main.css" th:href="@{static/styles/main.css}" />
-
     <link rel="stylesheet" href="static/styles/17.css" th:href="@{static/styles/17.css}" />
 </head>
 
@@ -87,7 +85,6 @@
 <script type="text/javascript" src="static/scripts/controllers/category.js" th:src="@{scripts/controllers/category.js}"></script>
 <script type="text/javascript" src="static/scripts/controllers/privacy.js" th:src="@{scripts/controllers/privacy.js}"></script>
 <script type="text/javascript" src="static/scripts/controllers/search.js" th:src="@{scripts/controllers/search.js}"></script>
-<script type="text/javascript" src="static/scripts/controllers/sitemap.js" th:src="@{scripts/controllers/sitemap.js}"></script>
 
 <script type="text/javascript" src="static/scripts/services/CategoryService.js" th:src="@{scripts/services/CategoryService.js}"></script>
 <script type="text/javascript" src="static/scripts/services/OperatingSystemService.js" th:src="@{scripts/services/OperatingSystemService.js}"></script>
@@ -95,14 +92,22 @@
 <script type="text/javascript" src="static/scripts/services/SearchService.js" th:src="@{scripts/services/SearchService.js}"></script>
 <!-- endbuild -->
 
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-560995-6"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-  gtag('config', 'UA-560995-6');
+    ga('create', 'UA-560995-6', 'app.midnightbsd.org');
+    ga('require', 'linkid', 'linkid.js');
+    ga('send', 'pageview');
 </script>
 
 </body>

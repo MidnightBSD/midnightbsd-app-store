@@ -1,6 +1,7 @@
 package org.midnightbsd.appstore.repository;
 
 import org.midnightbsd.appstore.model.Rating;
+import org.midnightbsd.appstore.model.RatingAverage;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,6 +18,4 @@ public interface RatingRepository extends JpaRepository<Rating, Integer>{
 
     List<Rating> findAllByPkg(Package pkg);
 
-    @Query("Select new BigDecimal(avg(r.score)) FROM Rating r where pkg= :pkg")
-    BigDecimal getAverageRatingByPkg(@Param("pkg") Package pkg);
 }

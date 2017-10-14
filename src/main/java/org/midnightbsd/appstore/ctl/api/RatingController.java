@@ -30,4 +30,5 @@ public class RatingController {
     public ResponseEntity<Rating> get(@PathVariable("id") int id) {
         return ResponseEntity.ok(ratingService.get(id));
     }
+
 }

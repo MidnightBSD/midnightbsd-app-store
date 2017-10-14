@@ -1,12 +1,18 @@
 <div class="row">
     <div class="col-xs-12">
-        <h2>{{category.name}} Packages</h2>
+        <h2>{{category.name}} packages</h2>
         <p>{{category.description}}</p>
 
         <div ng-repeat="pkg in packages">
             <h3>{{pkg.name}}</h3>
             <p>{{pkg.description}}</p>
-            <p ng-hide="pkg.url == null || pkg.url == ''">Website: <a href="{{pkg.url}}">{{pkg.url}}</a></p>
+            <p ng-hide="pkg.url == null || pkg.url == ''"><b>Website:</b> <a href="{{pkg.url}}">{{pkg.url}}</a></p>
+
+            <p><b>Licenses:</b> <span ng-repeat="license in pkg.licenses">{{license}}</span></p>
+
+            <div ng-repeat="inst in pkg.instances">
+                {{inst.version}} for {{inst.operatingSystem.version}} {{inst.architecture.name}}
+            </div>
         </div>
 
     </div>

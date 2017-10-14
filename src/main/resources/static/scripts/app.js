@@ -36,10 +36,6 @@ angular.module('wwwApp',
                         templateUrl: 'views/search.html',
                         controller: 'SearchCtrl'
                     })
-                    .when('/sitemap', {
-                        templateUrl: 'views/sitemap.html',
-                        controller: 'SitemapCtrl'
-                    })
                     .otherwise({
                         redirectTo: '/'
                     });

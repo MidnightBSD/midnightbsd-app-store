@@ -1,8 +1,8 @@
-angular.module('wwwApp').controller('CategoryCtrl', ['$scope', '$routeParams', '$location', 'CategoryService',
-    function ($scope, $routeParams, $location, CategoryService) {
+angular.module('wwwApp').controller('CategoryCtrl', ['$scope', '$routeParams', '$location', 'CategoryService', 'PackageService',
+    function ($scope, $routeParams, $location, CategoryService, PackageService) {
         'use strict';
 
-        $scope.category = CategoryService.get({id: $routeParams.id}, function (cat) {
-            $scope.packages = PackageService.queryByCategoryName(cat.name);
+        $scope.category = CategoryService.get({Id: $routeParams.id}, function (cat) {
+            $scope.packages = PackageService.queryByCategoryName({ Name: cat.name });
         })
     }]);
