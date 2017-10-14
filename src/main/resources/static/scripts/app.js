@@ -28,6 +28,10 @@ angular.module('wwwApp',
                         templateUrl: 'views/privacy.html',
                         controller: 'PrivacyCtrl'
                     })
+                    .when('/search/:term', {
+                        templateUrl: 'views/search.html',
+                        controller: 'SearchCtrl'
+                    })
                     .when('/search', {
                         templateUrl: 'views/search.html',
                         controller: 'SearchCtrl'

@@ -1,14 +1,13 @@
 <div class="row">
-    <div class="col-xs-6">
-        <h2>{{category.name}}</h2>
+    <div class="col-xs-12">
+        <h2>{{category.name}} Packages</h2>
         <p>{{category.description}}</p>
 
-        <h3>Packages</h3>
-
-        <p ng-repeat="pkg in packages">
-        <h4>{{pkg.name}}</h4>
-            {{pkg.description}}
-        </p>
+        <div ng-repeat="pkg in packages">
+            <h3>{{pkg.name}}</h3>
+            <p>{{pkg.description}}</p>
+            <p ng-hide="pkg.url == null || pkg.url == ''">Website: <a href="{{pkg.url}}">{{pkg.url}}</a></p>
+        </div>
 
     </div>
 </div>

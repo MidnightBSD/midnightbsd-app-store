@@ -40,14 +40,14 @@ public class Package implements Serializable {
     @Column(name="url")
     private String url;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "package_category_map", joinColumns = @JoinColumn(name = "category_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "package_id", referencedColumnName = "id"))
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "package_category_map", joinColumns = @JoinColumn(name = "package_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id", referencedColumnName = "id"))
     private Set<Category> categories;
 
     @JsonManagedReference(value = "package-rating")
     @JsonProperty("ratings")
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pkg", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pkg", fetch = FetchType.LAZY)
     private Set<Rating> ratings;
 
     @JsonManagedReference(value = "package-instance")

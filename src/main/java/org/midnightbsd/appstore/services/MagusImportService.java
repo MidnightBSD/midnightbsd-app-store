@@ -2,24 +2,19 @@ package org.midnightbsd.appstore.services;
 
 import lombok.extern.slf4j.Slf4j;
 import org.midnightbsd.appstore.model.Architecture;
+import org.midnightbsd.appstore.model.Category;
 import org.midnightbsd.appstore.model.OperatingSystem;
 import org.midnightbsd.appstore.model.PackageInstance;
 import org.midnightbsd.appstore.model.magus.Port;
 import org.midnightbsd.appstore.model.magus.Run;
-import org.midnightbsd.appstore.repository.ArchitectureRepository;
-import org.midnightbsd.appstore.repository.OperatingSystemRepository;
-import org.midnightbsd.appstore.repository.PackageInstanceRepository;
-import org.midnightbsd.appstore.repository.PackageRepository;
+import org.midnightbsd.appstore.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -41,6 +36,9 @@ public class MagusImportService {
 
     @Autowired
     private ArchitectureRepository architectureRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Autowired
     private OperatingSystemRepository operatingSystemRepository;
@@ -95,11 +93,39 @@ public class MagusImportService {
             log.info("Processing " + ports.size() + " ports");
             for (final Port port : ports) {
                 final String catAndName = port.getPort();
-                final String name = catAndName.substring(catAndName.indexOf('/') + 1);
-                org.midnightbsd.appstore.model.Package pkg = packageRepository.findOneByName(name);
-                if (pkg == null)
-                    pkg = new org.midnightbsd.appstore.model.Package();
+                int nameSplitLoc = catAndName.indexOf('/');
+                
+                final String name = catAndName.substring(nameSplitLoc+ 1);
+                final String category = catAndName.substring(0, nameSplitLoc);
 
+                log.info("Attempt to find category " + category);
+                Category cat = categoryRepository.findOneByName(category);
+                if (cat == null) {
+                    cat = new Category();
+                    cat.setName(category);
+                    cat.setDescription("");
+                    cat = categoryRepository.saveAndFlush(cat);
+                    log.info("Created new category " + cat.getName());
+                }
+
+                org.midnightbsd.appstore.model.Package pkg = packageRepository.findOneByName(name);
+                if (pkg == null) {
+                    pkg = new org.midnightbsd.appstore.model.Package();
+                    Set<Category> s = new HashSet<>();
+                    s.add(cat);
+                    pkg.setCategories(s);
+                }    else {
+                    boolean catFound = false;
+                    for (Category c : pkg.getCategories()) {
+                        if (c.getName().equalsIgnoreCase(category)) {
+                            catFound = true;
+                            break;
+                        }
+                    }
+                    if (!catFound)
+                        pkg.getCategories().add(cat);
+                }
+                
                 pkg.setName(name);
                 // TODO: other metadata
                 pkg = packageRepository.saveAndFlush(pkg);

@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="static/styles/bootstrap.min.css" th:href="@{static/styles/bootstrap.min.css}" />
     <link rel="stylesheet" href="static/components/angular-ui/build/angular-ui.css" th:href="@{components/angular-ui/build/angular-ui.css}"/>
     <link rel="stylesheet" href="static/styles/main.css" th:href="@{static/styles/main.css}" />
+
+    <link rel="stylesheet" href="static/styles/17.css" th:href="@{static/styles/17.css}" />
 </head>
 
 <body data-ng-controller="wwwAppCtrl">
@@ -27,11 +29,11 @@
     <nav class="navbar navbar-inverse">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">App Store</a>
+          <a class="navbar-brand" href="#!/">App Store</a>
         </div>
         <ul class="nav navbar-nav">
-          <li class="active"><a href="#">Home</a></li>
-          <li><a href="#/search">Search</a></li>
+          <li class="active"><a href="#!/">Home</a></li>
+          <li><a href="#!/search">Search</a></li>
         </ul>
       </div>
     </nav>
@@ -90,7 +92,18 @@
 <script type="text/javascript" src="static/scripts/services/CategoryService.js" th:src="@{scripts/services/CategoryService.js}"></script>
 <script type="text/javascript" src="static/scripts/services/OperatingSystemService.js" th:src="@{scripts/services/OperatingSystemService.js}"></script>
 <script type="text/javascript" src="static/scripts/services/PackageService.js" th:src="@{scripts/services/PackageService.js}"></script>
+<script type="text/javascript" src="static/scripts/services/SearchService.js" th:src="@{scripts/services/SearchService.js}"></script>
 <!-- endbuild -->
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-560995-6"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-560995-6');
+</script>
 
 </body>
 </html>

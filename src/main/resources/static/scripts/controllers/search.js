@@ -1,7 +1,7 @@
 angular.module('wwwApp').controller('SearchCtrl', ['$scope', '$log', 'SearchService', function ($scope, $log, SearchService) {
     'use strict';
 
-    $scope.term = '';
+    $scope.term = $routeParams.term;
 
     $scope.search = function () {
         $log.info("trying to search");

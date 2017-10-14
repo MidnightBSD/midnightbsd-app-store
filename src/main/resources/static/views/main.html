@@ -4,6 +4,16 @@
             <p class="lead">
                </p>
         </div>
+        <div class="col-xs-4">
+            <form name="bsearch" id="bsearch">
+                  <fieldset>
+                      <p>
+                          <input type="text" name="bquery" id="bquery" value="" data-ng-model="term">
+                          <button data-ng-click="search()" class="btn btn-primary btn-md">Find</button>
+                      </p>
+                  </fieldset>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -12,7 +22,7 @@
             <h2>Categories</h2>
             <ul>
                 <li ng-repeat="cat in categories">
-                    {{cat.name}}
+                    <a ng-href="#!/category/{{cat.id}}">{{cat.name}}</a>
                 </li>
             </ul>
 
