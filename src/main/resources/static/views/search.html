@@ -10,10 +10,12 @@
             </p>
         </fieldset>
 
-        <div data-ng-repeat="entry in results.content">
-            <h4 style="color: orange;">{{ entry.date }}</h4>
+        <div data-ng-repeat="pkg in results.content">
+            <h3>{{ pkg.name }}</h3>
             <div>
-                <div class="ebody" ng-bind-html="entry.body"></div>
+                <p ng-bind-html="pkg.description"></p>
+                <p ng-hide="pkg.url == null || pkg.url == ''"><a href="{{pkg.url}}">{{pkg.url}}</a></p>
+                &nbsp; (<span ng-repeat="license in pkg.licenses">{{license.name}}</span>)
             </div>
         </div>
     </form>

@@ -5,12 +5,12 @@
 
         <div ng-repeat="pkg in packages">
             <h3>{{pkg.name}}</h3>
-            <p>{{pkg.description}}</p>
+            <p ng-bind-html="pkg.description"></p>
             <p ng-hide="pkg.url == null || pkg.url == ''"><a href="{{pkg.url}}">{{pkg.url}}</a></p>
 
             <div ng-repeat="inst in pkg.instances">
                 <b>{{inst.version}}</b> for {{inst.operatingSystem.version}} {{inst.architecture.name}}
-                &nbsp;&nbsp; (<span ng-repeat="license in inst.licenses">{{license.name}}</span>)
+                &nbsp; (<span ng-repeat="license in inst.licenses">{{license.name}}</span>)
             </div>
         </div>
 
