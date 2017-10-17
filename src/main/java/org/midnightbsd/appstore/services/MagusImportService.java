@@ -1,10 +1,7 @@
 package org.midnightbsd.appstore.services;
 
 import lombok.extern.slf4j.Slf4j;
-import org.midnightbsd.appstore.model.Architecture;
-import org.midnightbsd.appstore.model.Category;
-import org.midnightbsd.appstore.model.OperatingSystem;
-import org.midnightbsd.appstore.model.PackageInstance;
+import org.midnightbsd.appstore.model.*;
 import org.midnightbsd.appstore.model.magus.Port;
 import org.midnightbsd.appstore.model.magus.Run;
 import org.midnightbsd.appstore.repository.*;
@@ -48,6 +45,9 @@ public class MagusImportService {
 
     @Autowired
     private PackageInstanceRepository packageInstanceRepository;
+
+    @Autowired
+    private LicenseRepository licenseRepository;
 
     private static final int DELAY_ONE_MINUTE = 1000 * 60;
 
@@ -141,13 +141,31 @@ public class MagusImportService {
                     packageInstanceRepository.flush();
                 }
 
-                final PackageInstance packageInstance = new PackageInstance();
+                PackageInstance packageInstance = new PackageInstance();
                 packageInstance.setArchitecture(arch);
                 packageInstance.setOperatingSystem(os);
                 packageInstance.setVersion(port.getVersion());
                 packageInstance.setPkg(pkg);
                 packageInstance.setRun(run.getId());
-                packageInstanceRepository.saveAndFlush(packageInstance);
+                packageInstance = packageInstanceRepository.saveAndFlush(packageInstance);
+
+                String[] licenses = port.getLicense().split(" ");
+                for (String license : licenses) {
+                    if (license.isEmpty())
+                        break;
+
+                    License l = licenseRepository.findOneByName(license);
+                    if (l == null) {
+                        l = new License();
+                        l.setName(license);
+                        l = licenseRepository.saveAndFlush(l);
+                    }
+                    if (packageInstance.getLicenses() == null)
+                        packageInstance.setLicenses(new HashSet<>());
+                    packageInstance.getLicenses().add(l);
+
+                }
+                packageInstanceRepository.saveAndFlush(packageInstance); // save license link
             }
         }
     }
