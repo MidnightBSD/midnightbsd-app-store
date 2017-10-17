@@ -24,4 +24,13 @@ public class Port {
 
     @JsonProperty("can_reset")
     private Boolean canReset;
+
+    private String description;
+
+    /**
+     * One or more licenses separated by spaces
+     */
+    private String license;
+
+    private String www;
 }

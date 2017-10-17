@@ -127,6 +127,8 @@ public class MagusImportService {
                 }
                 
                 pkg.setName(name);
+                pkg.setDescription(port.getDescription());
+                pkg.setUrl(port.getWww());
                 // TODO: other metadata
                 pkg = packageRepository.saveAndFlush(pkg);
                 log.info("Saved package " + pkg.getName());
