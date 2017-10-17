@@ -20,7 +20,7 @@ public class SearchConfig {
     @Autowired
     private Environment environment;
 
-    @Value("search.package-entry-index")
+    @Value("search.package-item-index")
     private String packageItemIndex;
 
     @Bean

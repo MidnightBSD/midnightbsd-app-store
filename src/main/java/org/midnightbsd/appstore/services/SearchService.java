@@ -16,10 +16,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Lucas Holt
@@ -51,6 +49,7 @@ public class SearchService {
                     items.add(convert(pkg));
                 }
 
+                log.info("Saving a page of packages to elasticsearch. pg " + i);
                 packageSearchRepository.save(items);
 
                 pageable = new PageRequest(i + 1, 100);
@@ -61,8 +60,14 @@ public class SearchService {
         }
     }
 
+    public void index(@NonNull final org.midnightbsd.appstore.model.Package pkg) {
+        log.info("Indexing package " + pkg.getName() + " id: " + pkg.getId());
+        packageSearchRepository.save(convert(pkg));
+    }
 
     public PackageItem convert(@NonNull final org.midnightbsd.appstore.model.Package pkg) {
+        log.info("Converting package " + pkg.getName() + " id: " + pkg.getId());
+        
         final PackageItem packageItem = new PackageItem();
         HashMap<String,String> licenses = new HashMap<>();
 
@@ -86,7 +91,7 @@ public class SearchService {
                 cats.put(cat, null);
         }
 
-        final List<org.midnightbsd.appstore.model.search.Category> targetList = new ArrayList<org.midnightbsd.appstore.model.search.Category>();
+        final List<org.midnightbsd.appstore.model.search.Category> targetList = new ArrayList<>();
         for (final String t : cats.keySet()) {
             final org.midnightbsd.appstore.model.search.Category category = new org.midnightbsd.appstore.model.search.Category();
             category.setName(t);

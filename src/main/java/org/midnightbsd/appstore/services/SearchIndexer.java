@@ -7,7 +7,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.Calendar;
 
 @Slf4j
 @Component
@@ -20,6 +19,8 @@ public class SearchIndexer {
 
     @Scheduled(fixedDelay = 1000 * 60 * 30, initialDelay = 120000)
     public void loadNewEntries() {
+        log.info("Starting search indexer - Load all packages");
+        
         // TODO: add timestamp so we can limit reindexing
         /*log.info("Search indexer - Load new entries from the last 30 minutes");
 
@@ -35,7 +36,7 @@ public class SearchIndexer {
      */
     @PostConstruct
     public void initialize() {
-        log.info("Starting search indexer - Load all public entries");
+        log.info("Starting search indexer - Load all packages");
 
         searchService.indexAllPackages();
     }

@@ -61,6 +61,9 @@ server:
 magus:
   baseUrl:  http://www.midnightbsd.org/magus/
 
+search:
+  package-item-index: pkgitem
+
 ---
 spring:
   profiles: test

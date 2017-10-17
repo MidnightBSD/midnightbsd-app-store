@@ -49,6 +49,9 @@ public class MagusImportService {
     @Autowired
     private LicenseRepository licenseRepository;
 
+    @Autowired
+    private SearchService searchService;
+
     private static final int DELAY_ONE_MINUTE = 1000 * 60;
 
 
@@ -166,6 +169,8 @@ public class MagusImportService {
 
                 }
                 packageInstanceRepository.saveAndFlush(packageInstance); // save license link
+
+                searchService.index(pkg);
             }
         }
     }
