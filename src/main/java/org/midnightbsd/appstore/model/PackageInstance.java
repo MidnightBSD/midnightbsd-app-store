@@ -50,4 +50,7 @@ public class PackageInstance implements Serializable {
     @JoinColumn(name = "package_id")
     private Package pkg;
 
+    @Column(name="run")
+    private Integer run;
+
 }

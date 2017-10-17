@@ -61,8 +61,8 @@ public class MagusImportService {
         final HashMap<String, Run> osRunMap = new HashMap<>();
 
         for (final Run run : runs) {
-            final String os = run.getOsVersion() + "_" + run.getArch();
-
+            final String os = getFilteredKey(run);
+            
             // if we have a key but its less than then the current run id, ignore it
             if (osRunMap.containsKey(os) && osRunMap.get(os).getId() > run.getId())
                 continue;
@@ -134,7 +134,9 @@ public class MagusImportService {
                 final List<PackageInstance> packageInstances = packageInstanceRepository.findByPkgAndOperatingSystemAndArchitecture(pkg, os, arch);
                 if (packageInstances != null && !packageInstances.isEmpty()) {
                     // reload  TODO: update?
-                    packageInstanceRepository.delete(packageInstances);
+                    log.info("Deleting " + packageInstances.size() + " package instances");
+                    packageInstanceRepository.deleteInBatch(packageInstances);
+                    packageInstanceRepository.flush();
                 }
 
                 final PackageInstance packageInstance = new PackageInstance();
@@ -142,6 +144,7 @@ public class MagusImportService {
                 packageInstance.setOperatingSystem(os);
                 packageInstance.setVersion(port.getVersion());
                 packageInstance.setPkg(pkg);
+                packageInstance.setRun(run.getId());
                 packageInstanceRepository.saveAndFlush(packageInstance);
             }
         }
@@ -149,11 +152,16 @@ public class MagusImportService {
 
     public List<Run> getFilteredRuns() {
         log.info("Filtering runs to include only complete and active");
-        return getRuns().stream().filter( r -> r.getBlessed() && (
+      return getRuns().stream().filter( r -> r.getBlessed() && (
                         r.getStatus().equalsIgnoreCase("complete") ||
                         r.getStatus().equalsIgnoreCase("active")))
                         .sorted(Comparator.comparingInt(Run::getId)).collect(Collectors.toList());
     }
+
+    private String getFilteredKey(Run r) {
+       return r.getOsVersion() + "_" + r.getArch();
+    }
+
 
     public List<Run> getRuns() {
         log.info("Fetching Magus runs");
