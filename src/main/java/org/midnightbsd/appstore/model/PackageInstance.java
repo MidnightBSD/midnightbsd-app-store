@@ -40,7 +40,7 @@ public class PackageInstance implements Serializable {
     @JoinColumn(name = "architecture_id")
     private Architecture architecture;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "package_instance_license_map", joinColumns = @JoinColumn(name = "package_instance_id", referencedColumnName = "id"),
                                                       inverseJoinColumns = @JoinColumn(name = "license_id", referencedColumnName = "id"))
     private Set<License> licenses;
