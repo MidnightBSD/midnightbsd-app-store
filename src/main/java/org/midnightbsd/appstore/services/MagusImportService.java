@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
@@ -58,6 +59,7 @@ public class MagusImportService {
     /**
      * Synchronize with Magus, pull new package data
      */
+    @Transactional
     @Scheduled(fixedDelay = DELAY_ONE_MINUTE * 120, initialDelay = DELAY_ONE_MINUTE)
     public void sync() {
         final List<Run> runs = getFilteredRuns();
@@ -170,7 +172,7 @@ public class MagusImportService {
                 }
                 packageInstanceRepository.saveAndFlush(packageInstance); // save license link
 
-                searchService.index(pkg);
+                searchService.index(packageRepository.findOne(pkg.getId()));
             }
         }
     }

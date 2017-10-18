@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +37,7 @@ public class SearchService {
         return packageSearchRepository.findByNameContainsOrDescriptionContainsAllIgnoreCase(term, term, page);
     }
 
+    @Transactional
     @Async
     public void indexAllPackages() {
         try {
@@ -60,6 +62,7 @@ public class SearchService {
         }
     }
 
+    @Transactional
     public void index(@NonNull final org.midnightbsd.appstore.model.Package pkg) {
         log.info("Indexing package " + pkg.getName() + " id: " + pkg.getId());
         packageSearchRepository.save(convert(pkg));
