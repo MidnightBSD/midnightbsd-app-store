@@ -14,7 +14,6 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,7 +21,7 @@ import java.util.List;
  */
 @ToString
 @EqualsAndHashCode
-@Document(indexName = "#{@packageItemIndex}", type = "pkg")
+@Document(indexName = "package", type = "pkg")
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PackageItem implements Serializable, Comparable<PackageItem> {

@@ -40,6 +40,12 @@ spring:
        persistence:
          sharedCache:
            mode: ALL
+  cache:
+    type: REDIS
+  redis:
+    host: localhost
+    port: 6379
+    database: 0
 
 endpoints:
   hypermedia:
@@ -78,6 +84,10 @@ flyway:
 ---
 spring:
   profiles: prod
+  redis:
+    host: midnightbsd-redis.c6ifkh.0001.use1.cache.amazonaws.com
+    port: 6379
+    database: 0
   datasource:
     url: jdbc:postgresql://midnightbsd-app-store.c9or38nglwhm.us-east-1.rds.amazonaws.com/app_store?ssl=true&amp;sslfactory=org.postgresql.ssl.NonValidatingFactory
     username: appstore
