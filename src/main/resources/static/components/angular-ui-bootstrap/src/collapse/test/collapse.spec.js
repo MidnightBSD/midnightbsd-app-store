@@ -1,6 +1,7 @@
 describe('collapse directive', function () {
 
   var scope, $compile, $timeout, $transition;
+  var element;
 
   beforeEach(module('ui.bootstrap.collapse'));
   beforeEach(inject(function(_$rootScope_, _$compile_, _$timeout_, _$transition_) {
@@ -9,8 +10,6 @@ describe('collapse directive', function () {
     $timeout = _$timeout_;
     $transition = _$transition_;
   }));
-
-  var element;
 
   beforeEach(function() {
     element = $compile('<div collapse="isCollapsed">Some Content</div>')(scope);
@@ -55,7 +54,27 @@ describe('collapse directive', function () {
     expect(element.height()).not.toBe(0);
   });
 
+  it('should expand if isCollapsed = true with animation on subsequent uses', function() {
+    scope.isCollapsed = false;
+    scope.$digest();
+    scope.isCollapsed = true;
+    scope.$digest();
+    scope.isCollapsed = false;
+    scope.$digest();
+    scope.isCollapsed = true;
+    scope.$digest();
+    $timeout.flush();
+    expect(element.height()).toBe(0);
+    if ($transition.transitionEndEventName) {
+      element.triggerHandler($transition.transitionEndEventName);
+      expect(element.height()).toBe(0);
+    }
+  });
+
   describe('dynamic content', function() {
+
+    var element;
+
     beforeEach(function() {
       element = angular.element('<div collapse="isCollapsed"><p>Initial content</p><div ng-show="exp">Additional content</div></div>');
       $compile(element)(scope);
@@ -86,21 +105,5 @@ describe('collapse directive', function () {
       expect(element.height()).toBeLessThan(collapseHeight);
     });
 
-    it('should shrink accordingly when content size inside collapse decreases on subsequent use', function() {
-      scope.isCollapsed = false;
-      scope.exp = false;
-      scope.$digest();
-      scope.isCollapsed = true;
-      scope.$digest();
-      scope.isCollapsed = false;
-      scope.$digest();
-      $timeout.flush();
-      scope.exp = true;
-      scope.$digest();
-      var collapseHeight = element.height();
-      scope.exp = false;
-      scope.$digest();
-      expect(element.height()).toBeLessThan(collapseHeight);
-    });
   });
 });

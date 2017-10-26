@@ -9,6 +9,8 @@ import org.midnightbsd.appstore.model.search.PackageItem;
 import org.midnightbsd.appstore.repository.PackageRepository;
 import org.midnightbsd.appstore.repository.search.PackageSearchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -33,10 +35,12 @@ public class SearchService {
     @Autowired
     private PackageRepository packageRepository;
 
+    @Cacheable(key="#p0.concat('-').concat(#p1.getPageNumber())", value = "search")
     public Page<PackageItem> find(String term, Pageable page) {
         return packageSearchRepository.findByNameContainsOrDescriptionContainsAllIgnoreCase(term, term, page);
     }
 
+    @CacheEvict(value = "search", allEntries = true)
     @Transactional
     @Async
     public void indexAllPackages() {
@@ -51,7 +55,7 @@ public class SearchService {
                     items.add(convert(pkg));
                 }
 
-                log.info("Saving a page of packages to elasticsearch. pg " + i);
+                log.debug("Saving a page of packages to elasticsearch. pg " + i);
                 packageSearchRepository.save(items);
 
                 pageable = new PageRequest(i + 1, 100);
@@ -62,14 +66,15 @@ public class SearchService {
         }
     }
 
+    @CacheEvict(value = "search", allEntries = true)
     @Transactional
     public void index(@NonNull final org.midnightbsd.appstore.model.Package pkg) {
-        log.info("Indexing package " + pkg.getName() + " id: " + pkg.getId());
+        log.debug("Indexing package " + pkg.getName() + " id: " + pkg.getId());
         packageSearchRepository.save(convert(pkg));
     }
 
     public PackageItem convert(@NonNull final org.midnightbsd.appstore.model.Package pkg) {
-        log.info("Converting package " + pkg.getName() + " id: " + pkg.getId());
+        log.trace("Converting package " + pkg.getName() + " id: " + pkg.getId());
         
         final PackageItem packageItem = new PackageItem();
         HashMap<String,String> licenses = new HashMap<>();

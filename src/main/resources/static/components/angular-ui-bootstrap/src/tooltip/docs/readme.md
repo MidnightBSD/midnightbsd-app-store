@@ -11,11 +11,13 @@ The tooltip directives provide several optional attributes to control how they
 will display:
 
 - `tooltip-placement`: Where to place it? Defaults to "top", but also accepts
-  "bottom", "left", or "right".
+  "bottom", "left", "right".
 - `tooltip-animation`: Should it fade in and out? Defaults to "true".
 - `tooltip-popup-delay`: For how long should the user have to have the mouse
   over the element before the tooltip shows (in milliseconds)? Defaults to 0.
 - `tooltip-trigger`: What should trigger a show of the tooltip?
+- `tooltip-append-to-body`: Should the tooltip be appended to `$body` instead of
+  the parent element?
 
 The tooltip directives require the `$position` service.
 
@@ -30,4 +32,23 @@ provided hide triggers:
 
 For any non-supported value, the trigger will be used to both show and hide the
 tooltip.
+
+**$tooltipProvider**
+
+Through the `$tooltipProvider`, you can change the way tooltips and popovers
+behave by default; the attributes above always take precedence. The following
+methods are available:
+
+- `setTriggers( obj )`: Extends the default trigger mappings mentioned above
+  with mappings of your own. E.g. `{ 'openTrigger': 'closeTrigger' }`.
+- `options( obj )`: Provide a set of defaults for certain tooltip and popover
+  attributes. Currently supports 'placement', 'animation', 'popupDelay', and
+  `appendToBody`. Here are the defaults:
+
+  <pre>
+  placement: 'top',
+  animation: true,
+  popupDelay: 0,
+  appendToBody: false
+  </pre>
 

@@ -36,10 +36,10 @@ public class MagusImportService {
     private ArchitectureRepository architectureRepository;
 
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryService categoryService;
 
     @Autowired
-    private OperatingSystemRepository operatingSystemRepository;
+    private OperatingSystemService operatingSystemService;
 
     @Autowired
     private PackageRepository packageRepository;
@@ -85,13 +85,13 @@ public class MagusImportService {
                 arch = architectureRepository.saveAndFlush(arch);
             }
 
-            OperatingSystem os = operatingSystemRepository.findByNameAndVersion("MidnightBSD", run.getOsVersion());
+            OperatingSystem os = operatingSystemService.getByNameAndVersion("MidnightBSD", run.getOsVersion());
             if (os == null) {
                 log.info("Adding new operating system MidnightBSD " + run.getOsVersion());
                 os = new OperatingSystem();
                 os.setName("MidnightBSD");
                 os.setVersion(run.getOsVersion());
-                os = operatingSystemRepository.saveAndFlush(os);
+                os = operatingSystemService.save(os);
             }
 
             final List<Port> ports = getPorts(run.getId(), MAGUS_STATUS_PASS);
@@ -104,12 +104,12 @@ public class MagusImportService {
                 final String category = catAndName.substring(0, nameSplitLoc);
 
                 log.info("Attempt to find category " + category);
-                Category cat = categoryRepository.findOneByName(category);
+                Category cat = categoryService.getByName(category);
                 if (cat == null) {
                     cat = new Category();
                     cat.setName(category);
                     cat.setDescription("");
-                    cat = categoryRepository.saveAndFlush(cat);
+                    cat = categoryService.save(cat);
                     log.info("Created new category " + cat.getName());
                 }
 

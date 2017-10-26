@@ -1,76 +1,74 @@
 angular.module('ui.bootstrap.buttons', [])
 
-  .constant('buttonConfig', {
-    activeClass:'active',
-    toggleEvent:'click'
-  })
+.constant('buttonConfig', {
+  activeClass: 'active',
+  toggleEvent: 'click'
+})
 
-  .directive('btnRadio', ['buttonConfig', function (buttonConfig) {
-  var activeClass = buttonConfig.activeClass || 'active';
-  var toggleEvent = buttonConfig.toggleEvent || 'click';
+.controller('ButtonsController', ['buttonConfig', function(buttonConfig) {
+  this.activeClass = buttonConfig.activeClass || 'active';
+  this.toggleEvent = buttonConfig.toggleEvent || 'click';
+}])
 
+.directive('btnRadio', function () {
   return {
-
-    require:'ngModel',
-    link:function (scope, element, attrs, ngModelCtrl) {
-
-      var value = scope.$eval(attrs.btnRadio);
+    require: ['btnRadio', 'ngModel'],
+    controller: 'ButtonsController',
+    link: function (scope, element, attrs, ctrls) {
+      var buttonsCtrl = ctrls[0], ngModelCtrl = ctrls[1];
 
       //model -> UI
-      scope.$watch(function () {
-        return ngModelCtrl.$modelValue;
-      }, function (modelValue) {
-        if (angular.equals(modelValue, value)){
-          element.addClass(activeClass);
-        } else {
-          element.removeClass(activeClass);
-        }
-      });
+      ngModelCtrl.$render = function () {
+        element.toggleClass(buttonsCtrl.activeClass, angular.equals(ngModelCtrl.$modelValue, scope.$eval(attrs.btnRadio)));
+      };
 
       //ui->model
-      element.bind(toggleEvent, function () {
-        if (!element.hasClass(activeClass)) {
+      element.bind(buttonsCtrl.toggleEvent, function () {
+        var isActive = element.hasClass(buttonsCtrl.activeClass);
+
+        if (!isActive || angular.isDefined(attrs.uncheckable)) {
           scope.$apply(function () {
-            ngModelCtrl.$setViewValue(value);
+            ngModelCtrl.$setViewValue(isActive ? null : scope.$eval(attrs.btnRadio));
+            ngModelCtrl.$render();
           });
         }
       });
     }
   };
-}])
+})
 
-  .directive('btnCheckbox', ['buttonConfig', function (buttonConfig) {
-
-  var activeClass = buttonConfig.activeClass || 'active';
-  var toggleEvent = buttonConfig.toggleEvent || 'click';
-
+.directive('btnCheckbox', function () {
   return {
-    require:'ngModel',
-    link:function (scope, element, attrs, ngModelCtrl) {
+    require: ['btnCheckbox', 'ngModel'],
+    controller: 'ButtonsController',
+    link: function (scope, element, attrs, ctrls) {
+      var buttonsCtrl = ctrls[0], ngModelCtrl = ctrls[1];
 
-      var trueValue = scope.$eval(attrs.btnCheckboxTrue);
-      var falseValue = scope.$eval(attrs.btnCheckboxFalse);
+      function getTrueValue() {
+        return getCheckboxValue(attrs.btnCheckboxTrue, true);
+      }
 
-      trueValue = angular.isDefined(trueValue) ? trueValue : true;
-      falseValue = angular.isDefined(falseValue) ? falseValue : false;
+      function getFalseValue() {
+        return getCheckboxValue(attrs.btnCheckboxFalse, false);
+      }
+
+      function getCheckboxValue(attributeValue, defaultValue) {
+        var val = scope.$eval(attributeValue);
+        return angular.isDefined(val) ? val : defaultValue;
+      }
 
       //model -> UI
-      scope.$watch(function () {
-        return ngModelCtrl.$modelValue;
-      }, function (modelValue) {
-        if (angular.equals(modelValue, trueValue)) {
-          element.addClass(activeClass);
-        } else {
-          element.removeClass(activeClass);
-        }
-      });
+      ngModelCtrl.$render = function () {
+        element.toggleClass(buttonsCtrl.activeClass, angular.equals(ngModelCtrl.$modelValue, getTrueValue()));
+      };
 
       //ui->model
-      element.bind(toggleEvent, function () {
+      element.bind(buttonsCtrl.toggleEvent, function () {
         scope.$apply(function () {
-          ngModelCtrl.$setViewValue(element.hasClass(activeClass) ? falseValue : trueValue);
+          ngModelCtrl.$setViewValue(element.hasClass(buttonsCtrl.activeClass) ? getFalseValue() : getTrueValue());
+          ngModelCtrl.$render();
         });
       });
     }
   };
-}]);
+});

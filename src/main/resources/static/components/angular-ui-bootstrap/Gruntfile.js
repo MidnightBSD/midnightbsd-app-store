@@ -1,18 +1,25 @@
+/* jshint node: true */
 var markdown = require('node-markdown').Markdown;
 
 module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-contrib-copy'); 
+  grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-html2js');
+  grunt.loadNpmTasks('grunt-karma');
+  grunt.loadNpmTasks('grunt-conventional-changelog');
+  grunt.loadNpmTasks('grunt-ngdocs');
+  grunt.loadNpmTasks('grunt-ddescribe-iit');
 
   // Project configuration.
+  grunt.util.linefeed = '\n';
+
   grunt.initConfig({
-    ngversion: '1.0.5',
-    bsversion: '2.3.1',
+    ngversion: '1.2.16',
+    bsversion: '3.1.1',
     modules: [],//to be filled in by build task
     pkg: grunt.file.readJSON('package.json'),
     dist: 'dist',
@@ -21,32 +28,40 @@ module.exports = function(grunt) {
     meta: {
       modules: 'angular.module("ui.bootstrap", [<%= srcModules %>]);',
       tplmodules: 'angular.module("ui.bootstrap.tpls", [<%= tplModules %>]);',
-      all: 'angular.module("ui.bootstrap", ["ui.bootstrap.tpls", <%= srcModules %>]);'
+      all: 'angular.module("ui.bootstrap", ["ui.bootstrap.tpls", <%= srcModules %>]);',
+      banner: ['/*',
+               ' * <%= pkg.name %>',
+               ' * <%= pkg.homepage %>\n',
+               ' * Version: <%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %>',
+               ' * License: <%= pkg.license %>',
+               ' */\n'].join('\n')
     },
-    watch: {
+    delta: {
+      docs: {
+        files: ['misc/demo/index.html'],
+        tasks: ['after-test']
+      },
       html: {
         files: ['template/**/*.html'],
-        tasks: ['html2js']
+        tasks: ['html2js', 'karma:watch:run']
       },
       js: {
-        //nospawn makes the tests start faster
-        nospawn: true,
         files: ['src/**/*.js'],
         //we don't need to jshint here, it slows down everything else
-        tasks: ['test-run']
+        tasks: ['karma:watch:run']
       }
     },
     concat: {
       dist: {
         options: {
-          banner: '<%= meta.modules %>\n'
+          banner: '<%= meta.banner %><%= meta.modules %>\n'
         },
         src: [], //src filled in by build task
         dest: '<%= dist %>/<%= filename %>-<%= pkg.version %>.js'
       },
       dist_tpls: {
         options: {
-          banner: '<%= meta.all %>\n<%= meta.tplmodules %>\n'
+          banner: '<%= meta.banner %><%= meta.all %>\n<%= meta.tplmodules %>\n'
         },
         src: [], //src filled in by build task
         dest: '<%= dist %>/<%= filename %>-tpls-<%= pkg.version %>.js'
@@ -60,28 +75,31 @@ module.exports = function(grunt) {
         },
         files: [{
           expand: true,
-          src: ["**/*.html"],
-          cwd: "misc/demo/",
-          dest: "dist/"
+          src: ['**/*.html'],
+          cwd: 'misc/demo/',
+          dest: 'dist/'
         }]
       },
       demoassets: {
         files: [{
           expand: true,
           //Don't re-copy html files, we process those
-          src: ["**/**/*", "!**/*.html"],
-          cwd: "misc/demo",
-          dest: "dist/"
+          src: ['**/**/*', '!**/*.html'],
+          cwd: 'misc/demo',
+          dest: 'dist/'
         }]
       }
     },
     uglify: {
+      options: {
+        banner: '<%= meta.banner %>'
+      },
       dist:{
-        src:['<%= dist %>/<%= filename %>-<%= pkg.version %>.js'],
+        src:['<%= concat.dist.dest %>'],
         dest:'<%= dist %>/<%= filename %>-<%= pkg.version %>.min.js'
       },
       dist_tpls:{
-        src:['<%= dist %>/<%= filename %>-tpls-<%= pkg.version %>.js'],
+        src:['<%= concat.dist_tpls.dest %>'],
         dest:'<%= dist %>/<%= filename %>-tpls-<%= pkg.version %>.min.js'
       }
     },
@@ -101,26 +119,106 @@ module.exports = function(grunt) {
     jshint: {
       files: ['Gruntfile.js','src/**/*.js'],
       options: {
-        curly: true,
-        immed: true,
-        newcap: true,
-        noarg: true,
-        sub: true,
-        boss: true,
-        eqnull: true,
-        globals: {
-          angular: true
-        }
+        jshintrc: '.jshintrc'
       }
+    },
+    karma: {
+      options: {
+        configFile: 'karma.conf.js'
+      },
+      watch: {
+        background: true
+      },
+      continuous: {
+        singleRun: true
+      },
+      jenkins: {
+        singleRun: true,
+        colors: false,
+        reporters: ['dots', 'junit'],
+        browsers: ['Chrome', 'ChromeCanary', 'Firefox', 'Opera', '/Users/jenkins/bin/safari.sh']
+      },
+      travis: {
+        singleRun: true,
+        reporters: ['dots'],
+        browsers: ['Firefox']
+      },
+      coverage: {
+        preprocessors: {
+          'src/*/*.js': 'coverage'
+        },
+        reporters: ['progress', 'coverage']
+      }
+    },
+    changelog: {
+      options: {
+        dest: 'CHANGELOG.md',
+        templateFile: 'misc/changelog.tpl.md',
+        github: 'angular-ui/bootstrap'
+      }
+    },
+    shell: {
+      //We use %version% and evluate it at run-time, because <%= pkg.version %>
+      //is only evaluated once
+      'release-prepare': [
+        'grunt before-test after-test',
+        'grunt version', //remove "-SNAPSHOT"
+        'grunt changelog'
+      ],
+      'release-complete': [
+        'git commit CHANGELOG.md package.json -m "chore(release): v%version%"',
+        'git tag %version%'
+      ],
+      'release-start': [
+        'grunt version:minor:"SNAPSHOT"',
+        'git commit package.json -m "chore(release): Starting v%version%"'
+      ]
+    },
+    ngdocs: {
+      options: {
+        dest: 'dist/docs',
+        scripts: [
+          'angular.js',
+          '<%= concat.dist_tpls.dest %>'
+        ],
+        styles: [
+          'docs/css/style.css'
+        ],
+        navTemplate: 'docs/nav.html',
+        title: 'ui-bootstrap',
+        html5Mode: false
+      },
+      api: {
+        src: ['src/**/*.js', 'src/**/*.ngdoc'],
+        title: 'API Documentation'
+      }
+    },
+    'ddescribe-iit': {
+      files: [
+        'src/**/*.spec.js'
+      ]
     }
   });
 
-  //register before and after test tasks so we've don't have to change cli options on the goole's CI server
-  grunt.registerTask('before-test', ['jshint', 'html2js']);
+  //register before and after test tasks so we've don't have to change cli
+  //options on the goole's CI server
+  grunt.registerTask('before-test', ['enforce', 'ddescribe-iit', 'jshint', 'html2js']);
   grunt.registerTask('after-test', ['build', 'copy']);
+
+  //Rename our watch task to 'delta', then make actual 'watch'
+  //task build things, then start test server
+  grunt.renameTask('watch', 'delta');
+  grunt.registerTask('watch', ['before-test', 'after-test', 'karma:watch', 'delta']);
 
   // Default task.
   grunt.registerTask('default', ['before-test', 'test', 'after-test']);
+
+  grunt.registerTask('enforce', 'Install commit message enforce script if it doesn\'t exist', function() {
+    if (!grunt.file.exists('.git/hooks/commit-msg')) {
+      grunt.file.copy('misc/validate-commit-msg.js', '.git/hooks/commit-msg');
+      require('fs').chmodSync('.git/hooks/commit-msg', '0755');
+    }
+  });
 
   //Common ui.bootstrap module containing all modules for src and templates
   //findModule: Adds a given module to config
@@ -147,18 +245,18 @@ module.exports = function(grunt) {
       name: name,
       moduleName: enquote('ui.bootstrap.' + name),
       displayName: ucwords(breakup(name, ' ')),
-      srcFiles: grunt.file.expand("src/"+name+"/*.js"),
-      tplFiles: grunt.file.expand("template/"+name+"/*.html"),
-      tpljsFiles: grunt.file.expand("template/"+name+"/*.html.js"),
-      tplModules: grunt.file.expand("template/"+name+"/*.html").map(enquote),
+      srcFiles: grunt.file.expand('src/'+name+'/*.js'),
+      tplFiles: grunt.file.expand('template/'+name+'/*.html'),
+      tpljsFiles: grunt.file.expand('template/'+name+'/*.html.js'),
+      tplModules: grunt.file.expand('template/'+name+'/*.html').map(enquote),
       dependencies: dependenciesForModule(name),
       docs: {
-        md: grunt.file.expand("src/"+name+"/docs/*.md")
-          .map(grunt.file.read).map(markdown).join("\n"),
-        js: grunt.file.expand("src/"+name+"/docs/*.js")
-          .map(grunt.file.read).join("\n"),
-        html: grunt.file.expand("src/"+name+"/docs/*.html")
-          .map(grunt.file.read).join("\n")
+        md: grunt.file.expand('src/'+name+'/docs/*.md')
+          .map(grunt.file.read).map(markdown).join('\n'),
+        js: grunt.file.expand('src/'+name+'/docs/*.js')
+          .map(grunt.file.read).join('\n'),
+        html: grunt.file.expand('src/'+name+'/docs/*.html')
+          .map(grunt.file.read).join('\n')
       }
     };
     module.dependencies.forEach(findModule);
@@ -196,6 +294,8 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('build', 'Create bootstrap build files', function() {
+    var _ = grunt.util._;
+
     //If arguments define what modules to build, build those. Else, everything
     if (this.args.length) {
       this.args.forEach(findModule);
@@ -207,24 +307,30 @@ module.exports = function(grunt) {
         findModule(dir.split('/')[1]);
       });
     }
-    
-    //Pluck will take an array of objects, and map the given key to a new array
-    //@example: expect( pluck([{a:1},{a:2}], 'a') ).toBe([1,2])
-    function pluck(array, key) {
-      return array.map(function(obj) {
-        return obj[key];
-      });
-    }
 
     var modules = grunt.config('modules');
-    grunt.config('srcModules', pluck(modules, 'moduleName'));
-    grunt.config('tplModules', pluck(modules, 'tplModules').filter(function(tpls) { return tpls.length > 0;} ));
-    grunt.config('demoModules', modules.filter(function(module) {
-      return module.docs.md && module.docs.js && module.docs.html;
-    }));
+    grunt.config('srcModules', _.pluck(modules, 'moduleName'));
+    grunt.config('tplModules', _.pluck(modules, 'tplModules').filter(function(tpls) { return tpls.length > 0;} ));
+    grunt.config('demoModules', modules
+      .filter(function(module) {
+        return module.docs.md && module.docs.js && module.docs.html;
+      })
+      .sort(function(a, b) {
+        if (a.name < b.name) { return -1; }
+        if (a.name > b.name) { return 1; }
+        return 0;
+      })
+    );
 
-    var srcFiles = pluck(modules, 'srcFiles');
-    var tpljsFiles = pluck(modules, 'tpljsFiles');
+    var moduleFileMapping = _.clone(modules, true);
+    moduleFileMapping.forEach(function (module) {
+      delete module.docs;
+    });
+
+    grunt.config('moduleFileMapping', moduleFileMapping);
+
+    var srcFiles = _.pluck(modules, 'srcFiles');
+    var tpljsFiles = _.pluck(modules, 'tpljsFiles');
     //Set the concat task to concatenate the given src modules
     grunt.config('concat.dist.src', grunt.config('concat.dist.src')
                  .concat(srcFiles));
@@ -232,114 +338,82 @@ module.exports = function(grunt) {
     grunt.config('concat.dist_tpls.src', grunt.config('concat.dist_tpls.src')
                  .concat(srcFiles).concat(tpljsFiles));
 
-    grunt.task.run(['concat', 'uglify']);
+    grunt.task.run(['concat', 'uglify', 'makeModuleMappingFile', 'makeRawFilesJs']);
   });
 
-  grunt.registerTask('test', 'run tests on single-run server', function() {
-    var options = ['--single-run', '--no-auto-watch', '--log-level=warn']
-      .concat(this.args) //Let user augment test args with command line args
-      .concat(process.env.TRAVIS ? '--browsers=Firefox' : '');
-    runKarma('start', options);
-  });
-
-  grunt.registerTask('server', 'start karma server', function() {
-    var options = ['--no-single-run', '--no-auto-watch'].concat(this.args);
-    runKarma('start', options);
-  });
-
-  grunt.registerTask('test-run', 'run tests against continuous karma server', function() {
-    var options = ['--single-run', '--no-auto-watch'].concat(this.args);
-    runKarma('run', options);
-  });
-
-  grunt.registerTask('test-watch', 'start karma server, watch & execute tests', function() {
-    var options = ['--no-single-run', '--auto-watch'].concat(this.args);
-    runKarma('start', options);
-  });
-
-  //changelog generation
-  grunt.registerTask('changelog', 'generates changelog markdown from git commits', function () {
-
-    var changeFrom = this.args[0], changeTo = this.args[1] || 'HEAD';
-
-    var done = grunt.task.current.async();
-    var child = grunt.util.spawn({
-      cmd:process.platform === 'win32' ? 'git.cmd' : 'git',
-      args: [
-        'log',
-        changeFrom + '..' + changeTo,
-        '--format=%H%n%s%n%b%n==END=='
-      ]
-    }, function (err, result, code) {
-
-      var changelog = {};
-      function addChange(changeType, component, change) {
-        if (!changelog[changeType]) {
-          changelog[changeType] = {};
-        }
-        if (!changelog[changeType][component]) {
-          changelog[changeType][component] = [];
-        }
-        changelog[changeType][component].push(change);
+  grunt.registerTask('test', 'Run tests on singleRun karma server', function () {
+    //this task can be executed in 3 different environments: local, Travis-CI and Jenkins-CI
+    //we need to take settings for each one into account
+    if (process.env.TRAVIS) {
+      grunt.task.run('karma:travis');
+    } else {
+      var isToRunJenkinsTask = !!this.args.length;
+      if(grunt.option('coverage')) {
+        var karmaOptions = grunt.config.get('karma.options'),
+          coverageOpts = grunt.config.get('karma.coverage');
+        grunt.util._.extend(karmaOptions, coverageOpts);
+        grunt.config.set('karma.options', karmaOptions);
       }
+      grunt.task.run(this.args.length ? 'karma:jenkins' : 'karma:continuous');
+    }
+  });
 
-      var COMMIT_MSG_REGEXP = /^(chore|demo|docs|feat|fix|refactor|style|test)\((.+)\):? (.+)$/;
-      var gitlog = result.toString().split('\n==END==\n').reverse();
+  grunt.registerTask('makeModuleMappingFile', function () {
+    var _ = grunt.util._;
+    var moduleMappingJs = 'dist/assets/module-mapping.json';
+    var moduleMappings = grunt.config('moduleFileMapping');
+    var moduleMappingsMap = _.object(_.pluck(moduleMappings, 'name'), moduleMappings);
+    var jsContent = JSON.stringify(moduleMappingsMap);
+    grunt.file.write(moduleMappingJs, jsContent);
+    grunt.log.writeln('File ' + moduleMappingJs.cyan + ' created.');
+  });
 
-      if (code) {
-        grunt.log.error(err);
-        done(false);
-      } else {
+  grunt.registerTask('makeRawFilesJs', function () {
+    var _ = grunt.util._;
+    var jsFilename = 'dist/assets/raw-files.json';
+    var genRawFilesJs = require('./misc/raw-files-generator');
 
-        gitlog.forEach(function (logItem) {
-          var lines = logItem.split('\n');
-          var sha1 = lines.shift().substr(0,8); //Only first 7 of sha1
-          var subject = lines.shift();
+    genRawFilesJs(grunt, jsFilename, _.flatten(grunt.config('concat.dist_tpls.src')),
+                  grunt.config('meta.banner'));
+  });
 
-          var msgMatches = subject.match(COMMIT_MSG_REGEXP);
-          var changeType = msgMatches[1];
-          var component = msgMatches[2];
-          var componentMsg = msgMatches[3];
-
-          var breaking = logItem.match(/BREAKING CHANGE:([\s\S]*)/);
-          if (breaking) {
-            addChange('breaking', component, {
-              sha1: sha1,
-              msg: breaking[1]
-            });
-          }
-          addChange(changeType, component, {sha1:sha1, msg:componentMsg});
-        });
-
-        console.log(grunt.template.process(grunt.file.read('misc/changelog.tpl.md'), {data: {
-          changelog: changelog,
-          today: grunt.template.today('yyyy-mm-dd'),
-          version : grunt.config('pkg.version')
-        }}));
-
-        done();
+  function setVersion(type, suffix) {
+    var file = 'package.json';
+    var VERSION_REGEX = /([\'|\"]version[\'|\"][ ]*:[ ]*[\'|\"])([\d|.]*)(-\w+)*([\'|\"])/;
+    var contents = grunt.file.read(file);
+    var version;
+    contents = contents.replace(VERSION_REGEX, function(match, left, center) {
+      version = center;
+      if (type) {
+        version = require('semver').inc(version, type);
       }
+      //semver.inc strips our suffix if it existed
+      if (suffix) {
+        version += '-' + suffix;
+      }
+      return left + version + '"';
     });
-  });
-
-  // Karma configuration
-  function runKarma(command, options) {
-    var karmaCmd = process.platform === 'win32' ? 'karma.cmd' : 'karma';
-    var args = [command].concat(options);
-    var done = grunt.task.current.async();
-    var child = grunt.util.spawn({
-        cmd: karmaCmd,
-        args: args
-    }, function(err, result, code) {
-      if (code) {
-        done(false);
-      } else {
-        done();
-      }
-    });
-    child.stdout.pipe(process.stdout);
-    child.stderr.pipe(process.stderr);
+    grunt.log.ok('Version set to ' + version.cyan);
+    grunt.file.write(file, contents);
+    return version;
   }
-  
+
+  grunt.registerTask('version', 'Set version. If no arguments, it just takes off suffix', function() {
+    setVersion(this.args[0], this.args[1]);
+  });
+
+  grunt.registerMultiTask('shell', 'run shell commands', function() {
+    var self = this;
+    var sh = require('shelljs');
+    self.data.forEach(function(cmd) {
+      cmd = cmd.replace('%version%', grunt.file.readJSON('package.json').version);
+      grunt.log.ok(cmd);
+      var result = sh.exec(cmd,{silent:true});
+      if (result.code !== 0) {
+        grunt.fatal(result.output);
+      }
+    });
+  });
+
   return grunt;
 };

@@ -13,12 +13,12 @@ angular.module('plunker', [])
 
       var indexContent = function (content, version) {
         return '<!doctype html>\n' +
-          '<html ng-app="plunker">\n' +
+          '<html ng-app="ui.bootstrap.demo">\n' +
           '  <head>\n' +
-          '    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/'+ngVersion+'/angular.js"></script>\n' +
-          '    <script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-'+version+'.js"></script>\n' +
+          '    <script src="//ajax.googleapis.com/ajax/libs/angularjs/'+ngVersion+'/angular.js"></script>\n' +
+          '    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-'+version+'.js"></script>\n' +
           '    <script src="example.js"></script>\n' +
-          '    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/'+bsVersion+'/css/bootstrap-combined.min.css" rel="stylesheet">\n' +
+          '    <link href="//netdna.bootstrapcdn.com/bootstrap/'+bsVersion+'/css/bootstrap.min.css" rel="stylesheet">\n' +
           '  </head>\n' +
           '  <body>\n\n' +
           content + '\n' +
@@ -27,7 +27,7 @@ angular.module('plunker', [])
       };
 
       var scriptContent = function(content) {
-        return "angular.module('plunker', ['ui.bootstrap']);" + "\n" + content;
+        return "angular.module('ui.bootstrap.demo', ['ui.bootstrap']);" + "\n" + content;
       };
 
       addField('description', 'http://angular-ui.github.io/bootstrap/');
@@ -52,7 +52,7 @@ angular.module('plunker', [])
   .directive('plunkerContent', function () {
     return {
       link:function (scope, element, attrs) {
-        scope.$parent.content[attrs.plunkerContent] = element.text();
+        scope.content[attrs.plunkerContent] = element.text().trim();
       }
     }
   });

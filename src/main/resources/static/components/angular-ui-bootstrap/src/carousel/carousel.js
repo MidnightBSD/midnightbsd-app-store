@@ -1,28 +1,26 @@
-/*
+/**
+* @ngdoc overview
+* @name ui.bootstrap.carousel
 *
-*    AngularJS Bootstrap Carousel 
+* @description
+* AngularJS version of an image carousel.
 *
-*      A pure AngularJS carousel.
-*      
-*      For no interval set the interval to non-number, or milliseconds of desired interval
-*      Template: <carousel interval="none"><slide>{{anything}}</slide></carousel>
-*      To change the carousel's active slide set the active attribute to true
-*      Template: <carousel interval="none"><slide active="someModel">{{anything}}</slide></carousel>
 */
 angular.module('ui.bootstrap.carousel', ['ui.bootstrap.transition'])
-.controller('CarouselController', ['$scope', '$timeout', '$transition', '$q', function ($scope, $timeout, $transition, $q) {
+.controller('CarouselController', ['$scope', '$timeout', '$interval', '$transition', function ($scope, $timeout, $interval, $transition) {
   var self = this,
-    slides = self.slides = [],
+    slides = self.slides = $scope.slides = [],
     currentIndex = -1,
-    currentTimeout, isPlaying;
+    currentInterval, isPlaying;
   self.currentSlide = null;
 
+  var destroyed = false;
   /* direction: "prev" or "next" */
-  self.select = function(nextSlide, direction) {
+  self.select = $scope.select = function(nextSlide, direction) {
     var nextIndex = slides.indexOf(nextSlide);
     //Decide direction if it's not given
     if (direction === undefined) {
-      direction = nextIndex > currentIndex ? "next" : "prev";
+      direction = nextIndex > currentIndex ? 'next' : 'prev';
     }
     if (nextSlide && nextSlide !== self.currentSlide) {
       if ($scope.$currentTransition) {
@@ -34,11 +32,13 @@ angular.module('ui.bootstrap.carousel', ['ui.bootstrap.transition'])
       }
     }
     function goNext() {
+      // Scope has been destroyed, stop here.
+      if (destroyed) { return; }
       //If we have a slide to transition from and we have a transition type and we're allowed, go
-      if (self.currentSlide && angular.isString(direction) && !$scope.noTransition && nextSlide.$element) { 
+      if (self.currentSlide && angular.isString(direction) && !$scope.noTransition && nextSlide.$element) {
         //We shouldn't do class manip in here, but it's the same weird thing bootstrap does. need to fix sometime
         nextSlide.$element.addClass(direction);
-        nextSlide.$element[0].offsetWidth = nextSlide.$element[0].offsetWidth; //force reflow
+        var reflow = nextSlide.$element[0].offsetWidth; //force reflow
 
         //Set all other slides to stop doing their stuff for the new transition
         angular.forEach(slides, function(slide) {
@@ -69,6 +69,9 @@ angular.module('ui.bootstrap.carousel', ['ui.bootstrap.transition'])
       $scope.$currentTransition = null;
     }
   };
+  $scope.$on('$destroy', function () {
+    destroyed = true;
+  });
 
   /* Allow outside people to call indexOf on slides array */
   self.indexOfSlide = function(slide) {
@@ -77,44 +80,53 @@ angular.module('ui.bootstrap.carousel', ['ui.bootstrap.transition'])
 
   $scope.next = function() {
     var newIndex = (currentIndex + 1) % slides.length;
-    return self.select(slides[newIndex], 'next');
+
+    //Prevent this user-triggered transition from occurring if there is already one in progress
+    if (!$scope.$currentTransition) {
+      return self.select(slides[newIndex], 'next');
+    }
   };
 
   $scope.prev = function() {
     var newIndex = currentIndex - 1 < 0 ? slides.length - 1 : currentIndex - 1;
-    return self.select(slides[newIndex], 'prev');
-  };
 
-  $scope.select = function(slide) {
-    self.select(slide);
+    //Prevent this user-triggered transition from occurring if there is already one in progress
+    if (!$scope.$currentTransition) {
+      return self.select(slides[newIndex], 'prev');
+    }
   };
 
   $scope.isActive = function(slide) {
      return self.currentSlide === slide;
   };
 
-  $scope.slides = function() {
-    return slides;
-  };
-
   $scope.$watch('interval', restartTimer);
+  $scope.$on('$destroy', resetTimer);
+
   function restartTimer() {
-    if (currentTimeout) {
-      $timeout.cancel(currentTimeout);
-    }
-    function go() {
-      if (isPlaying) {
-        $scope.next();
-        restartTimer();
-      } else {
-        $scope.pause();
-      }
-    }
+    resetTimer();
     var interval = +$scope.interval;
-    if (!isNaN(interval) && interval>=0) {
-      currentTimeout = $timeout(go, interval);
+    if (!isNaN(interval) && interval > 0) {
+      currentInterval = $interval(timerFn, interval);
     }
   }
+
+  function resetTimer() {
+    if (currentInterval) {
+      $interval.cancel(currentInterval);
+      currentInterval = null;
+    }
+  }
+
+  function timerFn() {
+    var interval = +$scope.interval;
+    if (isPlaying && !isNaN(interval) && interval > 0) {
+      $scope.next();
+    } else {
+      $scope.pause();
+    }
+  }
+
   $scope.play = function() {
     if (!isPlaying) {
       isPlaying = true;
@@ -122,9 +134,9 @@ angular.module('ui.bootstrap.carousel', ['ui.bootstrap.transition'])
     }
   };
   $scope.pause = function() {
-    isPlaying = false;
-    if (currentTimeout) {
-      $timeout.cancel(currentTimeout);
+    if (!$scope.noPause) {
+      isPlaying = false;
+      resetTimer();
     }
   };
 
@@ -152,9 +164,51 @@ angular.module('ui.bootstrap.carousel', ['ui.bootstrap.transition'])
       } else {
         self.select(slides[index]);
       }
+    } else if (currentIndex > index) {
+      currentIndex--;
     }
   };
+
 }])
+
+/**
+ * @ngdoc directive
+ * @name ui.bootstrap.carousel.directive:carousel
+ * @restrict EA
+ *
+ * @description
+ * Carousel is the outer container for a set of image 'slides' to showcase.
+ *
+ * @param {number=} interval The time, in milliseconds, that it will take the carousel to go to the next slide.
+ * @param {boolean=} noTransition Whether to disable transitions on the carousel.
+ * @param {boolean=} noPause Whether to disable pausing on the carousel (by default, the carousel interval pauses on hover).
+ *
+ * @example
+<example module="ui.bootstrap">
+  <file name="index.html">
+    <carousel>
+      <slide>
+        <img src="http://placekitten.com/150/150" style="margin:auto;">
+        <div class="carousel-caption">
+          <p>Beautiful!</p>
+        </div>
+      </slide>
+      <slide>
+        <img src="http://placekitten.com/100/150" style="margin:auto;">
+        <div class="carousel-caption">
+          <p>D'aww!</p>
+        </div>
+      </slide>
+    </carousel>
+  </file>
+  <file name="demo.css">
+    .carousel-indicators {
+      top: auto;
+      bottom: 15px;
+    }
+  </file>
+</example>
+ */
 .directive('carousel', [function() {
   return {
     restrict: 'EA',
@@ -165,11 +219,54 @@ angular.module('ui.bootstrap.carousel', ['ui.bootstrap.transition'])
     templateUrl: 'template/carousel/carousel.html',
     scope: {
       interval: '=',
-      noTransition: '='
+      noTransition: '=',
+      noPause: '='
     }
   };
 }])
-.directive('slide', [function() {
+
+/**
+ * @ngdoc directive
+ * @name ui.bootstrap.carousel.directive:slide
+ * @restrict EA
+ *
+ * @description
+ * Creates a slide inside a {@link ui.bootstrap.carousel.directive:carousel carousel}.  Must be placed as a child of a carousel element.
+ *
+ * @param {boolean=} active Model binding, whether or not this slide is currently active.
+ *
+ * @example
+<example module="ui.bootstrap">
+  <file name="index.html">
+<div ng-controller="CarouselDemoCtrl">
+  <carousel>
+    <slide ng-repeat="slide in slides" active="slide.active">
+      <img ng-src="{{slide.image}}" style="margin:auto;">
+      <div class="carousel-caption">
+        <h4>Slide {{$index}}</h4>
+        <p>{{slide.text}}</p>
+      </div>
+    </slide>
+  </carousel>
+  Interval, in milliseconds: <input type="number" ng-model="myInterval">
+  <br />Enter a negative number to stop the interval.
+</div>
+  </file>
+  <file name="script.js">
+function CarouselDemoCtrl($scope) {
+  $scope.myInterval = 5000;
+}
+  </file>
+  <file name="demo.css">
+    .carousel-indicators {
+      top: auto;
+      bottom: 15px;
+    }
+  </file>
+</example>
+*/
+
+.directive('slide', function() {
   return {
     require: '^carousel',
     restrict: 'EA',
@@ -177,7 +274,7 @@ angular.module('ui.bootstrap.carousel', ['ui.bootstrap.transition'])
     replace: true,
     templateUrl: 'template/carousel/slide.html',
     scope: {
-      active: '='
+      active: '=?'
     },
     link: function (scope, element, attrs, carouselCtrl) {
       carouselCtrl.addSlide(scope, element);
@@ -193,4 +290,4 @@ angular.module('ui.bootstrap.carousel', ['ui.bootstrap.transition'])
       });
     }
   };
-}]);
+});

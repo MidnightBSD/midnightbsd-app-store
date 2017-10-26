@@ -44,8 +44,11 @@ describe('buttons', function () {
 
       btn.click();
       expect($scope.model).toEqual(true);
+      expect(btn).toHaveClass('active');
+
       btn.click();
       expect($scope.model).toEqual(false);
+      expect(btn).not.toHaveClass('active');
     });
 
     it('should toggle custom model values on click', function () {
@@ -54,8 +57,28 @@ describe('buttons', function () {
 
       btn.click();
       expect($scope.model).toEqual(1);
+      expect(btn).toHaveClass('active');
+
       btn.click();
       expect($scope.model).toEqual(0);
+      expect(btn).not.toHaveClass('active');
+    });
+
+    it('should monitor true / false value changes - issue 666', function () {
+
+      $scope.model = 1;
+      $scope.trueVal = 1;
+      var btn = compileButton('<button ng-model="model" btn-checkbox btn-checkbox-true="trueVal">click</button>', $scope);
+
+      expect(btn).toHaveClass('active');
+      expect($scope.model).toEqual(1);
+
+      $scope.model = 2;
+      $scope.trueVal = 2;
+      $scope.$digest();
+
+      expect(btn).toHaveClass('active');
+      expect($scope.model).toEqual(2);
     });
   });
 
@@ -86,9 +109,80 @@ describe('buttons', function () {
 
       btns.eq(0).click();
       expect($scope.model).toEqual(1);
+      expect(btns.eq(0)).toHaveClass('active');
+      expect(btns.eq(1)).not.toHaveClass('active');
 
       btns.eq(1).click();
       expect($scope.model).toEqual(2);
+      expect(btns.eq(1)).toHaveClass('active');
+      expect(btns.eq(0)).not.toHaveClass('active');
+    });
+
+    it('should watch btn-radio values and update state accordingly', function () {
+      $scope.values = ['value1', 'value2'];
+
+      var btns = compileButtons('<button ng-model="model" btn-radio="values[0]">click1</button><button ng-model="model" btn-radio="values[1]">click2</button>', $scope);
+      expect(btns.eq(0)).not.toHaveClass('active');
+      expect(btns.eq(1)).not.toHaveClass('active');
+
+      $scope.model = 'value2';
+      $scope.$digest();
+      expect(btns.eq(0)).not.toHaveClass('active');
+      expect(btns.eq(1)).toHaveClass('active');
+
+      $scope.values[1] = 'value3';
+      $scope.model = 'value3';
+      $scope.$digest();
+      expect(btns.eq(0)).not.toHaveClass('active');
+      expect(btns.eq(1)).toHaveClass('active');
+    });
+
+    describe('uncheckable', function () {
+      //model -> UI
+      it('should set active class based on model', function () {
+        var btns = compileButtons('<button ng-model="model" btn-radio="1" uncheckable>click1</button><button ng-model="model" btn-radio="2" uncheckable>click2</button>', $scope);
+        expect(btns.eq(0)).not.toHaveClass('active');
+        expect(btns.eq(1)).not.toHaveClass('active');
+
+        $scope.model = 2;
+        $scope.$digest();
+        expect(btns.eq(0)).not.toHaveClass('active');
+        expect(btns.eq(1)).toHaveClass('active');
+      });
+
+      //UI->model
+      it('should unset active class based on model', function () {
+        var btns = compileButtons('<button ng-model="model" btn-radio="1" uncheckable>click1</button><button ng-model="model" btn-radio="2" uncheckable>click2</button>', $scope);
+        expect($scope.model).toBeUndefined();
+
+        btns.eq(0).click();
+        expect($scope.model).toEqual(1);
+        expect(btns.eq(0)).toHaveClass('active');
+        expect(btns.eq(1)).not.toHaveClass('active');
+
+        btns.eq(0).click();
+        expect($scope.model).toEqual(undefined);
+        expect(btns.eq(1)).not.toHaveClass('active');
+        expect(btns.eq(0)).not.toHaveClass('active');
+      });
+
+      it('should watch btn-radio values and update state', function () {
+        $scope.values = ['value1', 'value2'];
+
+        var btns = compileButtons('<button ng-model="model" btn-radio="values[0]" uncheckable>click1</button><button ng-model="model" btn-radio="values[1]" uncheckable>click2</button>', $scope);
+        expect(btns.eq(0)).not.toHaveClass('active');
+        expect(btns.eq(1)).not.toHaveClass('active');
+
+        $scope.model = 'value2';
+        $scope.$digest();
+        expect(btns.eq(0)).not.toHaveClass('active');
+        expect(btns.eq(1)).toHaveClass('active');
+
+        $scope.model = undefined;
+        $scope.$digest();
+        expect(btns.eq(0)).not.toHaveClass('active');
+        expect(btns.eq(1)).not.toHaveClass('active');
+      });
     });
   });
 });

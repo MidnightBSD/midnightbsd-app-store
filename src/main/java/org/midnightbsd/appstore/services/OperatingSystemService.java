@@ -4,21 +4,28 @@ import lombok.extern.slf4j.Slf4j;
 import org.midnightbsd.appstore.model.OperatingSystem;
 import org.midnightbsd.appstore.repository.OperatingSystemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 /**
  * @author Lucas Holt
  */
+@Transactional(readOnly = true)
+@CacheConfig(cacheNames = "os")
 @Slf4j
 @Service
 public class OperatingSystemService implements AppService<OperatingSystem> {
     @Autowired
     private OperatingSystemRepository repository;
 
+    @Cacheable(key = "'osList'", unless = "#result == null")
     public List<OperatingSystem> list() {
         return repository.findAll();
     }
@@ -27,11 +34,26 @@ public class OperatingSystemService implements AppService<OperatingSystem> {
         return repository.findAll(page);
     }
 
+    @Cacheable(unless = "#result == null", key = "#id.toString()")
     public OperatingSystem get(final int id) {
         return repository.findOne(id);
     }
 
     public OperatingSystem getByNameAndVersion(final String name, final String version) {
         return repository.findByNameAndVersion(name, version);
+    }
+
+    @Transactional
+    @CacheEvict(allEntries = true)
+    public OperatingSystem save(OperatingSystem operatingSystem) {
+        OperatingSystem existing = repository.findOne(operatingSystem.getId());
+        if (existing == null) {
+            // create new one
+            return repository.saveAndFlush(operatingSystem);
+        }
+
+        existing.setName(operatingSystem.getName());
+        existing.setVersion(operatingSystem.getVersion());
+        return repository.saveAndFlush(existing);
     }
 }
