@@ -2,7 +2,10 @@ package org.midnightbsd.appstore.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,6 +17,9 @@ import java.io.Serializable;
 @Table(name="architecture")
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Architecture implements Serializable {
     @JsonIgnore
     private static final long serialVersionUID = -8907435937263824811L;

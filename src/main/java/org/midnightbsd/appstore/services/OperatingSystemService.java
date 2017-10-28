@@ -22,8 +22,12 @@ import java.util.List;
 @Slf4j
 @Service
 public class OperatingSystemService implements AppService<OperatingSystem> {
+    private final OperatingSystemRepository repository;
+
     @Autowired
-    private OperatingSystemRepository repository;
+    public OperatingSystemService(final OperatingSystemRepository repository) {
+        this.repository = repository;
+    }
 
     @Cacheable(key = "'osList'", unless = "#result == null")
     public List<OperatingSystem> list() {
@@ -55,5 +59,14 @@ public class OperatingSystemService implements AppService<OperatingSystem> {
         existing.setName(operatingSystem.getName());
         existing.setVersion(operatingSystem.getVersion());
         return repository.saveAndFlush(existing);
+    }
+
+    @Transactional
+    @CacheEvict(allEntries = true)
+    public OperatingSystem createIfNotExists(final String name, String version) {
+        final OperatingSystem os =  getByNameAndVersion(name, version);
+        if (os != null)
+            return os;
+        return save(OperatingSystem.builder().name(name).version(version).build());
     }
 }

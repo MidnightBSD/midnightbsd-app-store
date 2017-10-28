@@ -4,7 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.midnightbsd.appstore.model.*;
 import org.midnightbsd.appstore.model.magus.Port;
 import org.midnightbsd.appstore.model.magus.Run;
-import org.midnightbsd.appstore.repository.*;
+import org.midnightbsd.appstore.repository.PackageInstanceRepository;
+import org.midnightbsd.appstore.repository.PackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -33,7 +34,7 @@ public class MagusImportService {
     private RestTemplate restTemplate;
 
     @Autowired
-    private ArchitectureRepository architectureRepository;
+    private ArchitectureService architectureService;
 
     @Autowired
     private CategoryService categoryService;
@@ -48,26 +49,29 @@ public class MagusImportService {
     private PackageInstanceRepository packageInstanceRepository;
 
     @Autowired
-    private LicenseRepository licenseRepository;
+    private LicenseService licenseService;
 
     @Autowired
     private SearchService searchService;
 
     private static final int DELAY_ONE_MINUTE = 1000 * 60;
+    private static final int SIX_HOURS = DELAY_ONE_MINUTE * 60 * 6;
 
 
     /**
      * Synchronize with Magus, pull new package data
      */
     @Transactional
-    @Scheduled(fixedDelay = DELAY_ONE_MINUTE * 120, initialDelay = DELAY_ONE_MINUTE)
+    @Scheduled(fixedDelay = SIX_HOURS, initialDelay = DELAY_ONE_MINUTE)
     public void sync() {
         final List<Run> runs = getFilteredRuns();
         final HashMap<String, Run> osRunMap = new HashMap<>();
+        final HashMap<String, Category> categoryMap = new HashMap<>();
+        final HashMap<String, License> licenseMap = new HashMap<>();
 
         for (final Run run : runs) {
             final String os = getFilteredKey(run);
-            
+
             // if we have a key but its less than then the current run id, ignore it
             if (osRunMap.containsKey(os) && osRunMap.get(os).getId() > run.getId())
                 continue;
@@ -75,118 +79,142 @@ public class MagusImportService {
             osRunMap.put(os, run);
         }
 
-        for (final Run run : osRunMap.values()) {
-            Architecture arch = architectureRepository.findOneByName(run.getArch());
-            if (arch == null)
-            {
-                log.info("Adding new architecture " + run.getArch());
-                arch = new Architecture();
-                arch.setName(run.getArch());
-                arch = architectureRepository.saveAndFlush(arch);
-            }
+        log.info("Processing " + osRunMap.values().size() + " runs");
 
-            OperatingSystem os = operatingSystemService.getByNameAndVersion("MidnightBSD", run.getOsVersion());
-            if (os == null) {
-                log.info("Adding new operating system MidnightBSD " + run.getOsVersion());
-                os = new OperatingSystem();
-                os.setName("MidnightBSD");
-                os.setVersion(run.getOsVersion());
-                os = operatingSystemService.save(os);
-            }
+        for (final Run run : osRunMap.values()) {
+
+            final Architecture arch = architectureService.createIfNotExists(run.getArch());
+            final OperatingSystem os = operatingSystemService.createIfNotExists("MidnightBSD", run.getOsVersion());
 
             final List<Port> ports = getPorts(run.getId(), MAGUS_STATUS_PASS);
             log.info("Processing " + ports.size() + " ports");
             for (final Port port : ports) {
-                final String catAndName = port.getPort();
-                int nameSplitLoc = catAndName.indexOf('/');
-                
-                final String name = catAndName.substring(nameSplitLoc+ 1);
-                final String category = catAndName.substring(0, nameSplitLoc);
+                try {
+                    final String catAndName = port.getPort();
+                    final int nameSplitLoc = catAndName.indexOf('/');
 
-                log.info("Attempt to find category " + category);
-                Category cat = categoryService.getByName(category);
-                if (cat == null) {
-                    cat = new Category();
-                    cat.setName(category);
-                    cat.setDescription("");
-                    cat = categoryService.save(cat);
-                    log.info("Created new category " + cat.getName());
-                }
+                    final String name = catAndName.substring(nameSplitLoc + 1);
+                    final String category = catAndName.substring(0, nameSplitLoc);
 
-                org.midnightbsd.appstore.model.Package pkg = packageRepository.findOneByName(name);
-                if (pkg == null) {
-                    pkg = new org.midnightbsd.appstore.model.Package();
-                    Set<Category> s = new HashSet<>();
-                    s.add(cat);
-                    pkg.setCategories(s);
-                }    else {
-                    boolean catFound = false;
-                    for (Category c : pkg.getCategories()) {
-                        if (c.getName().equalsIgnoreCase(category)) {
-                            catFound = true;
-                            break;
+                    final Category cat;
+                    if (categoryMap.containsKey(category))
+                          cat = categoryMap.get(category);
+                    else {
+                        cat = categoryService.createIfNotExists(category, "");
+                        categoryMap.put(category, cat);
+                    }
+
+                    org.midnightbsd.appstore.model.Package pkg = packageRepository.findOneByName(name);
+                    if (pkg == null) {
+                        // new package
+
+                        pkg = new org.midnightbsd.appstore.model.Package();
+                        Set<Category> s = new HashSet<>();
+                        s.add(cat);
+                        pkg.setCategories(s);
+                        pkg.setName(name);
+                        pkg.setDescription(port.getDescription());
+                        pkg.setUrl(port.getWww());
+                        pkg = packageRepository.saveAndFlush(pkg);
+                        log.info("Saved new package " + pkg.getName());
+                    } else {
+                        boolean catFound = false;
+                        for (final Category c : pkg.getCategories()) {
+                            if (c.getName().equalsIgnoreCase(category)) {
+                                catFound = true;
+                                break;
+                            }
+                        }
+                        if (!catFound)
+                            pkg.getCategories().add(cat);
+
+                        // only save if something changed.
+                        if (!catFound ||
+                                (port.getDescription() != null && !port.getDescription().equalsIgnoreCase(pkg.getDescription())) ||
+                                (port.getWww() != null && !port.getWww().equalsIgnoreCase(pkg.getUrl()))) {
+                            pkg.setDescription(port.getDescription());
+                            pkg.setUrl(port.getWww());
+                            pkg = packageRepository.saveAndFlush(pkg);
+                            log.info("Updated package " + pkg.getName());
                         }
                     }
-                    if (!catFound)
-                        pkg.getCategories().add(cat);
-                }
-                
-                pkg.setName(name);
-                pkg.setDescription(port.getDescription());
-                pkg.setUrl(port.getWww());
-                // TODO: other metadata
-                pkg = packageRepository.saveAndFlush(pkg);
-                log.info("Saved package " + pkg.getName());
 
-                final List<PackageInstance> packageInstances = packageInstanceRepository.findByPkgAndOperatingSystemAndArchitecture(pkg, os, arch);
-                if (packageInstances != null && !packageInstances.isEmpty()) {
-                    // reload  TODO: update?
-                    log.info("Deleting " + packageInstances.size() + " package instances");
-                    packageInstanceRepository.deleteInBatch(packageInstances);
-                    packageInstanceRepository.flush();
-                }
+                    PackageInstance packageInstance = null;
+                    final List<PackageInstance> packageInstances = packageInstanceRepository.findByPkgAndOperatingSystemAndArchitecture(pkg, os, arch);
+                    if (packageInstances == null || packageInstances.isEmpty()) {
+                        packageInstance = new PackageInstance();
+                        packageInstance.setArchitecture(arch);
+                        packageInstance.setOperatingSystem(os);
+                        packageInstance.setVersion(port.getVersion());
+                        packageInstance.setPkg(pkg);
+                        packageInstance.setRun(run.getId());
+                        packageInstance = packageInstanceRepository.saveAndFlush(packageInstance);
+                        log.info("Package instance for " + pkg.getName() + ": " + arch.getName() + " " + os.getVersion() + " added");
+                    } else {
+                        log.info("Instances exist " + packageInstances.size());
+                        boolean present = false;
+                        for (final PackageInstance pi : packageInstances) {
+                            if (pi.getVersion().equalsIgnoreCase(port.getVersion()) && pi.getRun().equals(run.getId())) {
+                                present = true;
+                                packageInstance = pi;
+                                break;
+                            }
+                        }
 
-                PackageInstance packageInstance = new PackageInstance();
-                packageInstance.setArchitecture(arch);
-                packageInstance.setOperatingSystem(os);
-                packageInstance.setVersion(port.getVersion());
-                packageInstance.setPkg(pkg);
-                packageInstance.setRun(run.getId());
-                packageInstance = packageInstanceRepository.saveAndFlush(packageInstance);
-
-                String[] licenses = port.getLicense().split(" ");
-                for (String license : licenses) {
-                    if (license.isEmpty())
-                        break;
-
-                    License l = licenseRepository.findOneByName(license);
-                    if (l == null) {
-                        l = new License();
-                        l.setName(license);
-                        l = licenseRepository.saveAndFlush(l);
+                        if (!present) {
+                            packageInstance = new PackageInstance();
+                            packageInstance.setArchitecture(arch);
+                            packageInstance.setOperatingSystem(os);
+                            packageInstance.setVersion(port.getVersion());
+                            packageInstance.setPkg(pkg);
+                            packageInstance.setRun(run.getId());
+                            packageInstance = packageInstanceRepository.saveAndFlush(packageInstance);
+                        }
                     }
-                    if (packageInstance.getLicenses() == null)
-                        packageInstance.setLicenses(new HashSet<>());
-                    packageInstance.getLicenses().add(l);
 
+                    boolean licenseAdded = false;
+                    final String[] licenses = port.getLicense().split(" ");
+                    for (final String license : licenses) {
+                        if (license.isEmpty())
+                            break;
+
+                        final License l;
+                        if (licenseMap.containsKey(license))
+                            l = licenseMap.get(license);
+                        else {
+                            l = licenseService.createIfNotExists(license);
+                            licenseMap.put(license, l);
+                        }
+                        if (packageInstance.getLicenses() == null)
+                            packageInstance.setLicenses(new HashSet<>());
+
+                        if (packageInstance.getLicenses().stream().noneMatch(f -> f.getName().equalsIgnoreCase(l.getName()))) {
+                            packageInstance.getLicenses().add(l);
+                            licenseAdded = true;
+                        }
+                    }
+                    if (licenseAdded)
+                        packageInstanceRepository.saveAndFlush(packageInstance); // save license link
+
+                    log.info("Indexing package " + pkg.getName());
+                    searchService.index(packageRepository.findOne(pkg.getId()));
+                } catch (final Exception e) {
+                    log.error("Error saving package " + e.getMessage(), e);
                 }
-                packageInstanceRepository.saveAndFlush(packageInstance); // save license link
-
-                searchService.index(packageRepository.findOne(pkg.getId()));
             }
         }
     }
 
     public List<Run> getFilteredRuns() {
         log.info("Filtering runs to include only complete and active");
-      return getRuns().stream().filter( r -> r.getBlessed() && (
-                        r.getStatus().equalsIgnoreCase("complete") ||
+        return getRuns().stream().filter(r -> r.getBlessed() && (
+                r.getStatus().equalsIgnoreCase("complete") ||
                         r.getStatus().equalsIgnoreCase("active")))
-                        .sorted(Comparator.comparingInt(Run::getId)).collect(Collectors.toList());
+                .sorted(Comparator.comparingInt(Run::getId)).collect(Collectors.toList());
     }
 
-    private String getFilteredKey(Run r) {
-       return r.getOsVersion() + "_" + r.getArch();
+    private String getFilteredKey(final Run r) {
+        return r.getOsVersion() + "_" + r.getArch();
     }
 
 

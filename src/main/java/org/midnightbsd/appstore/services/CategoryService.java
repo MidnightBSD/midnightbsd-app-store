@@ -1,6 +1,5 @@
 package org.midnightbsd.appstore.services;
 
-import groovy.util.logging.Slf4j;
 import org.midnightbsd.appstore.model.Category;
 import org.midnightbsd.appstore.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,7 @@ import java.util.List;
  */
 @Transactional(readOnly = true)
 @CacheConfig(cacheNames = "category")
-@Slf4j
+@lombok.extern.slf4j.Slf4j
 @Service
 public class CategoryService implements AppService<Category> {
 
@@ -54,15 +53,32 @@ public class CategoryService implements AppService<Category> {
 
     @Transactional
     @CacheEvict(allEntries = true)
-    public Category save(Category category) {
-        Category existing = categoryRepository.findOne(category.getId());
+    public Category save(final Category category) {
+        final Category existing = categoryRepository.findOne(category.getId());
         if (existing == null) {
+            log.debug("Created new category " + category.getName());
+            
             // create new one
             return categoryRepository.saveAndFlush(category);
         }
 
-        existing.setDescription(category.getDescription());
-        existing.setName(category.getName());
-        return categoryRepository.saveAndFlush(existing);
+        if (!category.getDescription().equals(existing.getDescription()) ||
+                !category.getName().equals(existing.getName())) {
+            existing.setDescription(category.getDescription());
+            existing.setName(category.getName());
+            return categoryRepository.saveAndFlush(existing);
+        }
+        return existing;
+    }
+
+    public Category createIfNotExists(final String name, final String description) {
+        Category cat = getByName(name);
+        if (cat == null) {
+            cat = new Category();
+            cat.setName(name);
+            cat.setDescription(description);
+            return save(cat);
+        }
+        return cat;
     }
 }
