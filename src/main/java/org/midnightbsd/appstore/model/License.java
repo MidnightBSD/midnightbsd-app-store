@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author Lucas Holt
@@ -42,4 +43,9 @@ public class License implements Serializable {
 
     @Column(name="url")
     private String url;
+
+    @JsonIgnore
+    @Column(name = "created")
+    @Temporal(value = TemporalType.DATE)
+    private Date created = new Date();
 }
