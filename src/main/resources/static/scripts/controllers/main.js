@@ -6,6 +6,6 @@ angular.module('wwwApp').controller('MainCtrl', ['$scope', '$http', '$location',
     $scope.os = OperatingSystemService.query();
 
     $scope.search = function() {
-        $location.path('/search/' + $scope.term);
+        $location.path('/search?keyword=' + $scope.term);
     }
 }]);
