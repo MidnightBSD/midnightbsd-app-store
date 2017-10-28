@@ -41,7 +41,7 @@ public class License implements Serializable {
     @Column(name="description",columnDefinition="TEXT",length = 65616)
     private String description;
 
-    @Column(name="url")
+    @Column(name="url", length = 255)
     private String url;
 
     @JsonIgnore

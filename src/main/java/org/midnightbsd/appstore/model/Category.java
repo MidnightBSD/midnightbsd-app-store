@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author Lucas Holt
@@ -37,4 +38,9 @@ public class Category implements Serializable {
 
     @Column(name="description",columnDefinition="TEXT",length = 65616)
     private String description;
+
+    @JsonIgnore
+    @Column(name = "created")
+    @Temporal(value = TemporalType.DATE)
+    private Date created = new Date();
 }
