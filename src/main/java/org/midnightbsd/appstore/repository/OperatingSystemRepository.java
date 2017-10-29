@@ -13,6 +13,8 @@ import java.util.List;
 @Repository
 public interface OperatingSystemRepository extends JpaRepository<OperatingSystem,Integer> {
 
+    List<OperatingSystem> findAllByOrderByVersionAsc();
+
     List<OperatingSystem> findByName(@Param("name") String name);
 
     OperatingSystem findByNameAndVersion(@Param("name") String name, @Param("version") String version);

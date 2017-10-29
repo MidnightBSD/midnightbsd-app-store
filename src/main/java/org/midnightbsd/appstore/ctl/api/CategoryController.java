@@ -16,23 +16,26 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/category")
-public class CategoryController
-{
+public class CategoryController {
+    private final CategoryService categoryService;
+
     @Autowired
-    private CategoryService categoryService;
+    public CategoryController(final CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
 
     @GetMapping
-      public ResponseEntity<List<Category>> list() {
-          return ResponseEntity.ok(categoryService.list());
-      }
+    public ResponseEntity<List<Category>> list() {
+        return ResponseEntity.ok(categoryService.list());
+    }
 
-      @GetMapping("/{id}")
-      public ResponseEntity<Category> get(@PathVariable("id") int id) {
-          return ResponseEntity.ok(categoryService.get(id));
-      }
+    @GetMapping("/{id}")
+    public ResponseEntity<Category> get(@PathVariable("id") int id) {
+        return ResponseEntity.ok(categoryService.get(id));
+    }
 
-      @GetMapping("/name/{name}")
-      public ResponseEntity<Category> get(@PathVariable("name") String name) {
-          return ResponseEntity.ok(categoryService.getByName(name));
-      }
+    @GetMapping("/name/{name}")
+    public ResponseEntity<Category> get(@PathVariable("name") String name) {
+        return ResponseEntity.ok(categoryService.getByName(name));
+    }
 }

@@ -9,6 +9,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +32,7 @@ public class OperatingSystemService implements AppService<OperatingSystem> {
 
     @Cacheable(key = "'osList'", unless = "#result == null")
     public List<OperatingSystem> list() {
-        return repository.findAll();
+        return repository.findAllByOrderByVersionAsc();
     }
 
     public Page<OperatingSystem> get(final Pageable page) {
@@ -52,7 +53,6 @@ public class OperatingSystemService implements AppService<OperatingSystem> {
     public OperatingSystem save(OperatingSystem operatingSystem) {
         OperatingSystem existing = repository.findOne(operatingSystem.getId());
         if (existing == null) {
-            // create new one
             return repository.saveAndFlush(operatingSystem);
         }
 
@@ -63,7 +63,7 @@ public class OperatingSystemService implements AppService<OperatingSystem> {
 
     @Transactional
     @CacheEvict(allEntries = true)
-    public OperatingSystem createIfNotExists(final String name, String version) {
+    public OperatingSystem createIfNotExists(final String name, final String version) {
         final OperatingSystem os =  getByNameAndVersion(name, version);
         if (os != null)
             return os;

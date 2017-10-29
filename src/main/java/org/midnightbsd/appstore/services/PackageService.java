@@ -6,6 +6,7 @@ import org.midnightbsd.appstore.model.Package;
 import org.midnightbsd.appstore.repository.PackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -57,5 +58,26 @@ public class PackageService implements AppService<Package> {
     public List<Package> getByCategoryName(final String name) {
       final Category category = categoryService.getByName(name);
       return packageRepository.findByCategories(category);
+    }
+    
+    public Page<Package> getByOsAndArch(final String os, final String arch, Pageable page) {
+         return packageRepository.findByOsAndArch(os, arch, page);
+       }
+
+    @Transactional
+    @CacheEvict(allEntries = true)
+    public Package save(Package pkg) {
+        org.midnightbsd.appstore.model.Package p = packageRepository.findOne(pkg.getId());
+        if (p == null) {
+            // new package
+            return packageRepository.saveAndFlush(pkg);
+        }
+        
+        p.setCategories(pkg.getCategories());
+        p.setDescription(pkg.getDescription());
+        p.setUrl(pkg.getUrl());
+        p = packageRepository.saveAndFlush(p);
+
+        return p;
     }
 }

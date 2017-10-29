@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -52,5 +53,10 @@ public class PackageInstance implements Serializable {
 
     @Column(name="run")
     private Integer run;
+
+    @JsonIgnore
+    @Column(name = "created")
+    @Temporal(value = TemporalType.DATE)
+    private Date created = new Date();
 
 }

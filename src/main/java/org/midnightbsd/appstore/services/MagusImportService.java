@@ -54,15 +54,18 @@ public class MagusImportService {
     @Autowired
     private SearchService searchService;
 
+    @Autowired
+    private PackageService packageService;
+
     private static final int DELAY_ONE_MINUTE = 1000 * 60;
-    private static final int SIX_HOURS = DELAY_ONE_MINUTE * 60 * 6;
+    private static final int ONE_DAY = DELAY_ONE_MINUTE * 60 * 24;
 
 
     /**
      * Synchronize with Magus, pull new package data
      */
     @Transactional
-    @Scheduled(fixedDelay = SIX_HOURS, initialDelay = DELAY_ONE_MINUTE)
+    @Scheduled(fixedDelay = ONE_DAY, initialDelay = DELAY_ONE_MINUTE)
     public void sync() {
         final List<Run> runs = getFilteredRuns();
         final HashMap<String, Run> osRunMap = new HashMap<>();
@@ -115,7 +118,7 @@ public class MagusImportService {
                         pkg.setName(name);
                         pkg.setDescription(port.getDescription());
                         pkg.setUrl(port.getWww());
-                        pkg = packageRepository.saveAndFlush(pkg);
+                        pkg = packageService.save(pkg);
                         log.info("Saved new package " + pkg.getName());
                     } else {
                         boolean catFound = false;
@@ -134,14 +137,35 @@ public class MagusImportService {
                                 (port.getWww() != null && !port.getWww().equalsIgnoreCase(pkg.getUrl()))) {
                             pkg.setDescription(port.getDescription());
                             pkg.setUrl(port.getWww());
-                            pkg = packageRepository.saveAndFlush(pkg);
+                            pkg = packageService.save(pkg);
                             log.info("Updated package " + pkg.getName());
                         }
                     }
-
+                    
                     PackageInstance packageInstance = null;
-                    final List<PackageInstance> packageInstances = packageInstanceRepository.findByPkgAndOperatingSystemAndArchitecture(pkg, os, arch);
-                    if (packageInstances == null || packageInstances.isEmpty()) {
+                    if (pkg.getInstances() != null) {
+                        for (PackageInstance pi : pkg.getInstances()) {
+                            if (pi.getOperatingSystem().getName().equals(os.getName()) &&
+                                    pi.getOperatingSystem().getVersion().equals(os.getVersion()) &&
+                                    pi.getArchitecture().getName().equals(arch.getName())) {
+
+                                // the same exact run, do nothing.
+                                if (pi.getRun().equals(run.getId())) {
+                                    log.info("package instance exists, do nothing for " + pkg.getName() + ": " + arch.getName() + " " + os.getVersion());
+                                    packageInstance = pi;
+                                    break;
+                                }
+
+                                // the run is different, so update it
+                                pi.setRun(run.getId());
+                                packageInstance = packageInstanceRepository.saveAndFlush(pi);
+                                log.info("Run id updated for package instance " + pkg.getName() + ": " + arch.getName() + " " + os.getVersion());
+                                break;
+                            }
+                        }
+                    }
+                    
+                    if (packageInstance == null) {
                         packageInstance = new PackageInstance();
                         packageInstance.setArchitecture(arch);
                         packageInstance.setOperatingSystem(os);
@@ -150,26 +174,6 @@ public class MagusImportService {
                         packageInstance.setRun(run.getId());
                         packageInstance = packageInstanceRepository.saveAndFlush(packageInstance);
                         log.info("Package instance for " + pkg.getName() + ": " + arch.getName() + " " + os.getVersion() + " added");
-                    } else {
-                        log.info("Instances exist " + packageInstances.size());
-                        boolean present = false;
-                        for (final PackageInstance pi : packageInstances) {
-                            if (pi.getVersion().equalsIgnoreCase(port.getVersion()) && pi.getRun().equals(run.getId())) {
-                                present = true;
-                                packageInstance = pi;
-                                break;
-                            }
-                        }
-
-                        if (!present) {
-                            packageInstance = new PackageInstance();
-                            packageInstance.setArchitecture(arch);
-                            packageInstance.setOperatingSystem(os);
-                            packageInstance.setVersion(port.getVersion());
-                            packageInstance.setPkg(pkg);
-                            packageInstance.setRun(run.getId());
-                            packageInstance = packageInstanceRepository.saveAndFlush(packageInstance);
-                        }
                     }
 
                     boolean licenseAdded = false;

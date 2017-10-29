@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -54,6 +55,11 @@ public class Package implements Serializable {
 
     @JsonManagedReference(value = "package-instance")
     @JsonProperty("instances")
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pkg", fetch = FetchType.EAGER)
+    @OneToMany(cascade = { CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE}, mappedBy = "pkg", fetch = FetchType.EAGER)
     private Set<PackageInstance> instances;
+
+    @JsonIgnore
+    @Column(name = "created")
+    @Temporal(value = TemporalType.DATE)
+    private Date created = new Date();
 }

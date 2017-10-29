@@ -1,0 +1,45 @@
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="ehcache.xsd"
+         updateCheck="false"
+         monitoring="autodetect"
+         dynamicConfig="true">
+
+    <diskStore path="java.io.tmpdir"/>
+
+    <defaultCache eternal="true" maxElementsInMemory="10000" overflowToDisk="true"/>
+
+    <cache name="org.hibernate.cache.internal.StandardQueryCache"
+           eternal="true" maxElementsInMemory="10000" overflowToDisk="false"
+           memoryStoreEvictionPolicy="LFU"
+            />
+
+    <cache name="org.hibernate.cache.spi.UpdateTimestampsCache"
+           eternal="true" maxElementsInMemory="1000" overflowToDisk="false"
+           memoryStoreEvictionPolicy="LFU"
+            />
+
+    <cache name="org.midnightbsd.appstore.model.Architecture"
+           eternal="true" maxElementsInMemory="50" overflowToDisk="false"
+           memoryStoreEvictionPolicy="LFU"
+            />
+
+    <cache name="org.midnightbsd.appstore.model.OperatingSystem"
+           eternal="true" maxElementsInMemory="50" overflowToDisk="false"
+           memoryStoreEvictionPolicy="LFU"
+            />
+
+    <cache name="org.midnightbsd.appstore.model.Package"
+           eternal="true" maxElementsInMemory="5000" overflowToDisk="false"
+           memoryStoreEvictionPolicy="LFU"
+            />
+
+    <cache name="org.midnightbsd.appstore.model.PackageInstance"
+              eternal="true" maxElementsInMemory="10000" overflowToDisk="false"
+              memoryStoreEvictionPolicy="LFU"
+               />
+
+    <cache name="org.midnightbsd.appstore.model.Rating"
+              eternal="true" maxElementsInMemory="100" overflowToDisk="false"
+              memoryStoreEvictionPolicy="LFU"
+               />
+</ehcache>

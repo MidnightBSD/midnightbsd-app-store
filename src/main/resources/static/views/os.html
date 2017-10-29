@@ -1,0 +1,28 @@
+
+    <div class="row top-padding">
+        <div class="col-md-7 col-md-offset-1">
+
+            <div data-ng-repeat="pkg in packages.content">
+                <h3>{{ pkg.name }}</h3>
+                <div>
+                    <p ng-bind-html="pkg.description"></p>
+                    <p ng-hide="pkg.url == null || pkg.url == ''"><a href="{{pkg.url}}">{{pkg.url}}</a></p>
+                    &nbsp; (<span ng-repeat="license in pkg.licenses">{{license.name}}</span>)
+
+                    <p>Install by running command:<br>
+                        <code>mport install {{pkg.name}}</code>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <pagination data-ng-change="load()"
+                        total-items="totalElements"
+                        items-per-page="size"
+                        data-ng-model="page"
+                        class="pagination-sm"></pagination>
+        </div>
+    </div>

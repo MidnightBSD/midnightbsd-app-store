@@ -1,40 +1,55 @@
-<div class="jumbotron">
-    <div class="row">
-        <div class="col-xs-8">
-            <p class="lead">
-               </p>
-        </div>
-        <div class="col-xs-4">
-            <form name="bsearch" id="bsearch">
-                  <fieldset>
-                      <p>
-                          <input type="text" name="bquery" id="bquery" value="" data-ng-model="term">
-                          <button data-ng-click="search()" class="btn btn-primary btn-md">Find</button>
-                      </p>
-                  </fieldset>
-            </form>
-        </div>
+<div class="row">
+    <div class="col-xs-3">
+        <h2>Find by Categories</h2>
+        <ul>
+            <li ng-repeat="cat in categories">
+                <a ng-href="#!/category/{{cat.id}}">{{cat.name}}</a>
+            </li>
+        </ul>
+
+
+    </div>
+
+    <div class="col-xs-3">
+        <h2>Find by OS</h2>
+        <ul>
+            <li ng-repeat="o in os">
+                {{o.version}}
+                <span ng-repeat="arch in architectures">
+                    <a ng-href="#!/os/{{o.version}}/arch/{{arch.name}}">{{arch.name}}</a> </span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="col-xs-6">
+        <h2>About the App Store</h2>
+        <p>The MidnightBSD app store helps you find software packages available for your OS version and
+            architecture. </p>
+
+        <h3>Search For Packages</h3>
+
+        <form name="bsearch" id="bsearch">
+            <fieldset>
+                <p>
+                    <input type="text" name="bquery" id="bquery" value="" data-ng-model="term">
+                    <button data-ng-click="search()" class="btn btn-primary">Find</button>
+                </p>
+            </fieldset>
+        </form>
+
+        <h3>Installing Packages</h3>
+
+        <p>MidnightBSD software packages can be installed using the <a
+                href="http://linuxconfig.net/manual-howto/how-to-mport-the-midnightbsd-package-management-tools.html">mport</a>
+            CLI tool or the <a href="https://github.com/MidnightBSD/mport-manager">mport manager</a>, a graphical
+            package manager.</p>
+
+        <p>
+            mport manager can be installed using <code>mport install mport-manager</code>
+        </p>
+        <p>
+            <img src="http://d2ibasrwfd3o7m.cloudfront.net/images/mport_pkg_mgr/available.png"
+                 alt="mport manager screenshot" style="max-width: 410px; max-height: 318px;"/>
+        </p>
     </div>
 </div>
-
-    <div class="row">
-        <div class="col-xs-6">
-            <h2>Categories</h2>
-            <ul>
-                <li ng-repeat="cat in categories">
-                    <a ng-href="#!/category/{{cat.id}}">{{cat.name}}</a>
-                </li>
-            </ul>
-
-
-        </div>
-
-        <div class="col-xs-6">
-            <h2>Operating Systems</h2>
-            <ul>
-                <li ng-repeat="o in os">
-                    {{o.name}} {{o.version}}
-                </li>
-            </ul>
-        </div>
-    </div>
