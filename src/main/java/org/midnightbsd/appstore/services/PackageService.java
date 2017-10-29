@@ -59,10 +59,14 @@ public class PackageService implements AppService<Package> {
       final Category category = categoryService.getByName(name);
       return packageRepository.findByCategories(category);
     }
-    
+
     public Page<Package> getByOsAndArch(final String os, final String arch, Pageable page) {
-         return packageRepository.findByOsAndArch(os, arch, page);
-       }
+        return packageRepository.findByOsAndArch(os, arch, page);
+    }
+
+    public Page<Package> getByLicense(final String license, Pageable page) {
+          return packageRepository.findByLicense(license, page);
+      }
 
     @Transactional
     @CacheEvict(allEntries = true)

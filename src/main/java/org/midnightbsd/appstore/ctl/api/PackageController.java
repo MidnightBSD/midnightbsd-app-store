@@ -51,4 +51,9 @@ public class PackageController {
     public ResponseEntity<Page<Package>> getByOsAndArch(@PathVariable("os") String os, @PathVariable("arch") String arch, Pageable page) {
         return ResponseEntity.ok(packageService.getByOsAndArch(os, arch, page));
     }
+
+    @GetMapping("/license/{license}")
+    public ResponseEntity<Page<Package>> getByOsAndArch(@PathVariable("license") String license, Pageable page) {
+        return ResponseEntity.ok(packageService.getByLicense(license, page));
+    }
 }
