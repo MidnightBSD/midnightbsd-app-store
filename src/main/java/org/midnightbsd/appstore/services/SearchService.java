@@ -85,9 +85,13 @@ public class SearchService {
         packageItem.setDescription(pkg.getDescription());
         packageItem.setUrl(pkg.getUrl());
 
-        for (PackageInstance instance : pkg.getInstances()) {
-            for (License license : instance.getLicenses()) {
-               licenses.putIfAbsent(license.getName(), null);
+        if (pkg.getInstances() != null) {
+            for (final PackageInstance instance : pkg.getInstances()) {
+                if (instance.getLicenses() != null) {
+                    for (final License license : instance.getLicenses()) {
+                        licenses.putIfAbsent(license.getName(), null);
+                    }
+                }
             }
         }
         packageItem.setLicenses(new ArrayList<>(licenses.keySet()));

@@ -56,7 +56,7 @@ public class RedisCacheService implements CacheService<Object, Object> {
     public void delete(@NotNull Object key) throws ServiceException {
         try {
             this.client.delete(key);
-        } catch (Exception var3) {
+        } catch (final Exception var3) {
             log.error(var3.getMessage(), var3);
             throw new ServiceException("Could not delete " + key.toString());
         }

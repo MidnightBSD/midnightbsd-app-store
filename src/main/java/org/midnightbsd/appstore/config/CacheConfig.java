@@ -38,6 +38,7 @@ public class CacheConfig extends CachingConfigurerSupport {
         return template;
     }
 
+    @Override
     public CacheManager cacheManager() {
         RedisCacheManager redisCacheManager = new RedisCacheManager(this.redisTemplate(this.redisConnectionFactory));
         redisCacheManager.setUsePrefix(true);

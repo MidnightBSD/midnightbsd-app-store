@@ -72,7 +72,7 @@ public class CategoryService implements AppService<Category> {
     }
 
     public Category createIfNotExists(final String name, final String description) {
-        Category cat = getByName(name);
+        Category cat = categoryRepository.findOneByName(name);
         if (cat == null) {
             cat = new Category();
             cat.setName(name);

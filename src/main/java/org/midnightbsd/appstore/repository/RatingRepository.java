@@ -16,6 +16,6 @@ import java.util.List;
 @Repository
 public interface RatingRepository extends JpaRepository<Rating, Integer>{
 
-    List<Rating> findAllByPkg(Package pkg);
+    List<Rating> findAllByPkg(@Param("pkg") Package pkg);
 
 }

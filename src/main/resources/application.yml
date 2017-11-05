@@ -100,3 +100,6 @@ cloud:
     region:
       static: US_EAST_1
 
+flyway:
+  url: jdbc:postgresql://midnightbsd-app-store.c9or38nglwhm.us-east-1.rds.amazonaws.com/app_store?ssl=true&amp;sslfactory=org.postgresql.ssl.NonValidatingFactory
+  
