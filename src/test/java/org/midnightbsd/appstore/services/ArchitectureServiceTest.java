@@ -18,6 +18,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
@@ -43,6 +44,7 @@ public class ArchitectureServiceTest {
 
         when(architectureRepository.findOneByName("test")).thenReturn(architecture);
         when(architectureRepository.findOne(1)).thenReturn(architecture);
+        when(architectureRepository.findAll()).thenReturn(Collections.singletonList(architecture));
     }
 
     @Test
@@ -65,5 +67,13 @@ public class ArchitectureServiceTest {
         assertEquals("Foo", arch.getDescription());
 
         verify(architectureRepository, times(1)).findOne(1);
+    }
+
+    @Test
+    public void testList() {
+        List<Architecture> items = architectureService.list();
+        assertNotNull(items);
+        assertTrue(items.size() > 0);
+        verify(architectureRepository, times(1)).findAll();
     }
 }
