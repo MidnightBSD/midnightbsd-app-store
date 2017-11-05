@@ -40,13 +40,18 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                      .addResourceLocations("classpath:/static/robots.txt")
                      .setCachePeriod(cachePeriod);
 
-       registry.addResourceHandler("/static/**")
+        registry.addResourceHandler("/static/**")
                 .addResourceLocations("classpath:/static/")
                 .setCachePeriod(cachePeriod);
 
         registry.addResourceHandler("/static/styles/**", "/styles/*.css", "/styles/*.map")
                         .addResourceLocations("classpath:/static/styles/")
                         .setCachePeriod(cachePeriod);
+
+        // enable webjars
+        registry
+                .addResourceHandler("/webjars/**")
+                .addResourceLocations("/webjars/");
     }
 
 
