@@ -14,7 +14,7 @@ angular.module('wwwApp').factory('PackageService', ['$resource', function ($reso
                 },
                 'queryByLicense': {
                     method: 'GET',
-                    isArray: true,
+                    isArray: false,
                     url: '/api/package/license/:license'
                 },
                 'queryByOsAndArch': {

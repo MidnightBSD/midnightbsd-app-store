@@ -1,0 +1,33 @@
+<div class="row">
+    <div class="col-xs-12">
+        <h2>{{license.name}} packages</h2>
+        <p>{{license.description}}</p>
+
+        <div ng-repeat="pkg in packages.content">
+            <h3>{{pkg.name}}</h3>
+            <p ng-bind-html="pkg.description"></p>
+            <p ng-hide="pkg.url == null || pkg.url == ''"><a ng-href="{{pkg.url}}">{{pkg.url}}</a></p>
+
+            <div ng-repeat="inst in pkg.instances">
+                <b>{{inst.version}}</b> for {{inst.operatingSystem.version}} {{inst.architecture.name}}
+                &nbsp; (<span ng-repeat="license in inst.licenses">{{license.name}}</span>)
+            </div>
+
+            <p>Install by running command:<br>
+            <code>mport install {{pkg.name}}</code>
+            </p>
+        </div>
+
+        <br>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-10 col-md-offset-1">
+        <pagination data-ng-change="load()"
+                    total-items="totals"
+                    items-per-page="pageSize"
+                    data-ng-model="page"
+                    class="pagination-sm"></pagination>
+    </div>
+</div>

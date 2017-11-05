@@ -1,6 +1,5 @@
 angular.module('wwwApp',
         [
-            'ui',
             'ui.bootstrap.buttons',
             'ui.bootstrap.pagination',
             'ui.bootstrap.rating',
