@@ -11,35 +11,49 @@
     <cache name="org.hibernate.cache.internal.StandardQueryCache"
            eternal="true" maxElementsInMemory="20000" overflowToDisk="false"
            memoryStoreEvictionPolicy="LFU"
+           timeToIdleSeconds="1800"
+           timeToLiveSeconds="1800"
             />
 
     <cache name="org.hibernate.cache.spi.UpdateTimestampsCache"
            eternal="true" maxElementsInMemory="2000" overflowToDisk="false"
            memoryStoreEvictionPolicy="LFU"
+           timeToIdleSeconds="1800"
+           timeToLiveSeconds="1800"
             />
 
     <cache name="org.midnightbsd.appstore.model.Architecture"
            eternal="true" maxElementsInMemory="100" overflowToDisk="false"
            memoryStoreEvictionPolicy="LFU"
+           timeToIdleSeconds="1800"
+           timeToLiveSeconds="1800"
             />
 
     <cache name="org.midnightbsd.appstore.model.OperatingSystem"
            eternal="true" maxElementsInMemory="100" overflowToDisk="false"
            memoryStoreEvictionPolicy="LFU"
+           timeToIdleSeconds="1800"
+           timeToLiveSeconds="1800"
             />
 
     <cache name="org.midnightbsd.appstore.model.Package"
            eternal="true" maxElementsInMemory="10000" overflowToDisk="false"
            memoryStoreEvictionPolicy="LFU"
+           timeToIdleSeconds="1800"
+           timeToLiveSeconds="1800"
             />
 
     <cache name="org.midnightbsd.appstore.model.PackageInstance"
-              eternal="true" maxElementsInMemory="20000" overflowToDisk="false"
+              eternal="true" maxElementsInMemory="80000" overflowToDisk="false"
               memoryStoreEvictionPolicy="LFU"
+           timeToIdleSeconds="1800"
+                   timeToLiveSeconds="1800"
                />
 
     <cache name="org.midnightbsd.appstore.model.Rating"
               eternal="true" maxElementsInMemory="500" overflowToDisk="false"
               memoryStoreEvictionPolicy="LFU"
+           timeToIdleSeconds="1800"
+                   timeToLiveSeconds="1800"
                />
 </ehcache>
