@@ -57,6 +57,10 @@ public class PackageItem implements Serializable, Comparable<PackageItem> {
     @Getter
     @Setter
     private List<String> licenses;
+
+    @Getter
+    @Setter
+    private List<Instance> instances;
     
     @Override
     public int compareTo(final PackageItem o) {

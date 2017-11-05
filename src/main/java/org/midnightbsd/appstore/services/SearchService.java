@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.midnightbsd.appstore.model.Category;
 import org.midnightbsd.appstore.model.License;
 import org.midnightbsd.appstore.model.PackageInstance;
+import org.midnightbsd.appstore.model.search.Instance;
 import org.midnightbsd.appstore.model.search.PackageItem;
 import org.midnightbsd.appstore.repository.PackageRepository;
 import org.midnightbsd.appstore.repository.search.PackageSearchRepository;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -84,7 +86,9 @@ public class SearchService {
         packageItem.setName(pkg.getName());
         packageItem.setDescription(pkg.getDescription());
         packageItem.setUrl(pkg.getUrl());
+        packageItem.setVersion(Calendar.getInstance().getTimeInMillis());
 
+        List<Instance> instances = new ArrayList<>();
         if (pkg.getInstances() != null) {
             for (final PackageInstance instance : pkg.getInstances()) {
                 if (instance.getLicenses() != null) {
@@ -92,9 +96,18 @@ public class SearchService {
                         licenses.putIfAbsent(license.getName(), null);
                     }
                 }
+
+                final Instance inst = new Instance();
+                if (instance.getArchitecture() != null)
+                    inst.setArchitecture(instance.getArchitecture().getName());
+                if (instance.getOperatingSystem() != null)
+                    inst.setOsVersion(instance.getOperatingSystem().getVersion());
+                inst.setVersion(instance.getVersion());
+                instances.add(inst);
             }
         }
         packageItem.setLicenses(new ArrayList<>(licenses.keySet()));
+        packageItem.setInstances(instances);
 
         final HashMap<String, Object> cats = new HashMap<String, Object>();
         for (Category c : pkg.getCategories()) {
