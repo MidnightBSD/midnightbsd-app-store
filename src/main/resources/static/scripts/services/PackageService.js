@@ -21,6 +21,15 @@ angular.module('wwwApp').factory('PackageService', ['$resource', function ($reso
                     method: 'GET',
                     isArray: false,
                     url: '/api/package/os/:os/arch/:arch'
+                },
+                'getRatingAverage': {
+                    method: 'GET',
+                    isArray: false,
+                    url: '/api/package/name/:Name/rating/avg'
+                },
+                'saveRating': {
+                    method: 'POST',
+                    url: '/api/package/name/:Name/rating'
                 }
             });
 }]);

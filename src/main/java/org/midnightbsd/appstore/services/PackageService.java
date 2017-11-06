@@ -57,7 +57,7 @@ public class PackageService implements AppService<Package> {
     @Cacheable(key="#p0.concat('-bycatname')")
     public List<Package> getByCategoryName(final String name) {
       final Category category = categoryService.getByName(name);
-      return packageRepository.findByCategories(category);
+      return packageRepository.findByCategoriesOrderByNameAsc(category);
     }
 
     public Page<Package> getByOsAndArch(final String os, final String arch, Pageable page) {

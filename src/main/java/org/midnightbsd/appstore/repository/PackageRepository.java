@@ -1,14 +1,13 @@
 package org.midnightbsd.appstore.repository;
 
-import org.midnightbsd.appstore.model.Architecture;
 import org.midnightbsd.appstore.model.Category;
-import org.midnightbsd.appstore.model.OperatingSystem;
 import org.midnightbsd.appstore.model.Package;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,9 +17,9 @@ import java.util.List;
  */
 @Repository
 public interface PackageRepository extends JpaRepository<org.midnightbsd.appstore.model.Package, Integer> {
-    org.midnightbsd.appstore.model.Package findOneByName(@Param("name") String name);
+    Package findOneByName(@Param("name") String name);
 
-    List<org.midnightbsd.appstore.model.Package> findByCategories(@Param("category") Category category);
+    List<Package> findByCategoriesOrderByNameAsc(@Param("category") Category category);
 
     @Query(
           value = "SELECT distinct p FROM Package p JOIN p.instances pi JOIN pi.operatingSystem o " +
