@@ -1,7 +1,10 @@
-angular.module('wwwApp').controller('SearchCtrl', ['$scope', '$log', '$routeParams', '$location', 'SearchService',
-    function ($scope, $log, $routeParams, $location, SearchService) {
-    'use strict';
+angular.module('wwwApp').controller('SearchCtrl', ['$scope', '$log', '$routeParams', '$location', '$http', 'SearchService', 'PackageService',
+    function ($scope, $log, $routeParams, $location, $http, SearchService, PackageService) {
+        'use strict';
 
+        $scope.max = 5;
+        $scope.ratings = {};
+        
         $scope.keyword = '';
    		$scope.searchTerm = '';
         $scope.processing = false;
@@ -75,7 +78,12 @@ angular.module('wwwApp').controller('SearchCtrl', ['$scope', '$log', '$routePara
 					$log.debug('Page Count: ' + $scope.pageCount);
 					$scope.showResults = true;
                     $scope.processing=false;
-				},
+
+
+                    for (var i = 0; i < pkgs.length; i++) {
+                        $scope.ratings[pkgs[i].name] = PackageService.getRatingAverage({Name: pkgs[i].name});
+                    }
+                },
 				function(reason) {
 					$log.error(reason);
 					if (typeof $scope.searchResponse === 'undefined' || $scope.searchResponse.totalElements === 0) {
@@ -86,6 +94,26 @@ angular.module('wwwApp').controller('SearchCtrl', ['$scope', '$log', '$routePara
                         $scope.processing=false;
 					}
 				});
+        };
+
+        $scope.addRating = function (name, score) {
+            console.log("rating " + name + " is " + score);
+            var data = {
+                packageName: name,
+                average: $scope.ratings[name].average
+            };
+            $http.post('api/package/name/' + name + '/rating', data).success(function (data, status) {
+                if (status === 201) {
+                    ga('send', 'event', 'Rating', 'Add');
+                    return false;
+                } else {
+                    alert("Unable to save rating.");
+                    return false;
+                }
+            }).error(function () {
+                alert("Unable to save rating.");
+                return false;
+            });
         };
         
 		$scope.$on('$destroy', function finalize() {
