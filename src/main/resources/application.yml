@@ -103,7 +103,7 @@ cloud:
 flyway:
   url: jdbc:postgresql://midnightbsd-app-store.c9or38nglwhm.us-east-1.rds.amazonaws.com/app_store?ssl=true&amp;sslfactory=org.postgresql.ssl.NonValidatingFactory
   
- eureka:
-   client:
-     serviceUrl:
+eureka:
+  client:
+    serviceUrl:
       defaultZone: http://localhost:8761/eureka/
