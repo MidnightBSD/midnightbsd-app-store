@@ -3,9 +3,7 @@ package org.midnightbsd.appstore.services;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.midnightbsd.appstore.model.License;
 import org.midnightbsd.appstore.model.Package;
-import org.midnightbsd.appstore.repository.LicenseRepository;
 import org.midnightbsd.appstore.repository.PackageRepository;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -16,9 +14,7 @@ import java.util.Calendar;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Lucas Holt
@@ -26,42 +22,42 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class PackageServiceTest {
     @Mock
-       private PackageRepository packageRepository;
+    private PackageRepository packageRepository;
 
-       @InjectMocks
-       private PackageService packageService;
+    @InjectMocks
+    private PackageService packageService;
 
-       @Before
-       public void setup() {
-           Package obj = new Package();
-           obj.setId(1);
-           obj.setName("test");
-           obj.setDescription("Foo");
-           obj.setCreated(Calendar.getInstance().getTime());
+    @Before
+    public void setup() {
+        Package obj = new Package();
+        obj.setId(1);
+        obj.setName("test");
+        obj.setDescription("Foo");
+        obj.setCreated(Calendar.getInstance().getTime());
 
-           when(packageRepository.findOneByName("test")).thenReturn(obj);
-           when(packageRepository.findOne(1)).thenReturn(obj);
-       }
+        when(packageRepository.findOneByName("test")).thenReturn(obj);
+        when(packageRepository.findOne(1)).thenReturn(obj);
+    }
 
-       @Test
-       public void testGetName() {
-           Package obj = packageService.getByName("test");
-           assertNotNull(obj);
-           assertEquals(1, obj.getId());
-           assertEquals("test", obj.getName());
-           assertEquals("Foo", obj.getDescription());
+    @Test
+    public void testGetName() {
+        Package obj = packageService.getByName("test");
+        assertNotNull(obj);
+        assertEquals(1, obj.getId());
+        assertEquals("test", obj.getName());
+        assertEquals("Foo", obj.getDescription());
 
-           verify(packageRepository, times(1)).findOneByName(anyString());
-       }
+        verify(packageRepository, times(1)).findOneByName(anyString());
+    }
 
-       @Test
-       public void testGet() {
-           Package obj = packageService.get(1);
-           assertNotNull(obj);
-           assertEquals(1, obj.getId());
-           assertEquals("test", obj.getName());
-           assertEquals("Foo", obj.getDescription());
+    @Test
+    public void testGet() {
+        Package obj = packageService.get(1);
+        assertNotNull(obj);
+        assertEquals(1, obj.getId());
+        assertEquals("test", obj.getName());
+        assertEquals("Foo", obj.getDescription());
 
-           verify(packageRepository, times(1)).findOne(1);
-       }
+        verify(packageRepository, times(1)).findOne(1);
+    }
 }
