@@ -58,6 +58,8 @@ eureka:
 
 flyway:
   baseline-on-migrate: true
+  user: appstore
+  url: jdbc:postgresql://db.midnightbsd.org/app_store
 
 server:
   tomcat:
