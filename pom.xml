@@ -6,7 +6,7 @@
 
     <groupId>org.midnightbsd</groupId>
     <artifactId>app-store</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.2-SNAPSHOT</version>
 
     <organization>
         <name>MidnightBSD</name>
@@ -16,15 +16,14 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.4.7.RELEASE</version>
+        <version>2.0.3.RELEASE</version>
     </parent>
 
     <properties>
         <java-version>1.8</java-version>
         <hibernate.version>5.2.1.Final</hibernate.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jackson.version>2.6.0</jackson.version>
-        <flyway.version>4.2.0</flyway.version>
+        <flyway.version>5.0.0</flyway.version>
     </properties>
 
     <dependencies>
@@ -63,7 +62,7 @@
 
         <dependency>
             <groupId>org.webjars</groupId>
-            <artifactId>webjars-locator</artifactId>
+            <artifactId>webjars-locator-core</artifactId>
         </dependency>
 
         <!-- server stuff -->
@@ -74,6 +73,12 @@
         </dependency>
 
         <dependency>
+         	<groupId>org.springframework.boot</groupId>
+         	<artifactId>spring-boot-properties-migrator</artifactId>
+         	<scope>runtime</scope>
+         </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
@@ -81,11 +86,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-actuator-docs</artifactId>
         </dependency>
 
         <dependency>
@@ -113,7 +113,7 @@
         <dependency>
             <groupId>io.reactivex.rxjava2</groupId>
             <artifactId>rxjava</artifactId>
-            <version>2.1.0</version>
+            <version>2.1.1</version>
         </dependency>
 
         <dependency>
@@ -153,17 +153,12 @@
 
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-eureka</artifactId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
         </dependency>
         
         <dependency>
@@ -180,8 +175,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-elasticsearch</artifactId>
+            <groupId>com.github.vanroy</groupId>
+            <artifactId>spring-boot-starter-data-jest</artifactId>
+            <version>3.1.2.RELEASE</version>
         </dependency>
 
         <dependency>
@@ -282,23 +278,6 @@
             <version>1</version>
         </dependency>
 
-        <!-- jackson JSON -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-
         <!-- For unit testing -->
         <dependency>
             <groupId>junit</groupId>
@@ -314,7 +293,7 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
-                <version>Camden.SR7</version>
+                <version>Finchley.RC2</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

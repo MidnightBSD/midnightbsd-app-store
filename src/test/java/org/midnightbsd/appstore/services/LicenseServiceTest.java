@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Calendar;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -36,7 +37,7 @@ public class LicenseServiceTest {
         obj.setCreated(Calendar.getInstance().getTime());
 
         when(licenseRepository.findOneByName("test")).thenReturn(obj);
-        when(licenseRepository.findOne(1)).thenReturn(obj);
+        when(licenseRepository.findById(1)).thenReturn(Optional.of(obj));
     }
 
     @Test
@@ -58,6 +59,6 @@ public class LicenseServiceTest {
         assertEquals("test", obj.getName());
         assertEquals("Foo", obj.getDescription());
 
-        verify(licenseRepository, times(1)).findOne(1);
+        verify(licenseRepository, times(1)).findById(1);
     }
 }

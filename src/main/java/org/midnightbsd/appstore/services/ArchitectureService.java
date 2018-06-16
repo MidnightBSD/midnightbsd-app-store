@@ -41,7 +41,7 @@ public class ArchitectureService implements AppService<Architecture> {
 
     @Cacheable(unless = "#result == null", key = "#id.toString()")
     public Architecture get(final int id) {
-        return repository.findOne(id);
+        return repository.findById(id).orElse(null);
     }
 
     @Cacheable(unless = "#result == null", key = "#name")

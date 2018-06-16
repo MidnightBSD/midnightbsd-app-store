@@ -34,7 +34,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         super.addResourceHandlers(registry);
-        Integer cachePeriod = resourceProperties.getCachePeriod();
+        Integer cachePeriod = 60;
 
         registry.addResourceHandler("/robots.txt")
                      .addResourceLocations("classpath:/static/robots.txt")

@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Calendar;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -37,7 +38,7 @@ public class CategoryServiceTest {
         cat.setCreated(Calendar.getInstance().getTime());
 
         when(categoryRepository.findOneByName("test")).thenReturn(cat);
-        when(categoryRepository.findOne(1)).thenReturn(cat);
+        when(categoryRepository.findById(1)).thenReturn(Optional.of(cat));
     }
 
     @Test
@@ -59,6 +60,6 @@ public class CategoryServiceTest {
         assertEquals("test", cat.getName());
         assertEquals("Foo", cat.getDescription());
 
-        verify(categoryRepository, times(1)).findOne(1);
+        verify(categoryRepository, times(1)).findById(1);
     }
 }

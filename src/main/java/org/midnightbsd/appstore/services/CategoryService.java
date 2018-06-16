@@ -44,7 +44,7 @@ public class CategoryService implements AppService<Category> {
     @Cacheable(unless = "#result == null", key = "#id.toString()")
     @Override
     public Category get(final int id) {
-        return categoryRepository.findOne(id);
+        return categoryRepository.findById(id).orElse(null);
     }
 
     @Cacheable(unless = "#result == null", key = "#name")
@@ -55,7 +55,7 @@ public class CategoryService implements AppService<Category> {
     @Transactional
     @CacheEvict(allEntries = true)
     public Category save(final Category category) {
-        final Category existing = categoryRepository.findOne(category.getId());
+        final Category existing = categoryRepository.findById(category.getId()).orElse(null);
         if (existing == null) {
             log.debug("Created new category " + category.getName());
             

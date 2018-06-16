@@ -1,10 +1,9 @@
 package org.midnightbsd.appstore.services;
 
-import groovy.util.logging.Slf4j;
+import lombok.extern.slf4j.Slf4j;
 import org.midnightbsd.appstore.model.PackageInstance;
 import org.midnightbsd.appstore.repository.PackageInstanceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -38,12 +37,12 @@ public class PackageInstanceService implements AppService<PackageInstance> {
 
     @Override
     public PackageInstance get(final int id) {
-        return packageInstanceRepository.findOne(id);
+        return packageInstanceRepository.findById(id).orElse(null);
     }
 
     @Transactional
     public PackageInstance save(PackageInstance packageInstance) {
-        PackageInstance pi = packageInstanceRepository.findOne(packageInstance.getId());
+        PackageInstance pi = packageInstanceRepository.findById(packageInstance.getId()).orElse(null);
         if (pi == null) {
             return packageInstanceRepository.saveAndFlush(packageInstance);
         }

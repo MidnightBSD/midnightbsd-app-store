@@ -37,7 +37,7 @@ public class SearchService {
     @Autowired
     private PackageRepository packageRepository;
 
-    @Cacheable(key="#p0.concat('-').concat(#p1.getPageNumber())", value = "search")
+   // @Cacheable(key="#p0.concat('-').concat(#p1.getPageNumber())", value = "search")
     public Page<PackageItem> find(String term, Pageable page) {
         return packageSearchRepository.findByNameContainsOrDescriptionContainsAllIgnoreCase(term, term, page);
     }
@@ -58,7 +58,7 @@ public class SearchService {
                 }
 
                 log.debug("Saving a page of packages to elasticsearch. pg " + i);
-                packageSearchRepository.save(items);
+                packageSearchRepository.saveAll(items);
 
                 pageable = new PageRequest(i + 1, 100);
                 packages = packageRepository.findAll(pageable);

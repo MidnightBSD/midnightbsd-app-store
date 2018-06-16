@@ -1,6 +1,6 @@
 package org.midnightbsd.appstore.services;
 
-import groovy.util.logging.Slf4j;
+import lombok.extern.slf4j.Slf4j;
 import org.midnightbsd.appstore.model.Category;
 import org.midnightbsd.appstore.model.Package;
 import org.midnightbsd.appstore.repository.PackageRepository;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Lucas Holt
@@ -46,7 +47,8 @@ public class PackageService implements AppService<Package> {
     @Cacheable(unless = "#result == null", key = "#id.toString()")
     @Override
     public Package get(final int id) {
-        return packageRepository.findOne(id);
+        Optional<Package> pkg = packageRepository.findById(id);
+        return pkg.orElse(null);
     }
 
     @Cacheable(key="#p0.concat('-byname')")
@@ -71,12 +73,13 @@ public class PackageService implements AppService<Package> {
     @Transactional
     @CacheEvict(allEntries = true)
     public Package save(Package pkg) {
-        org.midnightbsd.appstore.model.Package p = packageRepository.findOne(pkg.getId());
-        if (p == null) {
+        Optional<org.midnightbsd.appstore.model.Package> op = packageRepository.findById(pkg.getId());
+        if (!op.isPresent()) {
             // new package
             return packageRepository.saveAndFlush(pkg);
         }
-        
+       
+        org.midnightbsd.appstore.model.Package p = op.get();
         p.setCategories(pkg.getCategories());
         p.setDescription(pkg.getDescription());
         p.setUrl(pkg.getUrl());

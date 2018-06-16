@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -43,7 +44,7 @@ public class ArchitectureServiceTest {
         architecture.setCreated(Calendar.getInstance().getTime());
 
         when(architectureRepository.findOneByName("test")).thenReturn(architecture);
-        when(architectureRepository.findOne(1)).thenReturn(architecture);
+        when(architectureRepository.findById(1)).thenReturn(Optional.of(architecture));
         when(architectureRepository.findAll()).thenReturn(Collections.singletonList(architecture));
     }
 
@@ -66,7 +67,7 @@ public class ArchitectureServiceTest {
         assertEquals("test", arch.getName());
         assertEquals("Foo", arch.getDescription());
 
-        verify(architectureRepository, times(1)).findOne(1);
+        verify(architectureRepository, times(1)).findById(1);
     }
 
     @Test

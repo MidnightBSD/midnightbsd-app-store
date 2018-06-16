@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Calendar;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -36,7 +37,7 @@ public class OperatingSystemTest {
         obj.setCreated(Calendar.getInstance().getTime());
 
         when(operatingSystemRepository.findByNameAndVersion("test", "1.0")).thenReturn(obj);
-        when(operatingSystemRepository.findOne(1)).thenReturn(obj);
+        when(operatingSystemRepository.findById(1)).thenReturn(Optional.of(obj));
     }
 
     @Test
@@ -58,6 +59,6 @@ public class OperatingSystemTest {
         assertEquals("test", obj.getName());
         assertEquals("1.0", obj.getVersion());
 
-        verify(operatingSystemRepository, times(1)).findOne(1);
+        verify(operatingSystemRepository, times(1)).findById(1);
     }
 }

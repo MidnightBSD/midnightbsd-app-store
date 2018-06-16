@@ -9,7 +9,6 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,7 +40,7 @@ public class OperatingSystemService implements AppService<OperatingSystem> {
 
     @Cacheable(unless = "#result == null", key = "#id.toString()")
     public OperatingSystem get(final int id) {
-        return repository.findOne(id);
+        return repository.findById(id).orElse(null);
     }
 
     public OperatingSystem getByNameAndVersion(final String name, final String version) {
@@ -51,7 +50,7 @@ public class OperatingSystemService implements AppService<OperatingSystem> {
     @Transactional
     @CacheEvict(allEntries = true)
     public OperatingSystem save(OperatingSystem operatingSystem) {
-        OperatingSystem existing = repository.findOne(operatingSystem.getId());
+        OperatingSystem existing = repository.findById(operatingSystem.getId()).orElse(null);
         if (existing == null) {
             return repository.saveAndFlush(operatingSystem);
         }

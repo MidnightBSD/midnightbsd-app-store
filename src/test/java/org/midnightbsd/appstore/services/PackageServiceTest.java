@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Calendar;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -36,7 +37,7 @@ public class PackageServiceTest {
         obj.setCreated(Calendar.getInstance().getTime());
 
         when(packageRepository.findOneByName("test")).thenReturn(obj);
-        when(packageRepository.findOne(1)).thenReturn(obj);
+        when(packageRepository.findById(1)).thenReturn(Optional.of(obj));
     }
 
     @Test
@@ -58,6 +59,6 @@ public class PackageServiceTest {
         assertEquals("test", obj.getName());
         assertEquals("Foo", obj.getDescription());
 
-        verify(packageRepository, times(1)).findOne(1);
+        verify(packageRepository, times(1)).findById(1);
     }
 }

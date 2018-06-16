@@ -44,7 +44,7 @@ public class RatingService implements AppService<Rating> {
 
     @Override
     public Rating get(final int id) {
-        return ratingRepository.findOne(id);
+        return ratingRepository.findById(id).orElse(null);
     }
 
     public RatingAverage getAverage(final String pkgName) {
@@ -64,7 +64,7 @@ public class RatingService implements AppService<Rating> {
 
         Rating r = null;
         if (rating.getId() > 0)
-            r = ratingRepository.findOne(rating.getId());
+            r = ratingRepository.findById(rating.getId()).orElse(null);
 
         if (r == null) {
             final org.midnightbsd.appstore.model.Package pkg = packageRepository.findOneByName(pkgName);

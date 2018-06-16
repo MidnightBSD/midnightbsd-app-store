@@ -175,7 +175,7 @@ public class MagusImportService {
                     packageInstanceRepository.saveAndFlush(packageInstance); // save license link
 
                 log.info("Indexing package " + pkg.getName());
-                searchService.index(packageRepository.findOne(pkg.getId()));
+                searchService.index(packageRepository.findById(pkg.getId()).orElse(null));
             } catch (final Exception e) {
                 log.error("Error saving package " + e.getMessage(), e);
             }

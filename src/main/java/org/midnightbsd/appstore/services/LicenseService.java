@@ -41,7 +41,7 @@ public class LicenseService implements AppService<License> {
 
     @Cacheable(unless = "#result == null", key = "#id.toString()")
     public License get(final int id) {
-        return repository.findOne(id);
+        return repository.findById(id).orElse(null);
     }
 
     @Cacheable(unless = "#result == null", key = "#name")
