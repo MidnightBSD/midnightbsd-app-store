@@ -31,7 +31,7 @@ angular.module('wwwApp').controller('CategoryCtrl', ['$scope', '$routeParams', '
                         for (var i = 0; i < pkgs.length; i++) {
                             var n = pkgs[i].name;
                             $scope.ratings[n] = PackageService.getRatingAverage({Name: n},
-                                    function() {}, function() {
+                                    function() {}, function(n) {
                                         // fail case
                                         $scope.ratings[n] = {
                                             average: 0
