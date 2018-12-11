@@ -6,7 +6,7 @@
 
     <groupId>org.midnightbsd</groupId>
     <artifactId>app-store</artifactId>
-    <version>1.2.1-SNAPSHOT</version>
+    <version>1.2.2-SNAPSHOT</version>
 
     <organization>
         <name>MidnightBSD</name>
@@ -37,27 +37,27 @@
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>angular</artifactId>
-            <version>1.2.29</version>
+            <version>1.4.14</version>
         </dependency>
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>angular-cookies</artifactId>
-            <version>1.2.29</version>
+            <version>1.4.14</version>
         </dependency>
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>angular-route</artifactId>
-            <version>1.2.29</version>
+            <version>1.4.14</version>
         </dependency>
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>angular-resource</artifactId>
-            <version>1.2.29</version>
+            <version>1.4.14</version>
         </dependency>
         <dependency>
              <groupId>org.webjars.bower</groupId>
              <artifactId>angular-sanitize</artifactId>
-             <version>1.2.29</version>
+             <version>1.4.14</version>
          </dependency>
 
         <dependency>
@@ -293,7 +293,7 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
-                <version>Finchley.RC2</version>
+                <version>Finchley.SR2</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
