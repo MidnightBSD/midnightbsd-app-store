@@ -25,33 +25,32 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 public class Application {
     @Value("${tomcat.ajp.port}")
-       int ajpPort;
+    int ajpPort;
 
-       @Value("${tomcat.ajp.remoteauthentication}")
-       private boolean remoteAuthentication;
+    @Value("${tomcat.ajp.remoteauthentication}")
+    private boolean remoteAuthentication;
 
-       @Value("${tomcat.ajp.enabled}")
-       private boolean tomcatAjpEnabled;
+    @Value("${tomcat.ajp.enabled}")
+    private boolean tomcatAjpEnabled;
 
-       public static void main(final String[] args) {
-           SpringApplication.run(Application.class, args);
-       }
+    public static void main(final String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
 
-       @Bean
-       public TomcatServletWebServerFactory servletContainer() {
+    @Bean
+    public TomcatServletWebServerFactory servletContainer() {
 
-           final TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
-           if (tomcatAjpEnabled) {
-               final Connector ajpConnector = new Connector("AJP/1.3");
-               ajpConnector.setProtocol("AJP/1.3");
-               ajpConnector.setPort(ajpPort);
-               ajpConnector.setSecure(false);
-               ajpConnector.setAllowTrace(false);
-               ajpConnector.setScheme("http");
-               ajpConnector.setAttribute("tomcatAuthentication", !remoteAuthentication);
-               tomcat.addAdditionalTomcatConnectors(ajpConnector);
-           }
+        final TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory();
+        if (tomcatAjpEnabled) {
+            final Connector ajpConnector = new Connector("AJP/1.3");
+            ajpConnector.setPort(ajpPort);
+            ajpConnector.setSecure(false);
+            ajpConnector.setAllowTrace(false);
+            ajpConnector.setScheme("http");
+            ajpConnector.setAttribute("tomcatAuthentication", !remoteAuthentication);
+            tomcat.addAdditionalTomcatConnectors(ajpConnector);
+        }
 
-           return tomcat;
-       }
+        return tomcat;
+    }
 }
