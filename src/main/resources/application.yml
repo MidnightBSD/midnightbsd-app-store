@@ -77,6 +77,8 @@ spring:
 ---
 spring:
   profiles: prod
+  flyway:
+    url: jdbc:postgresql://midnightbsd-app-store.c9or38nglwhm.us-east-1.rds.amazonaws.com/app_store?ssl=true&amp;sslfactory=org.postgresql.ssl.DefaultJavaSSLFactory&amp;sslmode=require
   redis:
     host: midnightbsd-redis.c6ifkh.0001.use1.cache.amazonaws.com
     port: 6379
@@ -87,11 +89,11 @@ spring:
       aws-region: us-east-1
   datasource:
     hikari:
-      jdbc-url: jdbc:postgresql://midnightbsd-app-store.c9or38nglwhm.us-east-1.rds.amazonaws.com/app_store?ssl=true&amp;sslfactory=org.postgresql.ssl.NonValidatingFactory
+      jdbc-url: jdbc:postgresql://midnightbsd-app-store.c9or38nglwhm.us-east-1.rds.amazonaws.com/app_store?ssl=true&amp;sslfactory=org.postgresql.ssl.DefaultJavaSSLFactory&amp;sslmode=require
       maximum-pool-size: 10
       minimum-idle: 1
-    jdbc-url: jdbc:postgresql://midnightbsd-app-store.c9or38nglwhm.us-east-1.rds.amazonaws.com/app_store?ssl=true&amp;sslfactory=org.postgresql.ssl.NonValidatingFactory
-    url: jdbc:postgresql://midnightbsd-app-store.c9or38nglwhm.us-east-1.rds.amazonaws.com/app_store?ssl=true&amp;sslfactory=org.postgresql.ssl.NonValidatingFactory
+    jdbc-url: jdbc:postgresql://midnightbsd-app-store.c9or38nglwhm.us-east-1.rds.amazonaws.com/app_store?ssl=true&amp;sslfactory=org.postgresql.ssl.DefaultJavaSSLFactory&amp;sslmode=require
+    url: jdbc:postgresql://midnightbsd-app-store.c9or38nglwhm.us-east-1.rds.amazonaws.com/app_store?ssl=true&amp;sslfactory=org.postgresql.ssl.DefaultJavaSSLFactory&amp;sslmode=require
     username: appstore
     password: 
 cloud:
@@ -102,9 +104,6 @@ cloud:
     region:
       static: US_EAST_1
 
-flyway:
-  url: jdbc:postgresql://midnightbsd-app-store.c9or38nglwhm.us-east-1.rds.amazonaws.com/app_store?ssl=true&amp;sslfactory=org.postgresql.ssl.NonValidatingFactory
-  
 eureka:
   client:
     serviceUrl:
