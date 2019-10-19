@@ -36,27 +36,27 @@
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>angular</artifactId>
-            <version>1.4.14</version>
+            <version>1.6.5</version>
         </dependency>
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>angular-cookies</artifactId>
-            <version>1.4.14</version>
+            <version>1.6.5</version>
         </dependency>
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>angular-route</artifactId>
-            <version>1.4.14</version>
+            <version>1.6.5</version>
         </dependency>
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>angular-resource</artifactId>
-            <version>1.4.14</version>
+            <version>1.6.5</version>
         </dependency>
         <dependency>
              <groupId>org.webjars.bower</groupId>
              <artifactId>angular-sanitize</artifactId>
-             <version>1.4.14</version>
+             <version>1.6.5</version>
          </dependency>
 
         <dependency>
