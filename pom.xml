@@ -30,33 +30,33 @@
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>jquery</artifactId>
-            <version>2.2.4</version>
+            <version>3.4.0</version>
         </dependency>
 
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>angular</artifactId>
-            <version>1.4.14</version>
+            <version>1.7.9</version>
         </dependency>
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>angular-cookies</artifactId>
-            <version>1.4.14</version>
+            <version>1.6.9</version>
         </dependency>
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>angular-route</artifactId>
-            <version>1.4.14</version>
+            <version>1.6.9</version>
         </dependency>
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>angular-resource</artifactId>
-            <version>1.4.14</version>
+            <version>1.6.9</version>
         </dependency>
         <dependency>
              <groupId>org.webjars.bower</groupId>
              <artifactId>angular-sanitize</artifactId>
-             <version>1.4.14</version>
+             <version>1.6.9</version>
          </dependency>
 
         <dependency>
@@ -184,7 +184,7 @@
         <dependency>
             <groupId>com.github.vanroy</groupId>
             <artifactId>spring-boot-starter-data-jest</artifactId>
-            <version>3.2.5.RELEASE</version>
+            <version>3.3.0.RELEASE</version>
         </dependency>
         
         <dependency>
