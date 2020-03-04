@@ -4,6 +4,8 @@ import org.apache.catalina.connector.Connector;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +24,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableAsync
 @EnableTransactionManagement
 @EnableJpaRepositories
-@SpringBootApplication
+@SpringBootApplication(exclude = {ElasticsearchAutoConfiguration.class, ElasticsearchDataAutoConfiguration.class})
 public class Application {
     @Value("${tomcat.ajp.port}")
     int ajpPort;
@@ -32,6 +34,12 @@ public class Application {
 
     @Value("${tomcat.ajp.enabled}")
     private boolean tomcatAjpEnabled;
+
+    @Value("${tomcat.ajp.secret}")
+    private String secret;
+
+    @Value("${tomcat.ajp.secretRequired:true}")
+    private boolean secretRequired;
 
     public static void main(final String[] args) {
         SpringApplication.run(Application.class, args);
@@ -48,6 +56,8 @@ public class Application {
             ajpConnector.setAllowTrace(false);
             ajpConnector.setScheme("http");
             ajpConnector.setAttribute("tomcatAuthentication", !remoteAuthentication);
+            ajpConnector.setAttribute("secretRequired", secretRequired);
+            ajpConnector.setAttribute("secret", secret);
             tomcat.addAdditionalTomcatConnectors(ajpConnector);
         }
 
