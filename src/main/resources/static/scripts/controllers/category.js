@@ -28,6 +28,9 @@ angular.module('wwwApp').controller('CategoryCtrl', ['$scope', '$routeParams', '
         $scope.category = CategoryService.get({Id: $routeParams.id}, function (cat) {
             $scope.packages = PackageService.queryByCategoryName({Name: cat.name},
                     function (pkgs) {
+                        if (pkgs === 'undefined' || pkgs.length === 0)
+                            return;
+                        
                         for (var i = 0; i < pkgs.length; i++) {
                             var n = pkgs[i].name;
                             $scope.ratings[n] = PackageService.getRatingAverage({Name: n},

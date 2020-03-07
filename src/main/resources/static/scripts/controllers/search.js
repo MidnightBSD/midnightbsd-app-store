@@ -80,6 +80,7 @@ angular.module('wwwApp').controller('SearchCtrl', ['$scope', '$log', '$routePara
                     $scope.processing=false;
 
 
+        			var pkgs = $scope.searchResponse.content;
                     for (var i = 0; i < pkgs.length; i++) {
                         $scope.ratings[pkgs[i].name] = PackageService.getRatingAverage({Name: pkgs[i].name});
                     }
