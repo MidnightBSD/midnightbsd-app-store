@@ -47,7 +47,7 @@ public class SearchService {
     @Async
     public void indexAllPackages() {
         try {
-            Pageable pageable = new PageRequest(0, 100);
+            Pageable pageable = PageRequest.of(0, 100);
 
             Page<org.midnightbsd.appstore.model.Package> packages = packageRepository.findAll(pageable);
             for (int i = 0; i < packages.getTotalPages(); i++) {
@@ -60,7 +60,7 @@ public class SearchService {
                 log.debug("Saving a page of packages to elasticsearch. pg " + i);
                 packageSearchRepository.saveAll(items);
 
-                pageable = new PageRequest(i + 1, 100);
+                pageable = PageRequest.of(i + 1, 100);
                 packages = packageRepository.findAll(pageable);
             }
         } catch (final Exception e) {

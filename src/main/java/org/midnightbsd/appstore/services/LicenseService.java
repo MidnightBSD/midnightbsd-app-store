@@ -32,7 +32,7 @@ public class LicenseService implements AppService<License> {
 
     @Cacheable(key = "'licenseList'", unless = "#result == null")
     public List<License> list() {
-        return repository.findAll(new Sort(Sort.Direction.ASC, "name"));
+        return repository.findAll(Sort.by(Sort.Direction.ASC, "name"));
     }
 
     public Page<License> get(final Pageable page) {

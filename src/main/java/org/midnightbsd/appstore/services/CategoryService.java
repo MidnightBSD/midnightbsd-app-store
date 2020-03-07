@@ -33,7 +33,7 @@ public class CategoryService implements AppService<Category> {
     @Cacheable(key = "'categoryList'", unless = "#result == null")
     @Override
     public List<Category> list() {
-        return categoryRepository.findAll(new Sort(Sort.Direction.ASC, "name"));
+        return categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
     }
 
     @Override

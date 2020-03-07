@@ -85,7 +85,7 @@ spring:
     database: 0
   data:
     jest:
-      uri: http://vpc-mnbsd-3en4agwhc4ud7wmwuigo7aovwi.us-east-1.es.amazonaws.com
+      uri: https://vpc-mnbsd-3en4agwhc4ud7wmwuigo7aovwi.us-east-1.es.amazonaws.com:443/
       aws-region: us-east-1
   datasource:
     hikari:
