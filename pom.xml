@@ -25,6 +25,8 @@
         <flyway.version>6.3.0</flyway.version>
         <datajest.version>3.3.0.RELEASE</datajest.version>
         <spring-cloud.version>Hoxton.SR3</spring-cloud.version>
+        <jquery.version>3.4.0</jquery.version>
+        <angularjs.version>1.4.14</angularjs.version>
     </properties>
 
     <dependencies>
@@ -32,33 +34,33 @@
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>jquery</artifactId>
-            <version>3.3.1</version>
+            <version>${jquery.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>angular</artifactId>
-            <version>1.4.14</version>
+            <version>${angularjs.version}</version>
         </dependency>
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>angular-cookies</artifactId>
-            <version>1.4.14</version>
+            <version>${angularjs.version}</version>
         </dependency>
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>angular-route</artifactId>
-            <version>1.4.14</version>
+            <version>${angularjs.version}</version>
         </dependency>
         <dependency>
             <groupId>org.webjars.bower</groupId>
             <artifactId>angular-resource</artifactId>
-            <version>1.4.14</version>
+            <version>${angularjs.version}</version>
         </dependency>
         <dependency>
              <groupId>org.webjars.bower</groupId>
              <artifactId>angular-sanitize</artifactId>
-             <version>1.4.14</version>
+             <version>${angularjs.version}</version>
          </dependency>
 
         <dependency>
@@ -73,13 +75,6 @@
             <version>${flyway.version}</version>
         </dependency>
         
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-transport-native-kqueue</artifactId>
-            <version>4.1.45.Final</version>
-            <classifier>${os.detected.name}-${os.detected.arch}</classifier>
-        </dependency>
-
         <dependency>
          	<groupId>org.springframework.boot</groupId>
          	<artifactId>spring-boot-properties-migrator</artifactId>
