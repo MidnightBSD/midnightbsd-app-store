@@ -103,18 +103,22 @@ angular.module('wwwApp').controller('SearchCtrl', ['$scope', '$log', '$routePara
                 packageName: name,
                 average: $scope.ratings[name].average
             };
-            $http.post('api/package/name/' + name + '/rating', data).success(function (data, status) {
-                if (status === 201) {
-                    ga('send', 'event', 'Rating', 'Add');
-                    return false;
-                } else {
-                    alert("Unable to save rating.");
-                    return false;
-                }
-            }).error(function () {
-                alert("Unable to save rating.");
-                return false;
-            });
+			$http.post('api/package/name/' + name + '/rating', data)
+					.then(function onSuccess(response) {
+						// Handle success
+						var data = response.data;
+						var status = response.status;
+						if (status === 201) {
+							ga('send', 'event', 'Rating', 'Add');
+							return false;
+						} else {
+							alert("Unable to save rating.");
+							return false;
+						}
+					}).catch(function onError(response) {
+				alert("Unable to save rating.");
+				return false;
+			});
         };
         
 		$scope.$on('$destroy', function finalize() {

@@ -9,27 +9,30 @@ angular.module('wwwApp').controller('LicenseCtrl', ['$scope', '$routeParams', '$
         $scope.page = $location.search().page;
         if (typeof $scope.page === 'undefined')
             $scope.page = 0;
-
+        
         $scope.addRating = function (name, score) {
             console.log("rating " + name + " is " + score);
             var data = {
                 packageName: name,
                 average: $scope.ratings[name].average
             };
-            $http.post('api/package/name/' + name + '/rating', data).success(function (data, status) {
-                if (status === 201) {
-                    ga('send', 'event', 'Rating', 'Add');
-                    return false;
-                } else {
-                    alert("Unable to save rating.");
-                    return false;
-                }
-            }).error(function () {
+            $http.post('api/package/name/' + name + '/rating', data)
+                    .then(function onSuccess(response) {
+                        // Handle success
+                        var data = response.data;
+                        var status = response.status;
+                        if (status === 201) {
+                            ga('send', 'event', 'Rating', 'Add');
+                            return false;
+                        } else {
+                            alert("Unable to save rating.");
+                            return false;
+                        }
+                    }).catch(function onError(response) {
                 alert("Unable to save rating.");
                 return false;
             });
         };
-
 
         $scope.license = LicenseService.queryByName({ Name: $routeParams.license});
 
