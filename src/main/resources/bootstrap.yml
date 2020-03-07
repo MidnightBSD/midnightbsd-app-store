@@ -12,9 +12,3 @@ server:
   tomcat:
     remote_ip_header: x-forwarded-for
     protocol_header: x-forwarded-proto
-
-tomcat:
-  ajp:
-    port: ${ajp-port:8211}
-    remoteauthentication: ${ajp-auth:false}
-    enabled: ${ajp-on:true}

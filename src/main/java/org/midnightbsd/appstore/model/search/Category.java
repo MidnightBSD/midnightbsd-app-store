@@ -8,6 +8,7 @@ import lombok.ToString;
 import java.io.Serializable;
 
 /**
+ * Individual category like x11, devel, games.
  * @author Lucas Holt
  */
 @ToString
