@@ -32,5 +32,13 @@ pipeline {
                 }
             }
         }
+        stage('FOSSA') {
+            steps {
+                sh '''
+                fossa init
+                fossa analyze
+                '''
+            }
+        }
     }
 }
