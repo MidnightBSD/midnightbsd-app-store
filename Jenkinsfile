@@ -41,7 +41,7 @@ pipeline {
             	}
             }
        }
-        stage('jacoco') {
+       stage('jacoco') {
         	steps {
         		jacoco(
               	execPattern: 'target/*.exec',
@@ -50,19 +50,16 @@ pipeline {
               	exclusionPattern: 'src/test*'
         		)
         	}
-        }
-        stage('Sonarqube') {
+       }
+       stage('Sonarqube') {
             steps {
                 withSonarQubeEnv('sonarcloud') {
                 	sh 'mvn sonar:sonar -Dsonar.organization=laffer1-github'
                 }
-
+                timeout(time: 10, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
             }
-        }
-        stage('Quality Gate') {
-         timeout(time: 10, unit: 'MINUTES') {
-            waitForQualityGate abortPipeline: true
-         }
-        }
+       }
     }
 }
