@@ -1,4 +1,4 @@
-package org.midnightbsd.appstore.ctl;
+package integration;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -9,6 +9,7 @@ import org.midnightbsd.appstore.services.ArchitectureService;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -30,7 +31,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author Lucas Holt
  */
 @RunWith(MockitoJUnitRunner.class)
-public class ArchitectureControllerTest {
+public class ITArchitectureController {
+
+    private MockMvc mockMvc;
 
     @Mock
     private ArchitectureService architectureService;
@@ -42,6 +45,8 @@ public class ArchitectureControllerTest {
 
     @Before
     public void setup() {
+        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+
         arch = new Architecture();
         arch.setDescription("TEST ARCH");
         arch.setName("NAME");
@@ -52,27 +57,25 @@ public class ArchitectureControllerTest {
         when(architectureService.get(1)).thenReturn(arch);
         when(architectureService.getByName("NAME")).thenReturn(arch);
     }
-
+    
     @Test
-    public void testList() {
-        final ResponseEntity<List<Architecture>> result = controller.list();
-        assertNotNull(result);
-        assertEquals(1, result.getBody().size());
+    public void mvcTestList() throws Exception {
+        mockMvc.perform(get("/api/architecture").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith("application/json;charset=UTF-8"));
     }
 
     @Test
-    public void testGet() {
-        final ResponseEntity<Architecture> result = controller.get(1);
-        assertNotNull(result);
-        assertEquals("NAME", result.getBody().getName());
-        assertEquals(1, result.getBody().getId());
+    public void mvcTestGet() throws Exception {
+        mockMvc.perform(get("/api/architecture/1").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith("application/json;charset=UTF-8"));
     }
 
     @Test
-    public void testGetByName() {
-        final ResponseEntity<Architecture> result = controller.get("NAME");
-        assertNotNull(result);
-        assertEquals("NAME", result.getBody().getName());
-        assertEquals(1, result.getBody().getId());
+    public void mvcTestGetByName() throws Exception {
+        mockMvc.perform(get("/api/architecture/name/NAME").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith("application/json;charset=UTF-8"));
     }
 }

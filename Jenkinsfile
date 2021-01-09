@@ -31,6 +31,16 @@ pipeline {
                 }
             }
         }
+        stage('Integration Test') {
+            steps {
+                sh 'mvn integration-test'
+            }
+            post {
+                always {
+                   junit 'target/failsafe-reports/*.xml'
+            	}
+            }
+       }
         stage('jacoco') {
         	steps {
         		jacoco(
