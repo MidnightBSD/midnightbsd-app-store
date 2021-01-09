@@ -68,7 +68,7 @@ public class PackageController {
         return ResponseEntity.ok(ratingService.getAverage(name));
     }
 
-    @PostMapping(value = "/name/{name}/rating", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/name/{name}/rating", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Rating> postRating(@PathVariable("name") final String name, @RequestBody RatingAverage ratingAvg,
                                              HttpServletRequest request) {
 
