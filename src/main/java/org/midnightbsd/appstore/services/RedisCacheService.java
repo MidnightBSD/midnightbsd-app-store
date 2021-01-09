@@ -20,40 +20,40 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class RedisCacheService implements CacheService<Object, Object> {
-    private RedisTemplate<Object, Object> client;
+    private final RedisTemplate<Object, Object> client;
 
     @Autowired
-    public RedisCacheService(RedisTemplate<Object, Object> client) {
+    public RedisCacheService(final RedisTemplate<Object, Object> client) {
         this.client = client;
     }
 
-    public Boolean keyExists(@NotNull Object key) {
+    public Boolean keyExists(@NotNull final Object key) {
         return this.client.hasKey(key);
     }
 
-    public Object get(@NotNull Object key) {
+    public Object get(@NotNull final Object key) {
         return this.client.opsForValue().get(key);
     }
 
     public List<String> list() throws ServiceException {
         try {
-            Set<Object> redisKeys = this.client.keys("*");
+            final Set<Object> redisKeys = this.client.keys("*");
             return redisKeys.stream().map(Object::toString).collect(Collectors.toList());
-        } catch (Exception var2) {
+        } catch (final Exception var2) {
             log.error(var2.getMessage(), var2);
             throw new ServiceException("Cache list could not be loaded");
         }
     }
 
-    public void set(@NotNull Object key, Object value) {
+    public void set(@NotNull final Object key, final Object value) {
         this.client.opsForValue().set(key, value);
     }
 
-    public void set(@NotNull Object key, Object value, long timeout, TimeUnit unit) {
+    public void set(@NotNull final Object key, final Object value, long timeout, TimeUnit unit) {
         this.client.opsForValue().set(key, value, timeout, unit);
     }
 
-    public void delete(@NotNull Object key) throws ServiceException {
+    public void delete(@NotNull final Object key) throws ServiceException {
         try {
             this.client.delete(key);
         } catch (final Exception var3) {
@@ -67,12 +67,12 @@ public class RedisCacheService implements CacheService<Object, Object> {
             log.error("Client is null.");
             throw new ServiceException("Could not delete all key/value pairs from current redis database, null client.");
         } else {
-            RedisConnection connection = getConnectionFactory().getConnection();
+            final RedisConnection connection = getConnectionFactory().getConnection();
 
             try {
                 connection.flushDb();
                 log.trace("flushed cache for current db %n", ((JedisConnectionFactory) getConnectionFactory()).getDatabase());
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 log.error("Unable to delete all key/value pairs from current redis database", e);
                 throw new ServiceException("Unable to delete all key/value pairs from current redis database");
             }
