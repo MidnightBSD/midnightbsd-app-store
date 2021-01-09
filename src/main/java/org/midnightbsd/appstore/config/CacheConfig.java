@@ -33,7 +33,7 @@ public class CacheConfig extends CachingConfigurerSupport {
     public RedisTemplate redisTemplate(RedisConnectionFactory factory) {
         RedisTemplate<Object, Object> template = new RedisTemplate();
         template.setConnectionFactory(factory);
-        JdkSerializationRedisSerializer jdkSerializationRedisSerializer = new JdkSerializationRedisSerializer();
+        final JdkSerializationRedisSerializer jdkSerializationRedisSerializer = new JdkSerializationRedisSerializer();
         template.setKeySerializer(template.getStringSerializer());
         template.setValueSerializer(jdkSerializationRedisSerializer);
         template.setDefaultSerializer(template.getStringSerializer());
