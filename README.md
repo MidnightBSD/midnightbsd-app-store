@@ -1,4 +1,7 @@
 # midnightbsd-app-store
+
+[![Build Status](https://jenkins.midnightbsd.org/buildStatus/icon?job=MidnightBSD%2Fmidnightbsd-app-store%2Fmaster&build=8)](https://jenkins.midnightbsd.org/job/MidnightBSD/job/midnightbsd-app-store/job/master/8/)
+
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FMidnightBSD%2Fmidnightbsd-app-store.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FMidnightBSD%2Fmidnightbsd-app-store?ref=badge_shield)
 
 ![CodeQL](https://github.com/MidnightBSD/midnightbsd-app-store/workflows/CodeQL/badge.svg)
