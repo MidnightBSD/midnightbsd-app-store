@@ -26,7 +26,7 @@
         <flyway.version>6.5.7</flyway.version>
         <spring-cloud.version>2020.0.4</spring-cloud.version>
         <jquery.version>3.5.1</jquery.version>
-        <angularjs.version>1.6.10</angularjs.version>
+        <angularjs.version>1.7.5</angularjs.version>
         <argLine>-Xmx786m</argLine>
     </properties>
 
