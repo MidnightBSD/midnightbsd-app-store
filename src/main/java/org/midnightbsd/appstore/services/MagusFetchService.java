@@ -60,7 +60,7 @@ public class MagusFetchService {
 
         for (final Run run : osRunMap.values()) {
             final List<Port> ports = getPorts(run.getId(), MAGUS_STATUS_PASS);
-            log.info("Processing " + ports.size() + " ports");
+            log.info("Processing " + ports.size() + " ports for run " + run.getId());
             magusImportService.importRun(run, ports);
         }
     }

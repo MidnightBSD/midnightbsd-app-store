@@ -10,5 +10,6 @@ server:
     enabled: true
     mime-types: application/json,application/xml,text/html,text/xml,text/plain
   tomcat:
-    remote_ip_header: x-forwarded-for
-    protocol_header: x-forwarded-proto
+    remoteip:
+      remote_ip_header: x-forwarded-for
+      protocol_header: x-forwarded-proto

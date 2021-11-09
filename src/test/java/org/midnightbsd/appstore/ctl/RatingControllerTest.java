@@ -9,7 +9,7 @@ import org.midnightbsd.appstore.model.Rating;
 import org.midnightbsd.appstore.services.RatingService;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Calendar;

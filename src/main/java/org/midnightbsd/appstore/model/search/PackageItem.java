@@ -21,7 +21,7 @@ import java.util.List;
  */
 @ToString
 @EqualsAndHashCode
-@Document(indexName = "package", type = "pkg")
+@Document(indexName = "package")
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PackageItem implements Serializable, Comparable<PackageItem> {

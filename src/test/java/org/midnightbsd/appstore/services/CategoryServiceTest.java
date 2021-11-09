@@ -7,7 +7,7 @@ import org.midnightbsd.appstore.model.Category;
 import org.midnightbsd.appstore.repository.CategoryRepository;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Calendar;
 import java.util.Optional;
