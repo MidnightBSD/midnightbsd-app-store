@@ -8,17 +8,17 @@ spring:
       write-dates-as-timestamps: false
   flyway:
     baseline-on-migrate: true
-    user: appstore
+    user: appstoredev
     password:
-    url: jdbc:postgresql://db.midnightbsd.org/app_store
+    url: jdbc:postgresql://db.midnightbsd.org/app_store_dev
     table: schema_version
   datasource:
-    url: jdbc:postgresql://db.midnightbsd.org/app_store
-    jdbc-url: jdbc:postgresql://db.midnightbsd.org/app_store
-    username: appstore
+    url: jdbc:postgresql://db.midnightbsd.org/app_store_dev
+    jdbc-url: jdbc:postgresql://db.midnightbsd.org/app_store_dev
+    username: appstoredev
     password:
     hikari:
-      jdbc-url: jdbc:postgresql://db.midnightbsd.org/app_store
+      jdbc-url: jdbc:postgresql://db.midnightbsd.org/app_store_dev
       maximum-pool-size: 10
       minimum-idle: 1
   jpa:
