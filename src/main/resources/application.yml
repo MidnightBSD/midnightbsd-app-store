@@ -104,8 +104,11 @@ spring:
     port: 6379
     database: 2
   data:
-    jest:
-      uri: http://db.midnightbsd.org:9200/
+    elasticsearch:
+      rest:
+        uris: http://db.midnightbsd.org:9200
+      repositories:
+        enabled: true
   datasource:
     hikari:
       jdbc-url: jdbc:postgresql://db.midnightbsd.org/app_store
