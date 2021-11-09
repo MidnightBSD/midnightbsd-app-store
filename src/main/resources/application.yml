@@ -93,7 +93,7 @@ spring:
   redis:
     host: db.midnightbsd.org
     port: 6379
-    database: 0
+    database: 2
   data:
     jest:
       uri: http://db.midnightbsd.org:9200/
@@ -106,13 +106,6 @@ spring:
     url: jdbc:postgresql://db.midnightbsd.org/app_store
     username: appstore
     password: 
-cloud:
-  aws:
-    credentials:
-      accessKey:
-      secretKey:
-    region:
-      static: US_EAST_1
 
 eureka:
   client:
