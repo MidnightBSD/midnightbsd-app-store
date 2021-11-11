@@ -46,12 +46,9 @@ spring:
     host: localhost
     port: 6379
     database: 2
-  data:
-    elasticsearch:
-      rest:
-        uris: http://localhost:9200
-      repositories:
-        enabled: true
+  elasticsearch:
+    rest:
+      uris: http://localhost:9200
 
 eureka:
   client:
@@ -103,12 +100,9 @@ spring:
     host: db.midnightbsd.org
     port: 6379
     database: 2
-  data:
-    elasticsearch:
-      rest:
-        uris: http://db.midnightbsd.org:9200
-      repositories:
-        enabled: true
+  elasticsearch:
+    rest:
+      uris: http://db.midnightbsd.org:9200
   datasource:
     hikari:
       jdbc-url: jdbc:postgresql://db.midnightbsd.org/app_store
