@@ -4,8 +4,6 @@
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FMidnightBSD%2Fmidnightbsd-app-store.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FMidnightBSD%2Fmidnightbsd-app-store?ref=badge_shield)
 
-![CodeQL](https://github.com/MidnightBSD/midnightbsd-app-store/workflows/CodeQL/badge.svg)
-
 MidnightBSD APP Store API
 
 Provides the app store front end and backend rest API.  
@@ -22,10 +20,10 @@ The web frontend is written in Angular.JS and the backend is
 Spring Boot 2.
 
 Requires:
-* Redis 3.x or later
+* Redis 5.x or later
 * Java 11 or later
-* PostgreSQL 9.x or newer
-* ElasticSearch 6.7.x or newer
+* PostgreSQL 13.x or newer
+* ElasticSearch 6.8.x or newer
 
 ## clients
 In addition to the website, the graphical package manager (mport-manager), will call the app store to get user ratings for apps via the rest API. 
