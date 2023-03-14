@@ -8,7 +8,6 @@
     <meta property="og:site_name" content="MidnightBSD App Store" />
     <meta name="viewport" content="width=device-width" />
     <meta http-equiv="content-language" content="en-us" />
-    <link rel="stylesheet" href="static/styles/bootstrap.min.css" th:href="@{static/styles/bootstrap.min.css}" />
     <link rel="stylesheet" href="static/components/angular-ui/build/angular-ui.css" th:href="@{components/angular-ui/build/angular-ui.css}"/>
     <link rel="stylesheet" href="static/styles/17.css" th:href="@{static/styles/17.css}" />
 </head>
@@ -20,7 +19,7 @@
     <div class="container">
     <div id="header" class="row">
         <div class="col-xs-12">
-        <h1><a href="#!/"><img src="http://d2ibasrwfd3o7m.cloudfront.net/art/logo/MidnightBSDLogoText.png" alt="MidnightBSD" /></a></h1>
+        <h1><a href="#!/"><img src="https://www.midnightbsd.org/art/logo/MidnightBSDLogoText.png" alt="MidnightBSD" /></a></h1>
         </div>
     </div>
 
@@ -47,7 +46,7 @@
 <footer>
 <div id="footer" class="row">
     <div class="col-xs-12">
-    <p id="copyright">&#169; 2017-2021 Lucas Holt. All rights reserved.</p>
+    <p id="copyright">&#169; 2017-2023 Lucas Holt. All rights reserved.</p>
 
     <p><a href="/#!/privacy" title="Privacy Policy">Privacy</a> |
         <a href="/#!/search" title="Search">Search</a></p>
@@ -57,7 +56,7 @@
 </div>
 <!-- Footer: End -->
 
-<script th:src="@{/webjars/jquery/3.6.1/jquery.min.js}"></script>
+<script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
 
 <script th:src="@{/webjars/angular/1.8.2/angular.min.js}"></script>
 <script th:src="@{/webjars/angular-resource/1.8.2/angular-resource.min.js}"></script>
@@ -94,22 +93,14 @@
 <script type="text/javascript" src="static/scripts/services/SearchService.js" th:src="@{scripts/services/SearchService.js}"></script>
 <!-- endbuild -->
 
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F8W6E2ZCV2"></script>
 <script>
-    (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-            (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-                m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-    ga('create', 'UA-560995-6', 'app.midnightbsd.org');
-    ga('require', 'linkid', 'linkid.js');
-    ga('send', 'pageview');
+    gtag('config', 'G-F8W6E2ZCV2');
 </script>
 
 </body>
