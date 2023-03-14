@@ -3,14 +3,12 @@ package org.midnightbsd.appstore.ctl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.midnightbsd.appstore.ctl.api.ArchitectureController;
 import org.midnightbsd.appstore.ctl.api.CategoryController;
-import org.midnightbsd.appstore.model.Architecture;
 import org.midnightbsd.appstore.model.Category;
 import org.midnightbsd.appstore.services.CategoryService;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Calendar;

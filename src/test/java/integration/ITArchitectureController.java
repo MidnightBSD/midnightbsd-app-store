@@ -8,7 +8,7 @@ import org.midnightbsd.appstore.model.Architecture;
 import org.midnightbsd.appstore.services.ArchitectureService;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
