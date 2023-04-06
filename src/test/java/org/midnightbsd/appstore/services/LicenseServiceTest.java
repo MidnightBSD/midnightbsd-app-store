@@ -1,33 +1,33 @@
 package org.midnightbsd.appstore.services;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.midnightbsd.appstore.model.License;
 import org.midnightbsd.appstore.repository.LicenseRepository;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Calendar;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 /**
  * @author Lucas Holt
  */
-@RunWith(MockitoJUnitRunner.class)
-public class LicenseServiceTest {
+@ExtendWith(MockitoExtension.class)
+class LicenseServiceTest {
     @Mock
     private LicenseRepository licenseRepository;
 
     @InjectMocks
     private LicenseService licenseService;
 
-    @Before
+    @BeforeEach
     public void setup() {
         License obj = new License();
         obj.setId(1);
@@ -40,7 +40,7 @@ public class LicenseServiceTest {
     }
 
     @Test
-    public void testGetName() {
+    void testGetName() {
         License obj = licenseService.getByName("test");
         assertNotNull(obj);
         assertEquals(1, obj.getId());
@@ -51,7 +51,7 @@ public class LicenseServiceTest {
     }
 
     @Test
-    public void testGet() {
+    void testGet() {
         License obj = licenseService.get(1);
         assertNotNull(obj);
         assertEquals(1, obj.getId());

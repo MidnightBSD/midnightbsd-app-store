@@ -1,32 +1,30 @@
 package org.midnightbsd.appstore.ctl;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.midnightbsd.appstore.ctl.api.CategoryController;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.midnightbsd.appstore.ctl.api.LicenseController;
-import org.midnightbsd.appstore.model.Category;
 import org.midnightbsd.appstore.model.License;
-import org.midnightbsd.appstore.services.CategoryService;
 import org.midnightbsd.appstore.services.LicenseService;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 /**
  * @author Lucas Holt
  */
-@RunWith(MockitoJUnitRunner.class)
-public class LicenseControllerTest {
+@ExtendWith(MockitoExtension.class)
+class LicenseControllerTest {
     @Mock
         private LicenseService service;
 
@@ -35,7 +33,7 @@ public class LicenseControllerTest {
 
         private License license;
 
-        @Before
+        @BeforeEach
         public void setup() {
             license = new License();
             license.setDescription("TEST license");
@@ -49,14 +47,14 @@ public class LicenseControllerTest {
         }
 
         @Test
-        public void testList() {
+        void testList() {
             final ResponseEntity<List<License>> result = controller.list();
             assertNotNull(result);
-            assertEquals(1, result.getBody().size());
+            assertEquals(1, Objects.requireNonNull(result.getBody()).size());
         }
 
         @Test
-        public void testGet() {
+        void testGet() {
             final ResponseEntity<License> result = controller.get(1);
             assertNotNull(result);
             assertEquals("NAME", result.getBody().getName());
@@ -64,7 +62,7 @@ public class LicenseControllerTest {
         }
 
         @Test
-        public void testGetByName() {
+        void testGetByName() {
             final ResponseEntity<License> result = controller.get("NAME");
             assertNotNull(result);
             assertEquals("NAME", result.getBody().getName());

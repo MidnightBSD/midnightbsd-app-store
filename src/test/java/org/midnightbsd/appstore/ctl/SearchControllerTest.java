@@ -1,30 +1,22 @@
 package org.midnightbsd.appstore.ctl;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.midnightbsd.appstore.ctl.api.LicenseController;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.midnightbsd.appstore.ctl.api.SearchController;
-import org.midnightbsd.appstore.model.Category;
-import org.midnightbsd.appstore.model.License;
 import org.midnightbsd.appstore.model.search.PackageItem;
-import org.midnightbsd.appstore.services.LicenseService;
 import org.midnightbsd.appstore.services.SearchService;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -32,8 +24,8 @@ import static org.mockito.Mockito.when;
 /**
  * @author Lucas Holt
  */
-@RunWith(MockitoJUnitRunner.class)
-public class SearchControllerTest {
+@ExtendWith(MockitoExtension.class)
+class SearchControllerTest {
     @Mock
     private SearchService service;
 
@@ -42,7 +34,7 @@ public class SearchControllerTest {
 
     private PackageItem pkg;
 
-    @Before
+    @BeforeEach
     public void setup() {
         pkg = new PackageItem();
         pkg.setDescription("TEST license");
@@ -54,7 +46,7 @@ public class SearchControllerTest {
     }
 
     @Test
-    public void testFind() {
+    void testFind() {
         final Page<PackageItem> result = controller.find("test", PageRequest.of(1, 1));
         assertNotNull(result);
         assertEquals(1, result.getNumberOfElements());

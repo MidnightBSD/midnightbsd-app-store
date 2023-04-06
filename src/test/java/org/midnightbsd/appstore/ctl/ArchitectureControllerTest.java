@@ -1,22 +1,22 @@
 package org.midnightbsd.appstore.ctl;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.midnightbsd.appstore.ctl.api.ArchitectureController;
 import org.midnightbsd.appstore.model.Architecture;
 import org.midnightbsd.appstore.services.ArchitectureService;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 /**
@@ -24,8 +24,8 @@ import static org.mockito.Mockito.when;
  *
  * @author Lucas Holt
  */
-@RunWith(MockitoJUnitRunner.class)
-public class ArchitectureControllerTest {
+@ExtendWith(MockitoExtension.class)
+class ArchitectureControllerTest {
 
     @Mock
     private ArchitectureService architectureService;
@@ -35,7 +35,7 @@ public class ArchitectureControllerTest {
 
     private Architecture arch;
 
-    @Before
+    @BeforeEach
     public void setup() {
         arch = new Architecture();
         arch.setDescription("TEST ARCH");
@@ -49,14 +49,14 @@ public class ArchitectureControllerTest {
     }
 
     @Test
-    public void testList() {
+    void testList() {
         final ResponseEntity<List<Architecture>> result = controller.list();
         assertNotNull(result);
         assertEquals(1, result.getBody().size());
     }
 
     @Test
-    public void testGet() {
+    void testGet() {
         final ResponseEntity<Architecture> result = controller.get(1);
         assertNotNull(result);
         assertEquals("NAME", result.getBody().getName());
@@ -64,7 +64,7 @@ public class ArchitectureControllerTest {
     }
 
     @Test
-    public void testGetByName() {
+    void testGetByName() {
         final ResponseEntity<Architecture> result = controller.get("NAME");
         assertNotNull(result);
         assertEquals("NAME", result.getBody().getName());

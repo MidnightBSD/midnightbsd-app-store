@@ -1,35 +1,32 @@
 package org.midnightbsd.appstore.ctl;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.midnightbsd.appstore.ctl.api.LicenseController;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.midnightbsd.appstore.ctl.api.PackageInstanceController;
 import org.midnightbsd.appstore.model.Architecture;
-import org.midnightbsd.appstore.model.Category;
-import org.midnightbsd.appstore.model.License;
 import org.midnightbsd.appstore.model.OperatingSystem;
 import org.midnightbsd.appstore.model.PackageInstance;
-import org.midnightbsd.appstore.services.LicenseService;
 import org.midnightbsd.appstore.services.PackageInstanceService;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 /**
  * @author Lucas Holt
  */
-@RunWith(MockitoJUnitRunner.class)
-public class PackageInstanceControllerTest {
+@ExtendWith(MockitoExtension.class)
+class PackageInstanceControllerTest {
     @Mock
          private PackageInstanceService service;
 
@@ -38,7 +35,7 @@ public class PackageInstanceControllerTest {
 
          private PackageInstance instance;
 
-         @Before
+         @BeforeEach
          public void setup() {
              instance = new PackageInstance();
              instance.setId(1);
@@ -52,17 +49,17 @@ public class PackageInstanceControllerTest {
          }
 
          @Test
-         public void testList() {
+         void testList() {
              final ResponseEntity<List<PackageInstance>> result = controller.list();
              assertNotNull(result);
-             assertEquals(1, result.getBody().size());
+             assertEquals(1, Objects.requireNonNull(result.getBody()).size());
          }
 
          @Test
-         public void testGet() {
+         void testGet() {
              final ResponseEntity<PackageInstance> result = controller.get(1);
              assertNotNull(result);
-             assertEquals(2, result.getBody().getRun().intValue());
+             assertEquals(2, Objects.requireNonNull(result.getBody()).getRun().intValue());
              assertEquals(1, result.getBody().getId());
          }
 }

@@ -1,25 +1,21 @@
 package integration;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.midnightbsd.appstore.ctl.api.ArchitectureController;
 import org.midnightbsd.appstore.model.Architecture;
 import org.midnightbsd.appstore.services.ArchitectureService;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -30,8 +26,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  * @author Lucas Holt
  */
-@RunWith(MockitoJUnitRunner.class)
-public class ITArchitectureController {
+@ExtendWith(MockitoExtension.class)
+class ITArchitectureController {
 
     private MockMvc mockMvc;
 
@@ -43,7 +39,7 @@ public class ITArchitectureController {
 
     private Architecture arch;
 
-    @Before
+    @BeforeEach
     public void setup() {
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
@@ -59,21 +55,21 @@ public class ITArchitectureController {
     }
     
     @Test
-    public void mvcTestList() throws Exception {
+    void mvcTestList() throws Exception {
         mockMvc.perform(get("/api/architecture").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith("application/json;charset=UTF-8"));
     }
 
     @Test
-    public void mvcTestGet() throws Exception {
+    void mvcTestGet() throws Exception {
         mockMvc.perform(get("/api/architecture/1").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith("application/json;charset=UTF-8"));
     }
 
     @Test
-    public void mvcTestGetByName() throws Exception {
+    void mvcTestGetByName() throws Exception {
         mockMvc.perform(get("/api/architecture/name/NAME").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith("application/json;charset=UTF-8"));

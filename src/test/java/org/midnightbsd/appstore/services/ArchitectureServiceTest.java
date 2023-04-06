@@ -1,29 +1,27 @@
 package org.midnightbsd.appstore.services;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.midnightbsd.appstore.model.Architecture;
 import org.midnightbsd.appstore.repository.ArchitectureRepository;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
  * @author Lucas Holt
  */
-@RunWith(MockitoJUnitRunner.class)
-public class ArchitectureServiceTest {
+@ExtendWith(MockitoExtension.class)
+class ArchitectureServiceTest {
 
     @Mock
     private ArchitectureRepository architectureRepository;
@@ -31,7 +29,7 @@ public class ArchitectureServiceTest {
     @InjectMocks
     private ArchitectureService architectureService;
 
-    @Before
+    @BeforeEach
     public void setup() {
         Architecture architecture = new Architecture();
         architecture.setId(1);
@@ -45,7 +43,7 @@ public class ArchitectureServiceTest {
     }
 
     @Test
-    public void testGetName() {
+    void testGetName() {
         Architecture arch = architectureService.getByName("test");
         assertNotNull(arch);
         assertEquals(1, arch.getId());
@@ -56,7 +54,7 @@ public class ArchitectureServiceTest {
     }
 
     @Test
-    public void testGet() {
+    void testGet() {
         Architecture arch = architectureService.get(1);
         assertNotNull(arch);
         assertEquals(1, arch.getId());
@@ -67,7 +65,7 @@ public class ArchitectureServiceTest {
     }
 
     @Test
-    public void testList() {
+    void testList() {
         List<Architecture> items = architectureService.list();
         assertNotNull(items);
         assertTrue(items.size() > 0);
