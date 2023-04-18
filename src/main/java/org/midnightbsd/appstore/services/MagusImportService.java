@@ -146,6 +146,8 @@ public class MagusImportService {
                     packageInstance.setVersion(port.getVersion());
                     packageInstance.setPkg(pkg);
                     packageInstance.setRun(run.getId());
+                    packageInstance.setCpe(port.getCpe());
+                    packageInstance.setFlavor(port.getFlavor());
                     packageInstance = packageInstanceRepository.saveAndFlush(packageInstance);
                     log.info("Package instance for " + pkg.getName() + ": " + arch.getName() + " " + os.getVersion() + " added");
                 }

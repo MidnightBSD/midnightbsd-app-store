@@ -11,7 +11,6 @@ import org.midnightbsd.appstore.repository.PackageRepository;
 import org.midnightbsd.appstore.repository.search.PackageSearchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -103,13 +102,15 @@ public class SearchService {
                 if (instance.getOperatingSystem() != null)
                     inst.setOsVersion(instance.getOperatingSystem().getVersion());
                 inst.setVersion(instance.getVersion());
+                inst.setCpe(instance.getCpe());
+                inst.setFlavor(instance.getFlavor());
                 instances.add(inst);
             }
         }
         packageItem.setLicenses(new ArrayList<>(licenses.keySet()));
         packageItem.setInstances(instances);
 
-        final HashMap<String, Object> cats = new HashMap<String, Object>();
+        final HashMap<String, Object> cats = new HashMap<>();
         for (Category c : pkg.getCategories()) {
             final String cat = c.getName();
             if (!cats.containsKey(cat))

@@ -27,6 +27,14 @@ public class Instance implements Serializable, Comparable<Instance> {
     @Setter
     private String version;
 
+    @Getter
+    @Setter
+    private String cpe;
+
+    @Getter
+    @Setter
+    private String flavor;
+
     @Override
     public int compareTo(final Instance o) {
         return this.architecture.compareTo(o.getArchitecture()) +

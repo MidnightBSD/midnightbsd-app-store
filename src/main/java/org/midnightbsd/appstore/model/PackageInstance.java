@@ -33,6 +33,12 @@ public class PackageInstance implements Serializable {
     @Column(name="version", nullable = false)
     private String version;
 
+    @Column(name="cpe", length = 200)
+    private String cpe;
+
+    @Column(name="flavor", length=100)
+    private String flavor;
+
     @ManyToOne
     @JoinColumn(name = "os_id")
     private OperatingSystem operatingSystem;

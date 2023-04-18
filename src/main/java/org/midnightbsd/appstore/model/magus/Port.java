@@ -33,4 +33,8 @@ public class Port {
     private String license;
 
     private String www;
+
+    private String flavor;
+
+    private String cpe;
 }
