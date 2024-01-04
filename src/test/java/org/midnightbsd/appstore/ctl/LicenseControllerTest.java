@@ -40,14 +40,11 @@ class LicenseControllerTest {
             license.setName("NAME");
             license.setId(1);
             license.setCreated(Calendar.getInstance().getTime());
-
-            when(service.list()).thenReturn(Collections.singletonList(license));
-            when(service.get(1)).thenReturn(license);
-            when(service.getByName("NAME")).thenReturn(license);
         }
 
         @Test
         void testList() {
+            when(service.list()).thenReturn(Collections.singletonList(license));
             final ResponseEntity<List<License>> result = controller.list();
             assertNotNull(result);
             assertEquals(1, Objects.requireNonNull(result.getBody()).size());
@@ -55,6 +52,7 @@ class LicenseControllerTest {
 
         @Test
         void testGet() {
+            when(service.get(1)).thenReturn(license);
             final ResponseEntity<License> result = controller.get(1);
             assertNotNull(result);
             assertEquals("NAME", result.getBody().getName());
@@ -63,6 +61,7 @@ class LicenseControllerTest {
 
         @Test
         void testGetByName() {
+            when(service.getByName("NAME")).thenReturn(license);
             final ResponseEntity<License> result = controller.get("NAME");
             assertNotNull(result);
             assertEquals("NAME", result.getBody().getName());
