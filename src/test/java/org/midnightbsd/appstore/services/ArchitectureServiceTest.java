@@ -29,21 +29,20 @@ class ArchitectureServiceTest {
     @InjectMocks
     private ArchitectureService architectureService;
 
+    Architecture architecture;
+
     @BeforeEach
     public void setup() {
-        Architecture architecture = new Architecture();
+        architecture = new Architecture();
         architecture.setId(1);
         architecture.setName("test");
         architecture.setDescription("Foo");
         architecture.setCreated(Calendar.getInstance().getTime());
-
-        when(architectureRepository.findOneByName("test")).thenReturn(architecture);
-        when(architectureRepository.findById(1)).thenReturn(Optional.of(architecture));
-        when(architectureRepository.findAll()).thenReturn(Collections.singletonList(architecture));
     }
 
     @Test
     void testGetName() {
+        when(architectureRepository.findOneByName("test")).thenReturn(architecture);
         Architecture arch = architectureService.getByName("test");
         assertNotNull(arch);
         assertEquals(1, arch.getId());
@@ -55,6 +54,7 @@ class ArchitectureServiceTest {
 
     @Test
     void testGet() {
+        when(architectureRepository.findById(1)).thenReturn(Optional.of(architecture));
         Architecture arch = architectureService.get(1);
         assertNotNull(arch);
         assertEquals(1, arch.getId());
@@ -66,9 +66,10 @@ class ArchitectureServiceTest {
 
     @Test
     void testList() {
+        when(architectureRepository.findAll()).thenReturn(Collections.singletonList(architecture));
         List<Architecture> items = architectureService.list();
         assertNotNull(items);
-        assertTrue(items.size() > 0);
+        assertFalse(items.isEmpty());
         verify(architectureRepository, times(1)).findAll();
     }
 }

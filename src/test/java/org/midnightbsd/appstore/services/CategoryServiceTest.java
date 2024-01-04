@@ -28,20 +28,20 @@ class CategoryServiceTest {
     @InjectMocks
     private CategoryService categoryService;
 
+    Category cat;
+
     @BeforeEach
     public void setup() {
-        Category cat = new Category();
+        cat = new Category();
         cat.setId(1);
         cat.setName("test");
         cat.setDescription("Foo");
         cat.setCreated(Calendar.getInstance().getTime());
-
-        when(categoryRepository.findOneByName("test")).thenReturn(cat);
-        when(categoryRepository.findById(1)).thenReturn(Optional.of(cat));
     }
 
     @Test
     void testGetName() {
+        when(categoryRepository.findOneByName("test")).thenReturn(cat);
         Category cat = categoryService.getByName("test");
         assertNotNull(cat);
         assertEquals(1, cat.getId());
@@ -53,6 +53,7 @@ class CategoryServiceTest {
 
     @Test
     void testGet() {
+        when(categoryRepository.findById(1)).thenReturn(Optional.of(cat));
         Category cat = categoryService.get(1);
         assertNotNull(cat);
         assertEquals(1, cat.getId());

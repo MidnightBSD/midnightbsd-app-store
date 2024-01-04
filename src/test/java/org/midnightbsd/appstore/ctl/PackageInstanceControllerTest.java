@@ -43,13 +43,11 @@ class PackageInstanceControllerTest {
              instance.setArchitecture(new Architecture());
              instance.setOperatingSystem(new OperatingSystem());
              instance.setCreated(Calendar.getInstance().getTime());
-
-             when(service.list()).thenReturn(Collections.singletonList(instance));
-             when(service.get(1)).thenReturn(instance);
          }
 
          @Test
          void testList() {
+             when(service.list()).thenReturn(Collections.singletonList(instance));
              final ResponseEntity<List<PackageInstance>> result = controller.list();
              assertNotNull(result);
              assertEquals(1, Objects.requireNonNull(result.getBody()).size());
@@ -57,6 +55,7 @@ class PackageInstanceControllerTest {
 
          @Test
          void testGet() {
+             when(service.get(1)).thenReturn(instance);
              final ResponseEntity<PackageInstance> result = controller.get(1);
              assertNotNull(result);
              assertEquals(2, Objects.requireNonNull(result.getBody()).getRun().intValue());

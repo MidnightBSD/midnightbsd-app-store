@@ -27,20 +27,20 @@ class LicenseServiceTest {
     @InjectMocks
     private LicenseService licenseService;
 
+    License obj;
+
     @BeforeEach
     public void setup() {
-        License obj = new License();
+        obj = new License();
         obj.setId(1);
         obj.setName("test");
         obj.setDescription("Foo");
         obj.setCreated(Calendar.getInstance().getTime());
-
-        when(licenseRepository.findOneByName("test")).thenReturn(obj);
-        when(licenseRepository.findById(1)).thenReturn(Optional.of(obj));
     }
 
     @Test
     void testGetName() {
+        when(licenseRepository.findOneByName("test")).thenReturn(obj);
         License obj = licenseService.getByName("test");
         assertNotNull(obj);
         assertEquals(1, obj.getId());
@@ -52,6 +52,7 @@ class LicenseServiceTest {
 
     @Test
     void testGet() {
+        when(licenseRepository.findById(1)).thenReturn(Optional.of(obj));
         License obj = licenseService.get(1);
         assertNotNull(obj);
         assertEquals(1, obj.getId());

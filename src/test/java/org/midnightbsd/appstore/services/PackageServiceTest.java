@@ -27,20 +27,20 @@ class PackageServiceTest {
     @InjectMocks
     private PackageService packageService;
 
+    Package obj;
+
     @BeforeEach
     public void setup() {
-        Package obj = new Package();
+        obj = new Package();
         obj.setId(1);
         obj.setName("test");
         obj.setDescription("Foo");
         obj.setCreated(Calendar.getInstance().getTime());
-
-        when(packageRepository.findOneByName("test")).thenReturn(obj);
-        when(packageRepository.findById(1)).thenReturn(Optional.of(obj));
     }
 
     @Test
     void testGetName() {
+        when(packageRepository.findOneByName("test")).thenReturn(obj);
         Package obj = packageService.getByName("test");
         assertNotNull(obj);
         assertEquals(1, obj.getId());
@@ -52,6 +52,7 @@ class PackageServiceTest {
 
     @Test
     void testGet() {
+        when(packageRepository.findById(1)).thenReturn(Optional.of(obj));
         Package obj = packageService.get(1);
         assertNotNull(obj);
         assertEquals(1, obj.getId());

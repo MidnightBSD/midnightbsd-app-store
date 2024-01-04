@@ -27,20 +27,20 @@ class OperatingSystemTest {
     @InjectMocks
     private OperatingSystemService operatingSystemService;
 
+    OperatingSystem obj;
+
     @BeforeEach
     public void setup() {
-        OperatingSystem obj = new OperatingSystem();
+        obj = new OperatingSystem();
         obj.setId(1);
         obj.setName("test");
         obj.setVersion("1.0");
         obj.setCreated(Calendar.getInstance().getTime());
-
-        when(operatingSystemRepository.findByNameAndVersion("test", "1.0")).thenReturn(obj);
-        when(operatingSystemRepository.findById(1)).thenReturn(Optional.of(obj));
     }
 
     @Test
     void testGetNameAndVersion() {
+        when(operatingSystemRepository.findByNameAndVersion("test", "1.0")).thenReturn(obj);
         OperatingSystem obj = operatingSystemService.getByNameAndVersion("test", "1.0");
         assertNotNull(obj);
         assertEquals(1, obj.getId());
@@ -52,6 +52,7 @@ class OperatingSystemTest {
 
     @Test
     void testGet() {
+        when(operatingSystemRepository.findById(1)).thenReturn(Optional.of(obj));
         OperatingSystem obj = operatingSystemService.get(1);
         assertNotNull(obj);
         assertEquals(1, obj.getId());
