@@ -36,7 +36,7 @@
                     &nbsp; (<span ng-repeat="license in pkg.licenses">{{license.name}}</span>)
 
                     <div ng-repeat="inst in pkg.instances">
-                        <b>{{inst.version}}</b> for {{inst.osVersion}} {{inst.architecture}}
+                        <b>{{inst.version}}</b> for os: {{inst.osVersion}} {{inst.architecture}}  cpe: {{inst.cpe}}
                     </div>
 
                     <p>Install by running command:<br>
