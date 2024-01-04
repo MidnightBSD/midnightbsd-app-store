@@ -42,14 +42,11 @@ class ArchitectureControllerTest {
         arch.setName("NAME");
         arch.setId(1);
         arch.setCreated(Calendar.getInstance().getTime());
-
-        when(architectureService.list()).thenReturn(Collections.singletonList(arch));
-        when(architectureService.get(1)).thenReturn(arch);
-        when(architectureService.getByName("NAME")).thenReturn(arch);
     }
 
     @Test
     void testList() {
+        when(architectureService.list()).thenReturn(Collections.singletonList(arch));
         final ResponseEntity<List<Architecture>> result = controller.list();
         assertNotNull(result);
         assertEquals(1, result.getBody().size());
@@ -57,6 +54,7 @@ class ArchitectureControllerTest {
 
     @Test
     void testGet() {
+        when(architectureService.get(1)).thenReturn(arch);
         final ResponseEntity<Architecture> result = controller.get(1);
         assertNotNull(result);
         assertEquals("NAME", result.getBody().getName());
@@ -65,6 +63,7 @@ class ArchitectureControllerTest {
 
     @Test
     void testGetByName() {
+        when(architectureService.getByName("NAME")).thenReturn(arch);
         final ResponseEntity<Architecture> result = controller.get("NAME");
         assertNotNull(result);
         assertEquals("NAME", result.getBody().getName());
