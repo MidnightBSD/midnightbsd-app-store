@@ -39,13 +39,11 @@ class OperatingSystemControllerTest {
         os.setName("NAME");
         os.setId(1);
         os.setCreated(Calendar.getInstance().getTime());
-
-        when(service.list()).thenReturn(Collections.singletonList(os));
-        when(service.get(1)).thenReturn(os);
     }
 
     @Test
     void testList() {
+        when(service.list()).thenReturn(Collections.singletonList(os));
         final ResponseEntity<List<OperatingSystem>> result = controller.list();
         assertNotNull(result);
         assertEquals(1, Objects.requireNonNull(result.getBody()).size());
@@ -53,6 +51,7 @@ class OperatingSystemControllerTest {
 
     @Test
     void testGet() {
+        when(service.get(1)).thenReturn(os);
         final ResponseEntity<OperatingSystem> result = controller.get(1);
         assertNotNull(result);
         assertEquals("NAME", Objects.requireNonNull(result.getBody()).getName());

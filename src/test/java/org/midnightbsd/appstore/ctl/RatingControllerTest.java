@@ -41,13 +41,11 @@ class RatingControllerTest {
         rating.setScore(3);
         rating.setPkg(new Package());
         rating.setCreated(Calendar.getInstance().getTime());
-
-        when(service.list()).thenReturn(Collections.singletonList(rating));
-        when(service.get(1)).thenReturn(rating);
     }
 
     @Test
     void testList() {
+        when(service.list()).thenReturn(Collections.singletonList(rating));
         final ResponseEntity<List<Rating>> result = controller.list();
         assertNotNull(result);
         assertEquals(1, Objects.requireNonNull(result.getBody()).size());
@@ -55,6 +53,7 @@ class RatingControllerTest {
 
     @Test
     void testGet() {
+        when(service.get(1)).thenReturn(rating);
         final ResponseEntity<Rating> result = controller.get(1);
         assertNotNull(result);
         assertEquals(3, Objects.requireNonNull(result.getBody()).getScore());

@@ -39,13 +39,11 @@ class PackageControllerTest {
         pkg.setName("NAME");
         pkg.setId(1);
         pkg.setCreated(Calendar.getInstance().getTime());
-
-        when(service.list()).thenReturn(Collections.singletonList(pkg));
-        when(service.get(1)).thenReturn(pkg);
     }
 
     @Test
     void testList() {
+        when(service.list()).thenReturn(Collections.singletonList(pkg));
         final ResponseEntity<List<Package>> result = controller.list();
         assertNotNull(result);
         assertEquals(1, Objects.requireNonNull(result.getBody()).size());
@@ -53,6 +51,7 @@ class PackageControllerTest {
 
     @Test
     void testGet() {
+        when(service.get(1)).thenReturn(pkg);
         final ResponseEntity<Package> result = controller.get(1);
         assertNotNull(result);
         assertEquals("NAME", Objects.requireNonNull(result.getBody()).getName());
