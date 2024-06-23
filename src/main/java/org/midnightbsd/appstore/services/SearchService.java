@@ -18,10 +18,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Lucas Holt
@@ -30,13 +27,16 @@ import java.util.List;
 @Service
 public class SearchService {
 
-    @Autowired
-    private PackageSearchRepository packageSearchRepository;
+    private final PackageSearchRepository packageSearchRepository;
 
-    @Autowired
-    private PackageRepository packageRepository;
+    private final PackageRepository packageRepository;
 
-   // @Cacheable(key="#p0.concat('-').concat(#p1.getPageNumber())", value = "search")
+    public SearchService(PackageSearchRepository packageSearchRepository, PackageRepository packageRepository) {
+        this.packageSearchRepository = packageSearchRepository;
+        this.packageRepository = packageRepository;
+    }
+
+    // @Cacheable(key="#p0.concat('-').concat(#p1.getPageNumber())", value = "search")
     public Page<PackageItem> find(String term, Pageable page) {
         return packageSearchRepository.findByNameContainsOrDescriptionContainsAllIgnoreCase(term, term, page);
     }
@@ -110,21 +110,29 @@ public class SearchService {
         packageItem.setLicenses(new ArrayList<>(licenses.keySet()));
         packageItem.setInstances(instances);
 
+        final Map<String, Object> cats = buildCatMap(pkg.getCategories());
+        packageItem.setCategories(addCats(cats));
+
+        return packageItem;
+    }
+
+    private Map<String,Object> buildCatMap(Set<Category> categies) {
         final HashMap<String, Object> cats = new HashMap<>();
-        for (Category c : pkg.getCategories()) {
+        for (Category c : categies) {
             final String cat = c.getName();
             if (!cats.containsKey(cat))
                 cats.put(cat, null);
         }
+        return cats;
+    }
 
+    private List<org.midnightbsd.appstore.model.search.Category> addCats(Map<String,Object> cats) {
         final List<org.midnightbsd.appstore.model.search.Category> targetList = new ArrayList<>();
         for (final String t : cats.keySet()) {
             final org.midnightbsd.appstore.model.search.Category category = new org.midnightbsd.appstore.model.search.Category();
             category.setName(t);
             targetList.add(category);
         }
-        packageItem.setCategories(targetList);
-
-        return packageItem;
+        return targetList;
     }
 }
