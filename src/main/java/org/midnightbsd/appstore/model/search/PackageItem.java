@@ -7,12 +7,18 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
+import javax.persistence.EntityListeners;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +30,9 @@ import java.util.List;
 @Document(indexName = "package")
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 @JsonIgnoreProperties(ignoreUnknown = true)
+@EntityListeners(PackageItem.class)
 public class PackageItem implements Serializable, Comparable<PackageItem> {
+    @Serial
     private static final long serialVersionUID = 3452319081969591585L;
 
     @Id
@@ -61,6 +69,19 @@ public class PackageItem implements Serializable, Comparable<PackageItem> {
     @Getter
     @Setter
     private List<Instance> instances;
+
+    @LastModifiedDate
+    private LocalDateTime lastModifiedDate;
+
+    @PrePersist
+    public void prePersist() {
+        this.lastModifiedDate = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.lastModifiedDate = LocalDateTime.now();
+    }
     
     @Override
     public int compareTo(final PackageItem o) {
