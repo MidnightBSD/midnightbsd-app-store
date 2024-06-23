@@ -48,14 +48,11 @@ class ITArchitectureController {
         arch.setName("NAME");
         arch.setId(1);
         arch.setCreated(Calendar.getInstance().getTime());
-
-        when(architectureService.list()).thenReturn(Collections.singletonList(arch));
-        when(architectureService.get(1)).thenReturn(arch);
-        when(architectureService.getByName("NAME")).thenReturn(arch);
     }
     
     @Test
     void mvcTestList() throws Exception {
+        when(architectureService.list()).thenReturn(Collections.singletonList(arch));
         mockMvc.perform(get("/api/architecture").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith("application/json;charset=UTF-8"));
@@ -63,6 +60,7 @@ class ITArchitectureController {
 
     @Test
     void mvcTestGet() throws Exception {
+        when(architectureService.get(1)).thenReturn(arch);
         mockMvc.perform(get("/api/architecture/1").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith("application/json;charset=UTF-8"));
@@ -70,6 +68,7 @@ class ITArchitectureController {
 
     @Test
     void mvcTestGetByName() throws Exception {
+        when(architectureService.getByName("NAME")).thenReturn(arch);
         mockMvc.perform(get("/api/architecture/name/NAME").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith("application/json;charset=UTF-8"));
