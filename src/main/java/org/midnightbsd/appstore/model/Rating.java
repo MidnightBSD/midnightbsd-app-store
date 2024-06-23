@@ -2,10 +2,13 @@ package org.midnightbsd.appstore.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Data;
+import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * @author Lucas Holt
@@ -13,8 +16,11 @@ import java.util.Date;
 @Entity
 @Table(name = "rating")
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Data
-public class Rating {
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
+public class Rating implements Serializable {
 
     @Id
     @SequenceGenerator(name = "rating_id_seq",
@@ -45,4 +51,20 @@ public class Rating {
      */
     @Column(name="score", nullable = false)
     private int score;
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        Rating rating = (Rating) o;
+        return Objects.equals(getId(), rating.getId());
+    }
+
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+    }
 }
