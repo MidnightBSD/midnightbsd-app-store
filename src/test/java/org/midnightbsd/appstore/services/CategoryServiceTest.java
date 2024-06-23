@@ -42,11 +42,11 @@ class CategoryServiceTest {
     @Test
     void testGetName() {
         when(categoryRepository.findOneByName("test")).thenReturn(cat);
-        Category cat = categoryService.getByName("test");
+        Category c = categoryService.getByName("test");
         assertNotNull(cat);
-        assertEquals(1, cat.getId());
-        assertEquals("test", cat.getName());
-        assertEquals("Foo", cat.getDescription());
+        assertEquals(1, c.getId());
+        assertEquals("test", c.getName());
+        assertEquals("Foo", c.getDescription());
 
         verify(categoryRepository, times(1)).findOneByName(anyString());
     }
@@ -54,11 +54,11 @@ class CategoryServiceTest {
     @Test
     void testGet() {
         when(categoryRepository.findById(1)).thenReturn(Optional.of(cat));
-        Category cat = categoryService.get(1);
+        Category c = categoryService.get(1);
         assertNotNull(cat);
-        assertEquals(1, cat.getId());
-        assertEquals("test", cat.getName());
-        assertEquals("Foo", cat.getDescription());
+        assertEquals(1, c.getId());
+        assertEquals("test", c.getName());
+        assertEquals("Foo", c.getDescription());
 
         verify(categoryRepository, times(1)).findById(1);
     }

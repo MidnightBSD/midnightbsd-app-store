@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -49,7 +50,7 @@ class ArchitectureControllerTest {
         when(architectureService.list()).thenReturn(Collections.singletonList(arch));
         final ResponseEntity<List<Architecture>> result = controller.list();
         assertNotNull(result);
-        assertEquals(1, result.getBody().size());
+        assertEquals(1, Objects.requireNonNull(result.getBody()).size());
     }
 
     @Test
@@ -57,7 +58,7 @@ class ArchitectureControllerTest {
         when(architectureService.get(1)).thenReturn(arch);
         final ResponseEntity<Architecture> result = controller.get(1);
         assertNotNull(result);
-        assertEquals("NAME", result.getBody().getName());
+        assertEquals("NAME", Objects.requireNonNull(result.getBody()).getName());
         assertEquals(1, result.getBody().getId());
     }
 
@@ -66,7 +67,7 @@ class ArchitectureControllerTest {
         when(architectureService.getByName("NAME")).thenReturn(arch);
         final ResponseEntity<Architecture> result = controller.get("NAME");
         assertNotNull(result);
-        assertEquals("NAME", result.getBody().getName());
+        assertEquals("NAME", Objects.requireNonNull(result.getBody()).getName());
         assertEquals(1, result.getBody().getId());
     }
 }

@@ -19,8 +19,11 @@ import java.util.List;
 @RequestMapping("/api/architecture")
 public class ArchitectureController {
 
-    @Autowired
-    private ArchitectureService architectureService;
+    private final ArchitectureService architectureService;
+
+    ArchitectureController(ArchitectureService architectureService) {
+        this.architectureService = architectureService;
+    }
 
     @GetMapping (produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Architecture>> list() {
