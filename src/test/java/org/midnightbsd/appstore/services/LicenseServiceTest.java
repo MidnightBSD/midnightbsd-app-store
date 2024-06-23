@@ -41,11 +41,11 @@ class LicenseServiceTest {
     @Test
     void testGetName() {
         when(licenseRepository.findOneByName("test")).thenReturn(obj);
-        License obj = licenseService.getByName("test");
-        assertNotNull(obj);
-        assertEquals(1, obj.getId());
-        assertEquals("test", obj.getName());
-        assertEquals("Foo", obj.getDescription());
+        License lic = licenseService.getByName("test");
+        assertNotNull(lic);
+        assertEquals(1, lic.getId());
+        assertEquals("test", lic.getName());
+        assertEquals("Foo", lic.getDescription());
 
         verify(licenseRepository, times(1)).findOneByName(anyString());
     }
@@ -53,11 +53,11 @@ class LicenseServiceTest {
     @Test
     void testGet() {
         when(licenseRepository.findById(1)).thenReturn(Optional.of(obj));
-        License obj = licenseService.get(1);
+        License lic = licenseService.get(1);
         assertNotNull(obj);
-        assertEquals(1, obj.getId());
-        assertEquals("test", obj.getName());
-        assertEquals("Foo", obj.getDescription());
+        assertEquals(1, lic.getId());
+        assertEquals("test", lic.getName());
+        assertEquals("Foo", lic.getDescription());
 
         verify(licenseRepository, times(1)).findById(1);
     }

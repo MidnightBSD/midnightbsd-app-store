@@ -26,45 +26,45 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class LicenseControllerTest {
     @Mock
-        private LicenseService service;
+    private LicenseService service;
 
-        @InjectMocks
-        private LicenseController controller;
+    @InjectMocks
+    private LicenseController controller;
 
-        private License license;
+    private License license;
 
-        @BeforeEach
-        public void setup() {
-            license = new License();
-            license.setDescription("TEST license");
-            license.setName("NAME");
-            license.setId(1);
-            license.setCreated(Calendar.getInstance().getTime());
-        }
+    @BeforeEach
+    public void setup() {
+        license = new License();
+        license.setDescription("TEST license");
+        license.setName("NAME");
+        license.setId(1);
+        license.setCreated(Calendar.getInstance().getTime());
+    }
 
-        @Test
-        void testList() {
-            when(service.list()).thenReturn(Collections.singletonList(license));
-            final ResponseEntity<List<License>> result = controller.list();
-            assertNotNull(result);
-            assertEquals(1, Objects.requireNonNull(result.getBody()).size());
-        }
+    @Test
+    void testList() {
+        when(service.list()).thenReturn(Collections.singletonList(license));
+        final ResponseEntity<List<License>> result = controller.list();
+        assertNotNull(result);
+        assertEquals(1, Objects.requireNonNull(result.getBody()).size());
+    }
 
-        @Test
-        void testGet() {
-            when(service.get(1)).thenReturn(license);
-            final ResponseEntity<License> result = controller.get(1);
-            assertNotNull(result);
-            assertEquals("NAME", result.getBody().getName());
-            assertEquals(1, result.getBody().getId());
-        }
+    @Test
+    void testGet() {
+        when(service.get(1)).thenReturn(license);
+        final ResponseEntity<License> result = controller.get(1);
+        assertNotNull(result);
+        assertEquals("NAME", Objects.requireNonNull(result.getBody()).getName());
+        assertEquals(1, result.getBody().getId());
+    }
 
-        @Test
-        void testGetByName() {
-            when(service.getByName("NAME")).thenReturn(license);
-            final ResponseEntity<License> result = controller.get("NAME");
-            assertNotNull(result);
-            assertEquals("NAME", result.getBody().getName());
-            assertEquals(1, result.getBody().getId());
-        }
+    @Test
+    void testGetByName() {
+        when(service.getByName("NAME")).thenReturn(license);
+        final ResponseEntity<License> result = controller.get("NAME");
+        assertNotNull(result);
+        assertEquals("NAME", Objects.requireNonNull(result.getBody()).getName());
+        assertEquals(1, result.getBody().getId());
+    }
 }

@@ -18,8 +18,11 @@ import java.util.List;
 @RequestMapping("/api/package-instance")
 public class PackageInstanceController {
 
-    @Autowired
-    private PackageInstanceService packageInstanceService;
+    private final PackageInstanceService packageInstanceService;
+
+    public PackageInstanceController(PackageInstanceService packageInstanceService) {
+        this.packageInstanceService = packageInstanceService;
+    }
 
     @GetMapping
     public ResponseEntity<List<PackageInstance>> list() {

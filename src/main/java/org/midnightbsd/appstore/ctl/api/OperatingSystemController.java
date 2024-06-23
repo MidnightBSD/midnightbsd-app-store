@@ -18,8 +18,11 @@ import java.util.List;
 @RequestMapping("/api/os")
 public class OperatingSystemController {
 
-    @Autowired
-    private OperatingSystemService operatingSystemService;
+    private final OperatingSystemService operatingSystemService;
+
+    public OperatingSystemController(OperatingSystemService operatingSystemService) {
+        this.operatingSystemService = operatingSystemService;
+    }
 
     @GetMapping
     public ResponseEntity<List<OperatingSystem>> list() {

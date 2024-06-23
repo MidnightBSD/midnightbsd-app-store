@@ -18,8 +18,11 @@ import java.util.List;
 @RequestMapping("/api/license")
 public class LicenseController {
 
-    @Autowired
-    private LicenseService licenseService;
+    private final LicenseService licenseService;
+
+    public LicenseController(LicenseService licenseService) {
+        this.licenseService = licenseService;
+    }
 
     @GetMapping
     public ResponseEntity<List<License>> list() {

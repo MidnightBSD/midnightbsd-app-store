@@ -29,14 +29,17 @@ public class MagusFetchService {
     @Value("${magus.baseUrl}")
     private String magusBaseUrl;
 
-    @Autowired
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
     private static final int DELAY_ONE_MINUTE = 1000 * 60;
     private static final int ONE_DAY = DELAY_ONE_MINUTE * 60 * 24;
 
-    @Autowired
-    private MagusImportService magusImportService;
+    private final MagusImportService magusImportService;
+
+    public MagusFetchService(RestTemplate restTemplate, MagusImportService magusImportService) {
+        this.restTemplate = restTemplate;
+        this.magusImportService = magusImportService;
+    }
 
     /**
      * Synchronize with Magus, pull new package data
@@ -70,7 +73,7 @@ public class MagusFetchService {
         return getRuns().stream().filter(r -> r.getBlessed() && (
                 r.getStatus().equalsIgnoreCase("complete") ||
                         r.getStatus().equalsIgnoreCase("active")))
-                .sorted(Comparator.comparingInt(Run::getId)).collect(Collectors.toList());
+                .sorted(Comparator.comparingInt(Run::getId)).toList();
     }
 
     private String getFilteredKey(final Run r) {
@@ -81,6 +84,7 @@ public class MagusFetchService {
     public List<Run> getRuns() {
         log.info("Fetching Magus runs");
         final Run[] runs = restTemplate.getForObject(magusBaseUrl + API_RUN_PATH, Run[].class);
+        assert runs != null;
         return Arrays.asList(runs);
     }
 
@@ -88,6 +92,7 @@ public class MagusFetchService {
         log.info("Fetching Magus Ports");
         final String url = magusBaseUrl + API_RUN_PORTS_PATH + "?status=" + status + "&run=" + runId;
         final Port[] ports = restTemplate.getForObject(url, Port[].class);
+        assert ports != null;
         return Arrays.asList(ports);
     }
 }
