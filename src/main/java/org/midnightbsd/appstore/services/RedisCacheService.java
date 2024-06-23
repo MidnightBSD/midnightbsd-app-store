@@ -38,6 +38,7 @@ public class RedisCacheService implements CacheService<Object, Object> {
     public List<String> list() throws ServiceException {
         try {
             final Set<Object> redisKeys = this.client.keys("*");
+            assert redisKeys != null;
             return redisKeys.stream().map(Object::toString).collect(Collectors.toList());
         } catch (final Exception var2) {
             log.error(var2.getMessage(), var2);
