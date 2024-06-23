@@ -75,7 +75,7 @@ public class SearchService {
     }
 
     public PackageItem convert(@NonNull final org.midnightbsd.appstore.model.Package pkg) {
-        log.trace("Converting package " + pkg.getName() + " id: " + pkg.getId());
+        log.trace("Converting package {} id: {}", pkg.getName(), pkg.getId());
         
         final PackageItem packageItem = new PackageItem();
         HashMap<String,String> licenses = new HashMap<>();
@@ -96,15 +96,7 @@ public class SearchService {
                     }
                 }
 
-                final Instance inst = new Instance();
-                if (instance.getArchitecture() != null)
-                    inst.setArchitecture(instance.getArchitecture().getName());
-                if (instance.getOperatingSystem() != null)
-                    inst.setOsVersion(instance.getOperatingSystem().getVersion());
-                inst.setVersion(instance.getVersion());
-                inst.setCpe(instance.getCpe());
-                inst.setFlavor(instance.getFlavor());
-                instances.add(inst);
+                instances.add(createInstance(instance));
             }
         }
         packageItem.setLicenses(new ArrayList<>(licenses.keySet()));
@@ -114,6 +106,18 @@ public class SearchService {
         packageItem.setCategories(addCats(cats));
 
         return packageItem;
+    }
+
+    private Instance createInstance(PackageInstance instance) {
+        final Instance inst = new Instance();
+        if (instance.getArchitecture() != null)
+            inst.setArchitecture(instance.getArchitecture().getName());
+        if (instance.getOperatingSystem() != null)
+            inst.setOsVersion(instance.getOperatingSystem().getVersion());
+        inst.setVersion(instance.getVersion());
+        inst.setCpe(instance.getCpe());
+        inst.setFlavor(instance.getFlavor());
+        return inst;
     }
 
     private Map<String,Object> buildCatMap(Set<Category> categies) {
