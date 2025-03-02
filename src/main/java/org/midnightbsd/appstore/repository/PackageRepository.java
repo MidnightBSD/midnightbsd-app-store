@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -34,4 +35,10 @@ public interface PackageRepository extends JpaRepository<org.midnightbsd.appstor
             value = "SELECT distinct p FROM Package p JOIN p.instances pi JOIN pi.licenses lic " +
                     "WHERE lic.name = :license ORDER BY p.name")
     Page<Package> findByLicense(@Param("license") String license, Pageable page);
+
+
+    @Query(
+            value = "SELECT distinct p FROM Package p JOIN p.instances pi " +
+                    "WHERE pi.created > :since ORDER BY p.name")
+    Page<Package> findByLastModifiedDateGreaterThanEqual(Date since, Pageable pageable);
 }
