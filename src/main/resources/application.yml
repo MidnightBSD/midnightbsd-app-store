@@ -47,13 +47,7 @@ spring:
     port: 6379
     database: 2
   elasticsearch:
-    rest:
-      uris: http://localhost:9200
-
-eureka:
-  client:
-    serviceUrl:
-     defaultZone: http://eureka.justjournal.com:8761/eureka/
+    uris: http://localhost:9200
 
 server:
   tomcat:
@@ -111,9 +105,4 @@ spring:
     jdbc-url: jdbc:postgresql://db.midnightbsd.org/app_store
     url: jdbc:postgresql://db.midnightbsd.org/app_store
     username: appstore
-    password: 
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://eureka.justjournal.com:8761/eureka/
+    password:
