@@ -7,6 +7,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.Calendar;
+import java.util.Date;
 
 @Slf4j
 @Component
@@ -16,19 +18,17 @@ public class SearchIndexer {
     @Autowired
     private SearchService searchService;
 
+    private Date lastIndex;
 
     @Scheduled(fixedDelay = 1000 * 60 * 30, initialDelay = 120000)
     public void loadNewEntries() {
         log.info("Starting search indexer - Load all packages");
-        
-        // TODO: add timestamp so we can limit reindexing
-        /*log.info("Search indexer - Load new entries from the last 30 minutes");
-
-        final Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.MINUTE, -30);
-
-        searchService.indexAllPackagesSince(cal.getTime());   */
-        searchService.indexAllPackages();
+        if (lastIndex == null) {
+            searchService.indexAllPackages();
+        } else {
+            searchService.indexAllPackagesSince(lastIndex);
+        }
+        lastIndex = Calendar.getInstance().getTime();
     }
 
     /**

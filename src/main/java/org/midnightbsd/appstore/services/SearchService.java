@@ -4,6 +4,7 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.midnightbsd.appstore.model.Category;
 import org.midnightbsd.appstore.model.License;
+import org.midnightbsd.appstore.model.Package;
 import org.midnightbsd.appstore.model.PackageInstance;
 import org.midnightbsd.appstore.model.search.Instance;
 import org.midnightbsd.appstore.model.search.PackageItem;
@@ -14,11 +15,14 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.BulkFailureException;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * @author Lucas Holt
@@ -45,23 +49,37 @@ public class SearchService {
     @Transactional
     @Async
     public void indexAllPackages() {
+        indexPackages(packageRepository::findAll);
+    }
+
+    @CacheEvict(value = "search", allEntries = true)
+    @Transactional
+    @Async
+    public void indexAllPackagesSince(Date since) {
+        indexPackages(pageable -> packageRepository.findByLastModifiedDateGreaterThanEqual(since, pageable));
+    }
+
+    private void indexPackages(Function<Pageable, Page<Package>> fetchPackages) {
         try {
             Pageable pageable = PageRequest.of(0, 100);
+            Page<org.midnightbsd.appstore.model.Package> packages;
 
-            Page<org.midnightbsd.appstore.model.Package> packages = packageRepository.findAll(pageable);
-            for (int i = 0; i < packages.getTotalPages(); i++) {
+            do {
+                packages = fetchPackages.apply(pageable);
                 final ArrayList<PackageItem> items = new ArrayList<>();
 
                 for (final org.midnightbsd.appstore.model.Package pkg : packages) {
                     items.add(convert(pkg));
                 }
 
-                log.debug("Saving a page of packages to elasticsearch. pg " + i);
+                log.debug("Saving a page of packages to elasticsearch. pg " + pageable.getPageNumber());
                 packageSearchRepository.saveAll(items);
 
-                pageable = PageRequest.of(i + 1, 100);
-                packages = packageRepository.findAll(pageable);
-            }
+                pageable = PageRequest.of(pageable.getPageNumber() + 1, pageable.getPageSize());
+            } while (packages.hasNext());
+
+        } catch (BulkFailureException bulk) {
+            log.error("Error indexing bulk items: {}", bulk.getFailedDocuments());
         } catch (final Exception e) {
             log.error(e.getMessage(), e);
         }
