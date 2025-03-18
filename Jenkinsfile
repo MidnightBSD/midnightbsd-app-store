@@ -43,12 +43,9 @@ pipeline {
        }
        stage('jacoco') {
         	steps {
-        		jacoco(
-              	execPattern: 'target/*.exec',
-              	classPattern: 'target/classes',
-              	sourcePattern: 'src/main/java',
-              	exclusionPattern: 'src/test*'
-        		)
+                recordCoverage(tools: [[parser: 'JACOCO']], 
+            sourceCodeRetention: 'MODIFIED', 
+            sourceDirectories: [[path: 'plugin/src/main/java']])
         	}
        }
        stage('Sonarqube') {
