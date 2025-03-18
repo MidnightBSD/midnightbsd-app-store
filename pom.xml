@@ -28,7 +28,7 @@
         <angularjs.version>1.8.2</angularjs.version>
         <logback.version>1.2.13</logback.version>
         <log4j2.version>2.20.0</log4j2.version>
-        <tomcat.version>9.0.98</tomcat.version>
+        <tomcat.version>9.0.102</tomcat.version>
         <elasticsearch.version>7.17.28</elasticsearch.version>
         <argLine>-Xmx786m</argLine>
     </properties>
