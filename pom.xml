@@ -27,10 +27,6 @@
         <angularjs.version>1.8.2</angularjs.version>
         <tomcat.version>10.1.39</tomcat.version>
         <logback.version>1.4.14</logback.version>
-        <!--
-        <log4j2.version>2.20.0</log4j2.version>
-        -->
-     <!--   <elasticsearch.version>7.17.28</elasticsearch.version> -->
         <argLine>-Xmx786m</argLine>
     </properties>
 
