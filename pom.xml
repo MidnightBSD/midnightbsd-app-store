@@ -6,7 +6,7 @@
 
     <groupId>org.midnightbsd</groupId>
     <artifactId>app-store</artifactId>
-    <version>1.8.0-SNAPSHOT</version>
+    <version>1.8.1-SNAPSHOT</version>
 
     <organization>
         <name>MidnightBSD</name>
@@ -26,7 +26,7 @@
         <flyway.version>9.5.1</flyway.version>
         <angularjs.version>1.8.2</angularjs.version>
         <tomcat.version>10.1.39</tomcat.version>
-        <logback.version>1.4.12</logback.version>
+        <logback.version>1.4.14</logback.version>
         <!--
         <log4j2.version>2.20.0</log4j2.version>
         -->
