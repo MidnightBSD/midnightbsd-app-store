@@ -1,4 +1,8 @@
 spring:
+  profiles:
+    active: default
+---
+spring:
   profiles.default: default
 ---
 spring:
@@ -27,25 +31,22 @@ spring:
     database: POSTGRESQL
     hibernate:
       ddl-auto: none
-      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
-      use-new-id-generator-mappings: false
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     generate-ddl: false
     show-sql: false
     properties:
      dialect: org.hibernate.dialect.PostgreSQLDialect
      hibernate:
-       temp:
-         use_jdbc_metadata_defaults: false
-     javax:
+       jdbc:
+         lob:
+           non_contextual_creation
+     jakarta:
        persistence:
          sharedCache:
            mode: ALL
   cache:
     type: REDIS
-  redis:
-    host: localhost
-    port: 6379
-    database: 2
   elasticsearch:
     uris: http://localhost:9200
 
@@ -56,14 +57,16 @@ server:
       protocol_header: x-forwarded-proto
 
 magus:
-  baseUrl:  http://www.midnightbsd.org/magus/
+  baseUrl:  https://www.midnightbsd.org/magus/
 
 search:
   package-item-index: pkgitem
 
 ---
 spring:
-  profiles: test
+  config:
+    activate:
+      on-profile: test
   flyway:
     baseline-on-migrate: true
   datasource:
@@ -90,13 +93,8 @@ spring:
       on-profile: prod
   flyway:
     url: jdbc:postgresql://db.midnightbsd.org/app_store
-  redis:
-    host: db.midnightbsd.org
-    port: 6379
-    database: 2
   elasticsearch:
-    rest:
-      uris: http://db.midnightbsd.org:9200
+    uris: http://db.midnightbsd.org:9200
   datasource:
     hikari:
       jdbc-url: jdbc:postgresql://db.midnightbsd.org/app_store
