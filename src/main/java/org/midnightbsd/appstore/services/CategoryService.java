@@ -3,9 +3,6 @@ package org.midnightbsd.appstore.services;
 import org.midnightbsd.appstore.model.Category;
 import org.midnightbsd.appstore.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -18,7 +15,6 @@ import java.util.List;
  * @author Lucas Holt
  */
 @Transactional(readOnly = true)
-@CacheConfig(cacheNames = "category")
 @lombok.extern.slf4j.Slf4j
 @Service
 public class CategoryService implements AppService<Category> {
@@ -30,7 +26,6 @@ public class CategoryService implements AppService<Category> {
         this.categoryRepository = categoryRepository;
     }
 
-    @Cacheable(key = "'categoryList'", unless = "#result == null")
     @Override
     public List<Category> list() {
         return categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
@@ -41,19 +36,16 @@ public class CategoryService implements AppService<Category> {
         return categoryRepository.findAll(page);
     }
 
-    @Cacheable(unless = "#result == null", key = "#id.toString()")
     @Override
     public Category get(final int id) {
         return categoryRepository.findById(id).orElse(null);
     }
 
-    @Cacheable(unless = "#result == null", key = "#name")
     public Category getByName(final String name) {
         return categoryRepository.findOneByName(name);
     }
 
     @Transactional
-    @CacheEvict(allEntries = true)
     public Category save(final Category category) {
         final Category existing = categoryRepository.findById(category.getId()).orElse(null);
         if (existing == null) {

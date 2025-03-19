@@ -27,8 +27,15 @@ public interface PackageRepository extends JpaRepository<org.midnightbsd.appstor
     List<Package> findByCategoriesOrderByNameAsc(@Param("categoryName") String categoryName);
 
     @Query(
-          value = "SELECT distinct p FROM Package p JOIN p.instances pi JOIN pi.operatingSystem o " +
-                  "JOIN pi.architecture a WHERE o.version = :os AND a.name = :arch ORDER BY p.name")
+            value = "SELECT DISTINCT p FROM Package p " +
+                    "WHERE EXISTS (" +
+                    "    SELECT pi FROM PackageInstance pi " +
+                    "    WHERE pi.pkg = p " +
+                    "    AND pi.operatingSystem.version = :os " +
+                    "    AND pi.architecture.name = :arch" +
+                    ") " +
+                    "ORDER BY p.name"
+    )
     Page<Package> findByOsAndArch(@Param("os") String os, @Param("arch") String arch, Pageable page);
 
     @Query(

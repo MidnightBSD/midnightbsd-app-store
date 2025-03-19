@@ -4,9 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.midnightbsd.appstore.model.OperatingSystem;
 import org.midnightbsd.appstore.repository.OperatingSystemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,7 +15,6 @@ import java.util.List;
  * @author Lucas Holt
  */
 @Transactional(readOnly = true)
-@CacheConfig(cacheNames = "os")
 @Slf4j
 @Service
 public class OperatingSystemService implements AppService<OperatingSystem> {
@@ -29,7 +25,6 @@ public class OperatingSystemService implements AppService<OperatingSystem> {
         this.repository = repository;
     }
 
-    @Cacheable(key = "'osList'", unless = "#result == null")
     public List<OperatingSystem> list() {
         return repository.findAllByOrderByVersionAsc();
     }
@@ -38,7 +33,6 @@ public class OperatingSystemService implements AppService<OperatingSystem> {
         return repository.findAll(page);
     }
 
-    @Cacheable(unless = "#result == null", key = "#id.toString()")
     public OperatingSystem get(final int id) {
         return repository.findById(id).orElse(null);
     }
@@ -48,7 +42,6 @@ public class OperatingSystemService implements AppService<OperatingSystem> {
     }
 
     @Transactional
-    @CacheEvict(allEntries = true)
     public OperatingSystem save(OperatingSystem operatingSystem) {
         OperatingSystem existing = repository.findById(operatingSystem.getId()).orElse(null);
         if (existing == null) {
@@ -61,7 +54,6 @@ public class OperatingSystemService implements AppService<OperatingSystem> {
     }
 
     @Transactional
-    @CacheEvict(allEntries = true)
     public OperatingSystem createIfNotExists(final String name, final String version) {
         final OperatingSystem os =  getByNameAndVersion(name, version);
         if (os != null)

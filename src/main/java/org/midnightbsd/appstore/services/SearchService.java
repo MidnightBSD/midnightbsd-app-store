@@ -40,7 +40,6 @@ public class SearchService {
         this.packageRepository = packageRepository;
     }
 
-    // @Cacheable(key="#p0.concat('-').concat(#p1.getPageNumber())", value = "search")
     public Page<PackageItem> find(String term, Pageable page) {
         return packageSearchRepository.findByNameContainsOrDescriptionContainsAllIgnoreCase(term, term, page);
     }

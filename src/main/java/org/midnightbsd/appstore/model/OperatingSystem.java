@@ -7,7 +7,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -23,6 +25,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class OperatingSystem implements Serializable {
 
+    @Serial
     @JsonIgnore
     private static final long serialVersionUID = 7457280665276450257L;
 

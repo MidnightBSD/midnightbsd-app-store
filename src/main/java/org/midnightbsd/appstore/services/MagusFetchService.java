@@ -1,10 +1,13 @@
 package org.midnightbsd.appstore.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.midnightbsd.appstore.model.magus.Port;
 import org.midnightbsd.appstore.model.magus.Run;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -44,7 +47,7 @@ public class MagusFetchService {
     /**
      * Synchronize with Magus, pull new package data
      */
-    @Scheduled(fixedDelay = ONE_DAY, initialDelay = DELAY_ONE_MINUTE)
+  //  @Scheduled(fixedDelay = ONE_DAY, initialDelay = DELAY_ONE_MINUTE)
     public void sync() {
         final List<Run> runs = getFilteredRuns();
         final HashMap<String, Run> osRunMap = new HashMap<>();
@@ -82,10 +85,31 @@ public class MagusFetchService {
 
 
     public List<Run> getRuns() {
-        log.info("Fetching Magus runs");
-        final Run[] runs = restTemplate.getForObject(magusBaseUrl + API_RUN_PATH, Run[].class);
-        assert runs != null;
-        return Arrays.asList(runs);
+        var url = magusBaseUrl + API_RUN_PATH;
+        log.info("Fetching Magus runs from {}", url);
+        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+
+        if (response.getStatusCode().is2xxSuccessful()) {
+            String body = response.getBody();
+            if (body != null && body.trim().startsWith("[")) {
+                // It's likely JSON, try to parse it
+                ObjectMapper mapper = new ObjectMapper();
+                try {
+                    Run[] runs = mapper.readValue(body, Run[].class);
+                    return Arrays.asList(runs);
+                } catch (JsonProcessingException e) {
+                    log.error("Error parsing JSON response", e);
+                    throw new RuntimeException("Error parsing JSON response", e);
+                }
+            } else {
+                // It's not JSON, log the response and throw an exception
+                log.error("Unexpected response format. Body: " + body);
+                throw new RuntimeException("Unexpected response format");
+            }
+        } else {
+            log.error("Error response from server. Status: " + response.getStatusCode().value());
+            throw new RuntimeException("Error response from server");
+        }
     }
 
     public List<Port> getPorts(final int runId, final String status) {

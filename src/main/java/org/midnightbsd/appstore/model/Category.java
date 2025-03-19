@@ -2,13 +2,17 @@ package org.midnightbsd.appstore.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
 
-import javax.persistence.*;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * @author Lucas Holt
@@ -17,10 +21,13 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Table(name="category")
-@JsonIgnoreProperties(ignoreUnknown = true)
-@Data
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Getter
+@Setter
+@ToString
 public class Category implements Serializable {
 
+    @Serial
     @JsonIgnore
     private static final long serialVersionUID = -8936929013241662432L;
     
@@ -43,4 +50,25 @@ public class Category implements Serializable {
     @Column(name = "created")
     @Temporal(value = TemporalType.DATE)
     private Date created = new Date();
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "categories")
+    @ToString.Exclude
+    private Set<Package> packages;
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        Category category = (Category) o;
+        return Objects.equals(getId(), category.getId());
+    }
+
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+    }
 }

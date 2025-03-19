@@ -33,7 +33,13 @@
                 <div>
                     <p ng-bind-html="pkg.description"></p>
                     <p ng-hide="pkg.url == null || pkg.url == ''"><a href="{{pkg.url}}">{{pkg.url}}</a></p>
-                    &nbsp; (<span ng-repeat="license in pkg.licenses">{{license.name}}</span>)
+                    <p>Categories: <span ng-repeat="category in pkg.categories">{{category.name}}<span
+                            ng-if="!$last">, </span></span>
+                    </p>
+                    <p>Licenses: <span ng-repeat="inst in pkg.instances">
+                    <span ng-repeat="license in pkg.licenses">{{license}}<span ng-if="!$last">, </span></span>
+                    </span>
+                    </p>
 
                     <div ng-repeat="inst in pkg.instances">
                         <b>{{inst.version}}</b> for os: {{inst.osVersion}} {{inst.architecture}}  cpe: {{inst.cpe}}

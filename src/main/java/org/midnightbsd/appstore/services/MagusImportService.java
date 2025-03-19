@@ -7,8 +7,6 @@ import org.midnightbsd.appstore.model.magus.Run;
 import org.midnightbsd.appstore.repository.PackageInstanceRepository;
 import org.midnightbsd.appstore.repository.PackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,9 +51,6 @@ public class MagusImportService {
     /**
      * Synchronize with Magus, pull new package data
      */
-    @CacheEvict(allEntries = true, cacheNames = {
-            "category", "license", "arch", "os", "pkg"
-    })
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void importRun(final Run run, final List<Port> ports) {
 

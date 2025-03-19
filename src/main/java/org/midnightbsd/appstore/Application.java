@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableScheduling
 @EnableAsync
 @EnableTransactionManagement
-@EnableJpaRepositories
+@EnableJpaRepositories(basePackages = "org.midnightbsd.appstore.repository")
 @SpringBootApplication
 public class Application {
     public static void main(final String[] args) {

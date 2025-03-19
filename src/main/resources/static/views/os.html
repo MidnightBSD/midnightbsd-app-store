@@ -7,7 +7,13 @@
                 <div>
                     <p ng-bind-html="pkg.description"></p>
                     <p ng-hide="pkg.url == null || pkg.url == ''"><a href="{{pkg.url}}">{{pkg.url}}</a></p>
-                    &nbsp; (<span ng-repeat="license in pkg.licenses">{{license.name}}</span>)
+                    <p>Categories: <span ng-repeat="category in pkg.categories">{{category.name}}<span
+                        ng-if="!$last">, </span></span>
+                    </p>
+                    <p>Licenses: <span ng-repeat="inst in pkg.instances">
+                    <span ng-repeat="license in inst.licenses">{{license.name}}<span ng-if="!$last">, </span></span>
+                    </span>
+                </p>
 
                     <p>Install by running command:<br>
                         <code>mport install {{pkg.name}}</code>

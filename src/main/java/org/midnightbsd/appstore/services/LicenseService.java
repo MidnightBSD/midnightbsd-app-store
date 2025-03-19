@@ -4,8 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.midnightbsd.appstore.model.License;
 import org.midnightbsd.appstore.repository.LicenseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -17,7 +15,6 @@ import java.util.List;
 /**
  * @author Lucas Holt
  */
-@CacheConfig(cacheNames = "license")
 @Transactional(readOnly = true)
 @Slf4j
 @Service
@@ -30,7 +27,6 @@ public class LicenseService implements AppService<License> {
         this.repository = repository;
     }
 
-    @Cacheable(key = "'licenseList'", unless = "#result == null")
     public List<License> list() {
         return repository.findAll(Sort.by(Sort.Direction.ASC, "name"));
     }
@@ -39,12 +35,10 @@ public class LicenseService implements AppService<License> {
         return repository.findAll(page);
     }
 
-    @Cacheable(unless = "#result == null", key = "#id.toString()")
     public License get(final int id) {
         return repository.findById(id).orElse(null);
     }
 
-    @Cacheable(unless = "#result == null", key = "#name")
     public License getByName(final String name) {
         return repository.findOneByName(name);
     }

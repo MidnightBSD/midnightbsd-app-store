@@ -3,7 +3,6 @@ package org.midnightbsd.appstore.ctl.api;
 import org.midnightbsd.appstore.model.search.PackageItem;
 import org.midnightbsd.appstore.services.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;

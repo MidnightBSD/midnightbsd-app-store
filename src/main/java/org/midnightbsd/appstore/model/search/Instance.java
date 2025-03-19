@@ -6,9 +6,9 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import javax.persistence.EntityListeners;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -53,7 +53,7 @@ public class PackageInstance implements Serializable {
     private Set<License> licenses;
 
     @JsonBackReference
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "package_id")
     private Package pkg;
 

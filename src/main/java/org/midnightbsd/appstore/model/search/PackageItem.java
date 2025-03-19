@@ -13,9 +13,9 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-import javax.persistence.EntityListeners;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;

@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -43,7 +43,7 @@ public class Package implements Serializable {
     @Column(name="url")
     private String url;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(name = "package_category_map", joinColumns = @JoinColumn(name = "package_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "category_id", referencedColumnName = "id"))
     private Set<Category> categories;
@@ -52,7 +52,7 @@ public class Package implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pkg", fetch = FetchType.LAZY)
     private Set<Rating> ratings;
 
-    @JsonManagedReference(value = "package-instance")
+    @JsonManagedReference
     @JsonProperty("instances")
     @OneToMany(cascade = { CascadeType.DETACH, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE}, mappedBy = "pkg", fetch = FetchType.EAGER)
     private Set<PackageInstance> instances;
