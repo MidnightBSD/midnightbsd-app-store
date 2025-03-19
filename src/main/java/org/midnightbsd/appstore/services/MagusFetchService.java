@@ -47,7 +47,7 @@ public class MagusFetchService {
     /**
      * Synchronize with Magus, pull new package data
      */
-  //  @Scheduled(fixedDelay = ONE_DAY, initialDelay = DELAY_ONE_MINUTE)
+    @Scheduled(fixedDelay = ONE_DAY, initialDelay = DELAY_ONE_MINUTE)
     public void sync() {
         final List<Run> runs = getFilteredRuns();
         final HashMap<String, Run> osRunMap = new HashMap<>();
