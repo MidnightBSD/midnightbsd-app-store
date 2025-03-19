@@ -3,9 +3,9 @@ package org.midnightbsd.appstore.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.midnightbsd.appstore.exception.MagusFetchException;
 import org.midnightbsd.appstore.model.magus.Port;
 import org.midnightbsd.appstore.model.magus.Run;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -16,7 +16,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Lucas Holt
@@ -62,7 +61,7 @@ public class MagusFetchService {
             osRunMap.put(os, run);
         }
 
-        log.info("Processing " + osRunMap.values().size() + " runs");
+        log.info("Processing " + osRunMap.size() + " runs");
 
         for (final Run run : osRunMap.values()) {
             final List<Port> ports = getPorts(run.getId(), MAGUS_STATUS_PASS);
@@ -99,16 +98,16 @@ public class MagusFetchService {
                     return Arrays.asList(runs);
                 } catch (JsonProcessingException e) {
                     log.error("Error parsing JSON response", e);
-                    throw new RuntimeException("Error parsing JSON response", e);
+                    throw new MagusFetchException("Error parsing JSON response", e);
                 }
             } else {
                 // It's not JSON, log the response and throw an exception
                 log.error("Unexpected response format. Body: " + body);
-                throw new RuntimeException("Unexpected response format");
+                throw new MagusFetchException("Unexpected response format");
             }
         } else {
             log.error("Error response from server. Status: " + response.getStatusCode().value());
-            throw new RuntimeException("Error response from server");
+            throw new MagusFetchException("Error response from server");
         }
     }
 
