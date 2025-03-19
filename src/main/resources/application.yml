@@ -3,9 +3,6 @@ spring:
     active: default
 ---
 spring:
-  profiles.default: default
----
-spring:
   config:
     activate:
       on-profile: default
