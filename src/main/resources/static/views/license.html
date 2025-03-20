@@ -18,7 +18,7 @@
             </p>
 
             <p>
-                <rating ng-model="ratings[pkg.name].average" max="max"
+                <uib-rating ng-model="ratings[pkg.name].average" max="max"
                         ng-click="addRating(pkg.name, ratings[pkg.name].average)" on-hover="hoveringOver(value)"
                         on-leave="overStar = null"></rating>
                 <span class="label"
@@ -33,7 +33,7 @@
 
 <div class="row">
     <div class="col-md-10 col-md-offset-1">
-        <pagination data-ng-change="load()"
+        <uib-pagination data-ng-change="load()"
                     total-items="totals"
                     items-per-page="pageSize"
                     data-ng-model="page"
