@@ -51,7 +51,7 @@ pipeline {
        stage('Sonarqube') {
             steps {
                 withSonarQubeEnv('sonarcloud') {
-                	sh 'mvn sonar:sonar -Dsonar.organization=laffer1-github'
+                	sh 'mvn sonar:sonar -Dsonar.organization=midnightbsd -Dsonar.projectKey=MidnightBSD_midnightbsd-app-store'
                 }
                 timeout(time: 10, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: true
