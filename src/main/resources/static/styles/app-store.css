@@ -1,3 +1,32 @@
+.app-navbar {
+    background: linear-gradient(180deg, #0a5fa2 0%, #033769 100%);
+    border-bottom: 1px solid #022241;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.5rem 1.25rem rgba(4, 70, 135, 0.18);
+}
+
+.app-navbar .navbar-brand,
+.app-navbar .nav-link {
+    color: #f7fbff;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+}
+
+.app-navbar .nav-link.active,
+.app-navbar .nav-link:hover,
+.app-navbar .nav-link:focus,
+.app-navbar .navbar-brand:hover,
+.app-navbar .navbar-brand:focus {
+    color: #ffffff;
+}
+
+.app-navbar .navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.app-navbar .navbar-toggler-icon {
+    --bs-navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.85%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
 .package-card {
     margin-bottom: 30px;
 }
@@ -14,12 +43,20 @@
     padding: 0 2px;
     color: #dd5600;
     text-decoration: none;
+    font-size: 1.5rem;
+    line-height: 1;
 }
 
 .package-rating .rating-star:focus,
 .package-rating .rating-star:hover {
     text-decoration: none;
     outline: none;
+    color: #c94e00;
+}
+
+.package-rating .rating-star-icon {
+    display: inline-block;
+    min-width: 1rem;
 }
 
 .package-rating .rating-percent {
@@ -33,4 +70,19 @@
 
 .page-header {
     margin-top: 10px;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.top-padding {
+    padding-top: 1.5rem;
+}
+
+code {
+    color: #a52a2a;
+}
+
+footer {
+    color: #495057;
 }

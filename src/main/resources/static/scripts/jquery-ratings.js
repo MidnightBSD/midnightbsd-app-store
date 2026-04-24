@@ -1,16 +1,16 @@
 (function ($) {
     'use strict';
 
-    var labelClasses = 'label-warning label-info label-success';
+    var labelClasses = 'text-bg-warning text-bg-info text-bg-success';
 
     function ratingClass(percent) {
         if (percent < 30) {
-            return 'label-warning';
+            return 'text-bg-warning';
         }
         if (percent < 70) {
-            return 'label-info';
+            return 'text-bg-info';
         }
-        return 'label-success';
+        return 'text-bg-success';
     }
 
     function render($widget, value) {
@@ -20,9 +20,8 @@
         $widget.find('.rating-star').each(function () {
             var $star = $(this);
             var starValue = Number($star.data('value'));
-            var $icon = $star.find('.glyphicon');
-            $icon.toggleClass('glyphicon-star', starValue <= rating);
-            $icon.toggleClass('glyphicon-star-empty', starValue > rating);
+            var $icon = $star.find('.rating-star-icon');
+            $icon.text(starValue <= rating ? '★' : '☆');
         });
 
         $widget.find('.rating-percent')
@@ -74,12 +73,12 @@
                 }).done(function () {
                     $widget.data('average', score);
                     render($widget, score);
-                    $message.text('Rating saved.').removeClass('hidden text-danger').addClass('text-success');
+                    $message.text('Rating saved.').removeClass('d-none text-danger').addClass('text-success');
                     trackRating(packageName);
                 }).fail(function () {
                     render($widget, Number($widget.data('average')) || 0);
                     $message.text('Unable to save rating. Please try again later.')
-                        .removeClass('hidden text-success')
+                        .removeClass('d-none text-success')
                         .addClass('text-danger');
                 });
             });

@@ -8,46 +8,50 @@
     <meta property="og:site_name" content="MidnightBSD App Store" />
     <meta name="viewport" content="width=device-width" />
     <meta http-equiv="content-language" content="en-us" />
-    <link rel="stylesheet" th:href="@{/styles/17.css}" />
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/dist/css/bootstrap.min.css}" />
     <link rel="stylesheet" th:href="@{/styles/app-store.css}" />
 </head>
 <body>
 <header th:fragment="header(activePage)">
-    <div class="container">
+    <div class="container py-3">
         <div id="header" class="row">
-            <div class="col-xs-12">
+            <div class="col-12">
                 <h1><a th:href="@{/}"><img src="https://www.midnightbsd.org/art/logo/MidnightBSDLogoText.png" alt="MidnightBSD" /></a></h1>
             </div>
         </div>
 
-        <nav class="navbar navbar-inverse">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <a class="navbar-brand" th:href="@{/}">App Store</a>
+        <nav class="navbar navbar-expand-md app-navbar">
+            <div class="container-fluid px-0">
+                <a class="navbar-brand" th:href="@{/}">App Store</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav"
+                        aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div id="main-nav" class="collapse navbar-collapse">
+                    <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${activePage == 'home'} ? ' active'" th:href="@{/}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${activePage == 'search'} ? ' active'" th:href="@{/search}">Search</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${activePage == 'privacy'} ? ' active'" th:href="@{/privacy}">Privacy</a>
+                        </li>
+                    </ul>
                 </div>
-                <ul class="nav navbar-nav">
-                    <li th:classappend="${activePage == 'home'} ? 'active'">
-                        <a th:href="@{/}">Home</a>
-                    </li>
-                    <li th:classappend="${activePage == 'search'} ? 'active'">
-                        <a th:href="@{/search}">Search</a>
-                    </li>
-                    <li th:classappend="${activePage == 'privacy'} ? 'active'">
-                        <a th:href="@{/privacy}">Privacy</a>
-                    </li>
-                </ul>
             </div>
         </nav>
     </div>
 </header>
 
 <div th:fragment="footer">
-    <div class="container">
-        <footer>
+    <div class="container py-4">
+        <footer class="border-top pt-3">
             <div id="footer" class="row">
-                <div class="col-xs-12">
-                    <p id="copyright">&#169; 2017-2025 Lucas Holt. All rights reserved.</p>
-                    <p>
+                <div class="col-12">
+                    <p id="copyright" class="mb-1">&#169; 2017-2025 Lucas Holt. All rights reserved.</p>
+                    <p class="mb-0">
                         <a th:href="@{/privacy}" title="Privacy Policy">Privacy</a> |
                         <a th:href="@{/search}" title="Search">Search</a>
                     </p>
@@ -59,7 +63,7 @@
 
 <div th:fragment="scripts">
     <script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
-    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/5.3.8/dist/js/bootstrap.bundle.min.js}"></script>
     <script th:src="@{/scripts/jquery-ratings.js}"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-F8W6E2ZCV2"></script>
     <script>

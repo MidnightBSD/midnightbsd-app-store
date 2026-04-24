@@ -8,13 +8,13 @@
                 class="btn btn-link rating-star"
                 th:each="star : ${#numbers.sequence(1, 5)}"
                 th:attr="data-value=${star},title=${'Rate ' + packageName + ' ' + star + ' out of 5'}">
-            <span class="glyphicon"
-                  th:classappend="${star <= rating} ? ' glyphicon-star' : ' glyphicon-star-empty'"></span>
+            <span class="rating-star-icon"
+                  th:text="${star <= rating} ? '★' : '☆'">☆</span>
         </button>
-        <span class="label rating-percent"
+        <span class="badge rating-percent"
               th:classappend="${@pageViewService.ratingClass(rating)}"
               th:text="${@pageViewService.ratingPercent(rating)} + '%'">0%</span>
-        <span class="rating-message hidden"></span>
+        <span class="rating-message d-none"></span>
     </div>
 </div>
 

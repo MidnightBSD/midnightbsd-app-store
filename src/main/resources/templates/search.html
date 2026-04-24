@@ -8,13 +8,13 @@
     <h2>Search</h2>
 
     <div class="row">
-        <div class="col-md-offset-1 col-md-5">
-            <form class="form-search form-inline" th:action="@{/search}" method="get">
-                <div class="form-group">
-                    <input type="text" id="term" name="term" class="form-control input-large" placeholder="Search" th:value="${term}" />
+        <div class="col-md-5 offset-md-1">
+            <form class="row g-2 align-items-center" th:action="@{/search}" method="get">
+                <div class="col-sm-8">
+                    <input type="text" id="term" name="term" class="form-control" placeholder="Search" th:value="${term}" />
                 </div>
 
-                <div class="form-group">
+                <div class="col-sm-auto">
                     <button id="btnSearch" class="btn btn-primary" type="submit">Search</button>
                 </div>
             </form>
@@ -22,7 +22,7 @@
     </div>
 
     <div class="row top-padding" th:if="${termTooShort}">
-        <div class="col-md-7 col-md-offset-1">
+        <div class="col-md-7 offset-md-1">
             <div class="alert alert-warning">
                 <b>Please enter at least 3 characters to search.</b>
             </div>
@@ -30,7 +30,7 @@
     </div>
 
     <div class="row top-padding" th:if="${!#strings.isEmpty(term) and !termTooShort and results.totalElements == 0}">
-        <div class="col-md-7 col-md-offset-1">
+        <div class="col-md-7 offset-md-1">
             <div class="alert alert-warning">
                 <b>Search returned 0 results.</b>
             </div>
@@ -38,29 +38,29 @@
     </div>
 
     <div class="row top-padding" th:if="${results.totalElements > 0}">
-        <div class="col-md-7 col-md-offset-1">
+        <div class="col-md-7 offset-md-1">
             <div th:each="pkg : ${results.content}"
                  th:replace="~{fragments/packages :: searchCard(${pkg}, ${ratings[pkg.name]})}"></div>
         </div>
     </div>
 
     <div class="row" th:if="${results.totalPages > 1}">
-        <div class="col-md-10 col-md-offset-1">
+        <div class="col-md-10 offset-md-1">
             <ul class="pagination pagination-sm">
-                <li th:classappend="${results.first} ? 'disabled'">
-                    <a th:if="${!results.first}"
+                <li class="page-item" th:classappend="${results.first} ? ' disabled'">
+                    <a class="page-link" th:if="${!results.first}"
                        th:href="@{/search(term=${term}, page=${results.number - 1}, size=${results.size})}">Previous</a>
-                    <span th:if="${results.first}">Previous</span>
+                    <span class="page-link" th:if="${results.first}">Previous</span>
                 </li>
-                <li th:each="pageNumber : ${#numbers.sequence(0, results.totalPages - 1)}"
-                    th:classappend="${pageNumber == results.number} ? 'active'">
-                    <a th:href="@{/search(term=${term}, page=${pageNumber}, size=${results.size})}"
+                <li class="page-item" th:each="pageNumber : ${#numbers.sequence(0, results.totalPages - 1)}"
+                    th:classappend="${pageNumber == results.number} ? ' active'">
+                    <a class="page-link" th:href="@{/search(term=${term}, page=${pageNumber}, size=${results.size})}"
                        th:text="${pageNumber + 1}">1</a>
                 </li>
-                <li th:classappend="${results.last} ? 'disabled'">
-                    <a th:if="${!results.last}"
+                <li class="page-item" th:classappend="${results.last} ? ' disabled'">
+                    <a class="page-link" th:if="${!results.last}"
                        th:href="@{/search(term=${term}, page=${results.number + 1}, size=${results.size})}">Next</a>
-                    <span th:if="${results.last}">Next</span>
+                    <span class="page-link" th:if="${results.last}">Next</span>
                 </li>
             </ul>
         </div>

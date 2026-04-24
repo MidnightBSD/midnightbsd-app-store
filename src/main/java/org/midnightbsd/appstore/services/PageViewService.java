@@ -59,12 +59,12 @@ public class PageViewService {
     public String ratingClass(final Integer rating) {
         final int percent = ratingPercent(rating);
         if (percent < 30) {
-            return "label-warning";
+            return "text-bg-warning";
         }
         if (percent < 70) {
-            return "label-info";
+            return "text-bg-info";
         }
-        return "label-success";
+        return "text-bg-success";
     }
 
     public List<PackageInstance> sortedInstances(final Set<PackageInstance> instances) {

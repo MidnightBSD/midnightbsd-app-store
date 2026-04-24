@@ -6,7 +6,7 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-xs-6 col-md-4">
+        <div class="col-12 col-md-4 mb-4">
             <h2>Find by Categories</h2>
             <ul>
                 <li th:each="category : ${categories}">
@@ -25,7 +25,7 @@
             </ul>
         </div>
 
-        <div class="col-xs-6 col-md-4">
+        <div class="col-12 col-md-4 mb-4">
             <h2>Find by License</h2>
             <ul>
                 <li th:each="license : ${licenses}">
@@ -34,19 +34,19 @@
             </ul>
         </div>
 
-        <div class="col-xs-6 col-md-4">
+        <div class="col-12 col-md-4 mb-4">
             <h2>About the App Store</h2>
             <p>The MidnightBSD app store helps you find software packages available for your OS version and architecture.</p>
 
             <h3>Search For Packages</h3>
-            <form th:action="@{/search}" method="get">
+            <form th:action="@{/search}" method="get" class="row g-2">
                 <fieldset>
-                    <p>
+                    <div class="col-12">
                         <input type="text" name="term" id="term" value="" class="form-control" />
-                    </p>
-                    <p>
+                    </div>
+                    <div class="col-12">
                         <button type="submit" class="btn btn-primary">Find</button>
-                    </p>
+                    </div>
                 </fieldset>
             </form>
 

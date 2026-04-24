@@ -6,7 +6,7 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-xs-12">
+        <div class="col-12">
             <div class="page-header">
                 <h2 th:text="${license.name} + ' packages'">License packages</h2>
                 <p th:if="${license.description != null}" th:text="${license.description}"></p>
@@ -24,20 +24,20 @@
 
             <nav th:if="${packages.totalPages > 1}">
                 <ul class="pagination pagination-sm">
-                    <li th:classappend="${packages.first} ? 'disabled'">
-                        <a th:if="${!packages.first}"
+                    <li class="page-item" th:classappend="${packages.first} ? ' disabled'">
+                        <a class="page-link" th:if="${!packages.first}"
                            th:href="@{/license/{license}(license=${license.name}, page=${packages.number - 1}, size=${packages.size})}">Previous</a>
-                        <span th:if="${packages.first}">Previous</span>
+                        <span class="page-link" th:if="${packages.first}">Previous</span>
                     </li>
-                    <li th:each="pageNumber : ${#numbers.sequence(0, packages.totalPages - 1)}"
-                        th:classappend="${pageNumber == packages.number} ? 'active'">
-                        <a th:href="@{/license/{license}(license=${license.name}, page=${pageNumber}, size=${packages.size})}"
+                    <li class="page-item" th:each="pageNumber : ${#numbers.sequence(0, packages.totalPages - 1)}"
+                        th:classappend="${pageNumber == packages.number} ? ' active'">
+                        <a class="page-link" th:href="@{/license/{license}(license=${license.name}, page=${pageNumber}, size=${packages.size})}"
                            th:text="${pageNumber + 1}">1</a>
                     </li>
-                    <li th:classappend="${packages.last} ? 'disabled'">
-                        <a th:if="${!packages.last}"
+                    <li class="page-item" th:classappend="${packages.last} ? ' disabled'">
+                        <a class="page-link" th:if="${!packages.last}"
                            th:href="@{/license/{license}(license=${license.name}, page=${packages.number + 1}, size=${packages.size})}">Next</a>
-                        <span th:if="${packages.last}">Next</span>
+                        <span class="page-link" th:if="${packages.last}">Next</span>
                     </li>
                 </ul>
             </nav>
