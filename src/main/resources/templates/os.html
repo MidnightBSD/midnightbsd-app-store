@@ -15,8 +15,9 @@
                 <b>No packages were found for this operating system and architecture.</b>
             </div>
 
-            <div th:each="pkg : ${packages.content}"
-                 th:replace="~{fragments/packages :: packageCard(${pkg}, ${ratings[pkg.name]})}"></div>
+            <th:block th:each="pkg : ${packages.content}">
+                <div th:replace="~{fragments/packages :: packageCard(${pkg}, ${ratings[pkg.name]})}"></div>
+            </th:block>
         </div>
     </div>
 

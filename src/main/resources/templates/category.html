@@ -16,8 +16,9 @@
                 <b>No packages are currently listed for this category.</b>
             </div>
 
-            <div th:each="pkg : ${packages}"
-                 th:replace="~{fragments/packages :: packageCard(${pkg}, ${ratings[pkg.name]})}"></div>
+            <th:block th:each="pkg : ${packages}">
+                <div th:replace="~{fragments/packages :: packageCard(${pkg}, ${ratings[pkg.name]})}"></div>
+            </th:block>
         </div>
     </div>
 </div>

@@ -39,8 +39,9 @@
 
     <div class="row top-padding" th:if="${results.totalElements > 0}">
         <div class="col-md-7 offset-md-1">
-            <div th:each="pkg : ${results.content}"
-                 th:replace="~{fragments/packages :: searchCard(${pkg}, ${ratings[pkg.name]})}"></div>
+            <th:block th:each="pkg : ${results.content}">
+                <div th:replace="~{fragments/packages :: searchCard(${pkg}, ${ratings[pkg.name]})}"></div>
+            </th:block>
         </div>
     </div>
 
