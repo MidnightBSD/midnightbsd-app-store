@@ -161,6 +161,24 @@ body {
     color: #ffffff;
 }
 
+.multi-column-list {
+    column-count: 3;
+    column-gap: 20px;
+    list-style-position: inside;
+}
+
+@media (max-width: 768px) {
+    .multi-column-list {
+        column-count: 2;
+    }
+}
+
+@media (max-width: 576px) {
+    .multi-column-list {
+        column-count: 1;
+    }
+}
+
 code {
     color: #a52a2a;
 }
