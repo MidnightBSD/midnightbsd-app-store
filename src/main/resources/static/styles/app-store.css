@@ -1,5 +1,9 @@
+body {
+    background-color: #fdfbf7; /* Off-white / vanilla color */
+}
+
 .app-navbar {
-    background: linear-gradient(180deg, #0a5fa2 0%, #033769 100%);
+    background-color: #033769; /* Flat background color instead of gradient */
     border-bottom: 1px solid #022241;
     border-radius: 0.5rem;
     box-shadow: 0 0.5rem 1.25rem rgba(4, 70, 135, 0.18);
@@ -9,6 +13,9 @@
 .app-navbar .nav-link {
     color: #f7fbff;
     text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+    font-weight: 600; /* Increased font weight */
+    padding-left: 1.25rem !important; /* Increased padding */
+    padding-right: 1.25rem !important; /* Increased padding */
 }
 
 .app-navbar .nav-link.active,
@@ -27,12 +34,34 @@
     --bs-navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.85%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 
+/* Optimization for max-width content container */
+.container.max-width-container {
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .package-card {
     margin-bottom: 30px;
+    background-color: #ffffff; /* Make card stand out against off-white background */
+    border: 1px solid #e9ecef; /* Thin border */
+    border-radius: 0.5rem;
+    padding: 1.5rem; /* Padding inside the card */
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.04); /* Subtle shadow */
 }
 
 .package-card h3 {
     margin-top: 0;
+    font-size: 1.5rem; /* Slightly larger */
+    font-weight: 700; /* Bolder font */
+}
+
+.package-card p {
+    color: #495057; /* Muted gray for description */
+}
+
+.package-card a {
+    color: #033769; /* Slightly darker link color */
 }
 
 .package-rating {

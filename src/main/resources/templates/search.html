@@ -4,25 +4,25 @@
 <body>
 <header th:replace="~{fragments/layout :: header('search')}"></header>
 
-<div class="container">
+<div class="container max-width-container">
     <h2>Search</h2>
 
     <div class="row">
-        <div class="col-md-5 offset-md-1">
+        <div class="col-md-10 offset-md-1">
             <form class="row g-2 align-items-center" th:action="@{/search}" method="get">
                 <div class="col-sm-8">
                     <input type="text" id="term" name="term" class="form-control" placeholder="Search" th:value="${term}" />
                 </div>
 
                 <div class="col-sm-auto">
-                    <button id="btnSearch" class="btn btn-primary" type="submit">Search</button>
+                    <button id="btnSearch" class="btn btn-primary" type="submit">Find</button>
                 </div>
             </form>
         </div>
     </div>
 
     <div class="row top-padding" th:if="${termTooShort}">
-        <div class="col-md-7 offset-md-1">
+        <div class="col-md-10 offset-md-1">
             <div class="alert alert-warning">
                 <b>Please enter at least 3 characters to search.</b>
             </div>
@@ -30,7 +30,7 @@
     </div>
 
     <div class="row top-padding" th:if="${!#strings.isEmpty(term) and !termTooShort and results.totalElements == 0}">
-        <div class="col-md-7 offset-md-1">
+        <div class="col-md-10 offset-md-1">
             <div class="alert alert-warning">
                 <b>Search returned 0 results.</b>
             </div>
@@ -38,7 +38,7 @@
     </div>
 
     <div class="row top-padding" th:if="${results.totalElements > 0}">
-        <div class="col-md-7 offset-md-1">
+        <div class="col-md-10 offset-md-1">
             <th:block th:each="pkg : ${results.content}">
                 <div th:replace="~{fragments/packages :: searchCard(${pkg}, ${ratings[pkg.name]})}"></div>
             </th:block>
