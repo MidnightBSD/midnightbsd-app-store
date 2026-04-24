@@ -18,12 +18,12 @@
             </p>
 
             <p>
-                <uib-rating ng-model="ratings[pkg.name].average" max="max"
-                        ng-click="addRating(pkg.name, ratings[pkg.name].average)" on-hover="hoveringOver(value)"
-                        on-leave="overStar = null"></uib-rating>
+                <span uib-rating ng-model="ratings[pkg.name].average" max="max" read-only="isReadonly"
+                              ng-click="addRating(pkg.name, ratings[pkg.name].average)" on-hover="hoveringOver(pkg.name, value)"
+                              on-leave="ratings[pkg.name].overStar = null" titles="['one','two','three', 'four', 'five']"></span>
                 <span class="label"
-                      ng-class="{'label-warning': percent<30, 'label-info': percent>=30 && percent<70, 'label-success': percent>=70}"
-                      ng-show="overStar && !isReadonly">{{percent}}%</span>
+                      ng-class="{'label-warning': percent<30, 'label-info': ratings[pkg.name].percent>=30 && ratings[pkg.name].percent<70, 'label-success': ratings[pkg.name].percent>=70}"
+                      ng-show="ratings[pkg.name].overStar && !isReadonly">{{ratings[pkg.name].percent}}%</span>
             </p>
         </div>
 

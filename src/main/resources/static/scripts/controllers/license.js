@@ -10,6 +10,10 @@ angular.module('wwwApp').controller('LicenseCtrl', ['$scope', '$routeParams', '$
         if (typeof $scope.page === 'undefined')
             $scope.page = 0;
 
+        $scope.hoveringOver = function(name, value) {
+            $scope.ratings[name].overStar = value;
+            $scope.ratings[name].percent = 100 * (value / $scope.max);
+        };
 
         $scope.addRating = function (name, score) {
             // eslint-disable-next-line no-console

@@ -5,6 +5,11 @@ angular.module('wwwApp').controller('CategoryCtrl', ['$scope', '$routeParams', '
         $scope.max = 5;
         $scope.ratings = {};
 
+        $scope.hoveringOver = function(name, value) {
+            $scope.ratings[name].overStar = value;
+            $scope.ratings[name].percent = 100 * (value / $scope.max);
+        };
+
         $scope.addRating = function (name, score) {
             // eslint-disable-next-line no-console
             console.log(JSON.stringify({

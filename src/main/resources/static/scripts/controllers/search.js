@@ -97,6 +97,11 @@ angular.module('wwwApp').controller('SearchCtrl', ['$scope', '$log', '$routePara
 				});
         };
 
+		$scope.hoveringOver = function(name, value) {
+			$scope.ratings[name].overStar = value;
+			$scope.ratings[name].percent = 100 * (value / $scope.max);
+		};
+
 		$scope.addRating = function (name, score) {
 			// eslint-disable-next-line no-console
 			console.log(JSON.stringify({
