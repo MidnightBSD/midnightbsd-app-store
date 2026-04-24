@@ -1,0 +1,51 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en-US">
+<head th:replace="~{fragments/layout :: head(${license.name})}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header('home')}"></header>
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="page-header">
+                <h2 th:text="${license.name} + ' packages'">License packages</h2>
+                <p th:if="${license.description != null}" th:text="${license.description}"></p>
+                <p th:if="${license.url != null and !#strings.isEmpty(license.url)}">
+                    <a th:href="${license.url}" th:text="${license.url}">License URL</a>
+                </p>
+            </div>
+
+            <div th:if="${packages.totalElements == 0}" class="alert alert-warning">
+                <b>No packages are currently listed for this license.</b>
+            </div>
+
+            <div th:each="pkg : ${packages.content}"
+                 th:replace="~{fragments/packages :: packageCard(${pkg}, ${ratings[pkg.name]})}"></div>
+
+            <nav th:if="${packages.totalPages > 1}">
+                <ul class="pagination pagination-sm">
+                    <li th:classappend="${packages.first} ? 'disabled'">
+                        <a th:if="${!packages.first}"
+                           th:href="@{/license/{license}(license=${license.name}, page=${packages.number - 1}, size=${packages.size})}">Previous</a>
+                        <span th:if="${packages.first}">Previous</span>
+                    </li>
+                    <li th:each="pageNumber : ${#numbers.sequence(0, packages.totalPages - 1)}"
+                        th:classappend="${pageNumber == packages.number} ? 'active'">
+                        <a th:href="@{/license/{license}(license=${license.name}, page=${pageNumber}, size=${packages.size})}"
+                           th:text="${pageNumber + 1}">1</a>
+                    </li>
+                    <li th:classappend="${packages.last} ? 'disabled'">
+                        <a th:if="${!packages.last}"
+                           th:href="@{/license/{license}(license=${license.name}, page=${packages.number + 1}, size=${packages.size})}">Next</a>
+                        <span th:if="${packages.last}">Next</span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+<div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en-US">
+<head th:replace="~{fragments/layout :: head(${category.name})}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header('home')}"></header>
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="page-header">
+                <h2 th:text="${category.name} + ' packages'">Category packages</h2>
+                <p th:if="${category.description != null}" th:text="${category.description}"></p>
+            </div>
+
+            <div th:if="${packages.isEmpty()}" class="alert alert-warning">
+                <b>No packages are currently listed for this category.</b>
+            </div>
+
+            <div th:each="pkg : ${packages}"
+                 th:replace="~{fragments/packages :: packageCard(${pkg}, ${ratings[pkg.name]})}"></div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+<div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+</html>

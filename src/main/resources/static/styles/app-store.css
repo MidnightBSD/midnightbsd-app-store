@@ -1,0 +1,36 @@
+.package-card {
+    margin-bottom: 30px;
+}
+
+.package-card h3 {
+    margin-top: 0;
+}
+
+.package-rating {
+    margin-top: 10px;
+}
+
+.package-rating .rating-star {
+    padding: 0 2px;
+    color: #dd5600;
+    text-decoration: none;
+}
+
+.package-rating .rating-star:focus,
+.package-rating .rating-star:hover {
+    text-decoration: none;
+    outline: none;
+}
+
+.package-rating .rating-percent {
+    margin-left: 8px;
+}
+
+.package-rating .rating-message {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.page-header {
+    margin-top: 10px;
+}

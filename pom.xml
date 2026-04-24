@@ -24,7 +24,6 @@
         <java-version>17</java-version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <flyway.version>9.16.3</flyway.version>
-        <angularjs.version>1.8.2</angularjs.version>
         <tomcat.version>10.1.50</tomcat.version>
         <logback.version>1.4.14</logback.version>
         <argLine>-Xmx786m</argLine>
@@ -49,43 +48,6 @@
             <groupId>org.webjars</groupId>
             <artifactId>jquery</artifactId>
             <version>3.7.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.webjars.bower</groupId>
-            <artifactId>angular</artifactId>
-            <version>${angularjs.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.webjars.bower</groupId>
-            <artifactId>angular-cookies</artifactId>
-            <version>${angularjs.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.webjars.bower</groupId>
-            <artifactId>angular-route</artifactId>
-            <version>${angularjs.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.webjars.bower</groupId>
-            <artifactId>angular-resource</artifactId>
-            <version>${angularjs.version}</version>
-        </dependency>
-        <dependency>
-             <groupId>org.webjars.bower</groupId>
-             <artifactId>angular-sanitize</artifactId>
-             <version>${angularjs.version}</version>
-         </dependency>
-
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>angular-ui-bootstrap</artifactId>
-            <version>1.3.3</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>webjars-locator-core</artifactId>
         </dependency>
 
         <!-- server stuff -->

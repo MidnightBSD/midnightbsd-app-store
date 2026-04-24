@@ -1,0 +1,74 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en-US">
+<body>
+<div th:fragment="rating(packageName, rating)">
+    <div class="package-rating"
+         th:attr="data-package-name=${packageName},data-average=${rating}">
+        <button type="button"
+                class="btn btn-link rating-star"
+                th:each="star : ${#numbers.sequence(1, 5)}"
+                th:attr="data-value=${star},title=${'Rate ' + packageName + ' ' + star + ' out of 5'}">
+            <span class="glyphicon"
+                  th:classappend="${star <= rating} ? ' glyphicon-star' : ' glyphicon-star-empty'"></span>
+        </button>
+        <span class="label rating-percent"
+              th:classappend="${@pageViewService.ratingClass(rating)}"
+              th:text="${@pageViewService.ratingPercent(rating)} + '%'">0%</span>
+        <span class="rating-message hidden"></span>
+    </div>
+</div>
+
+<div class="package-card" th:fragment="packageCard(pkg, rating)">
+    <h3 th:text="${pkg.name}">Package Name</h3>
+    <p th:if="${pkg.description != null}" th:utext="${pkg.description}"></p>
+    <p th:if="${pkg.url != null and !#strings.isEmpty(pkg.url)}">
+        <a th:href="${pkg.url}" th:text="${pkg.url}">Package URL</a>
+    </p>
+
+    <div th:each="inst : ${@pageViewService.sortedInstances(pkg.instances)}">
+        <b th:text="${inst.version}">1.0</b>
+        <span th:text="${' for ' + inst.operatingSystem.version + ' ' + inst.architecture.name}"> for 3.0 amd64</span>
+        <span>&nbsp;(</span>
+        <span th:each="license, licenseStat : ${@pageViewService.sortedLicenses(inst.licenses)}">
+            <span th:text="${license.name}">BSD</span><span th:if="${!licenseStat.last}">, </span>
+        </span>
+        <span>)</span>
+    </div>
+
+    <p>Install by running command:<br /><code th:text="${'mport install ' + pkg.name}">mport install package</code></p>
+    <div th:replace="~{fragments/packages :: rating(${pkg.name}, ${rating})}"></div>
+</div>
+
+<div class="package-card" th:fragment="searchCard(pkg, rating)">
+    <h3 th:text="${pkg.name}">Package Name</h3>
+    <p th:if="${pkg.description != null}" th:utext="${pkg.description}"></p>
+    <p th:if="${pkg.url != null and !#strings.isEmpty(pkg.url)}">
+        <a th:href="${pkg.url}" th:text="${pkg.url}">Package URL</a>
+    </p>
+
+    <p th:if="${pkg.categories != null and !pkg.categories.isEmpty()}">
+        Categories:
+        <span th:each="category, categoryStat : ${pkg.categories}">
+            <span th:text="${category.name}">Category</span><span th:if="${!categoryStat.last}">, </span>
+        </span>
+    </p>
+
+    <p th:if="${pkg.licenses != null and !pkg.licenses.isEmpty()}">
+        Licenses:
+        <span th:each="license, licenseStat : ${pkg.licenses}">
+            <span th:text="${license}">BSD</span><span th:if="${!licenseStat.last}">, </span>
+        </span>
+    </p>
+
+    <div th:each="inst : ${@pageViewService.sortedSearchInstances(pkg.instances)}">
+        <b th:text="${inst.version}">1.0</b>
+        <span th:text="${' for os: ' + inst.osVersion + ' ' + inst.architecture}"> for os: 3.0 amd64</span>
+        <span th:if="${inst.cpe != null and !#strings.isEmpty(inst.cpe)}" th:text="${' cpe: ' + inst.cpe}"> cpe: value</span>
+        <span th:if="${inst.flavor != null and !#strings.isEmpty(inst.flavor)}" th:text="${' flavor: ' + inst.flavor}"> flavor: default</span>
+    </div>
+
+    <p>Install by running command:<br /><code th:text="${'mport install ' + pkg.name}">mport install package</code></p>
+    <div th:replace="~{fragments/packages :: rating(${pkg.name}, ${rating})}"></div>
+</div>
+</body>
+</html>
