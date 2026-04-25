@@ -62,7 +62,6 @@ public final class HomeController {
         model.addAttribute("categories", categoryService.list());
         model.addAttribute("operatingSystems", operatingSystemService.list());
         model.addAttribute("architectures", architectureService.list());
-        model.addAttribute("licenses", licenseService.list());
         return "index";
     }
 
@@ -78,6 +77,12 @@ public final class HomeController {
         model.addAttribute("packages", packages);
         model.addAttribute("ratings", pageViewService.loadPackageRatings(pageViewService.packageNames(packages)));
         return "category";
+    }
+
+    @GetMapping("/licenses")
+    public String licenses(final Model model) {
+        model.addAttribute("licenses", licenseService.list());
+        return "licenses";
     }
 
     @GetMapping("/license/{license}")

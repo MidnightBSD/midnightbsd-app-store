@@ -74,7 +74,6 @@ class HomeControllerTest {
         when(categoryService.list()).thenReturn(Collections.singletonList(new Category()));
         when(operatingSystemService.list()).thenReturn(Collections.emptyList());
         when(architectureService.list()).thenReturn(Collections.singletonList(new Architecture()));
-        when(licenseService.list()).thenReturn(Collections.singletonList(new License()));
 
         final ExtendedModelMap model = new ExtendedModelMap();
         final String view = controller.home(model);
@@ -83,6 +82,17 @@ class HomeControllerTest {
         assertTrue(model.containsAttribute("categories"));
         assertTrue(model.containsAttribute("operatingSystems"));
         assertTrue(model.containsAttribute("architectures"));
+        assertFalse(model.containsAttribute("licenses"));
+    }
+
+    @Test
+    void licensesLoadsListsIntoModel() {
+        when(licenseService.list()).thenReturn(Collections.singletonList(new License()));
+
+        final ExtendedModelMap model = new ExtendedModelMap();
+        final String view = controller.licenses(model);
+
+        assertEquals("licenses", view);
         assertTrue(model.containsAttribute("licenses"));
     }
 

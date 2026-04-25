@@ -50,9 +50,9 @@
     </div>
 
     <div class="row">
-        <div class="col-12 col-md-6 mb-4">
+        <div class="col-12 col-md-12 mb-4">
             <h2>Find by OS</h2>
-            <ul class="multi-column-list" style="column-count: 2;">
+            <ul class="multi-column-list" style="column-count: 3;">
                 <li th:each="os : ${operatingSystems}">
                     <span th:text="${os.version}">3.0</span>
                     <span th:each="arch : ${architectures}">
@@ -61,14 +61,11 @@
                 </li>
             </ul>
         </div>
+    </div>
 
-        <div class="col-12 col-md-6 mb-4">
-            <h2>Find by License</h2>
-            <ul class="multi-column-list" style="column-count: 2;">
-                <li th:each="license : ${licenses}">
-                    <a th:href="@{/license/{license}(license=${license.name})}" th:text="${license.name}">BSD</a>
-                </li>
-            </ul>
+    <div class="row border-top pt-4 text-center">
+        <div class="col-12">
+            <p>Looking for software by its open source license? <a th:href="@{/licenses}">Browse our full list of licenses</a>.</p>
         </div>
     </div>
 </div>
