@@ -1,0 +1,23 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en-US">
+<head th:replace="~{fragments/layout :: head('Licenses')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header('home')}"></header>
+
+<div class="container max-width-container">
+    <div class="row top-padding mb-4">
+        <div class="col-12 col-md-12">
+            <h2>Find by License</h2>
+            <ul class="multi-column-list">
+                <li th:each="license : ${licenses}">
+                    <a th:href="@{/license/{license}(license=${license.name})}" th:text="${license.name}">BSD</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+<div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+</html>

@@ -1,14 +1,7 @@
 {
   "name": "appstore",
-  "version": "1.8.1",
+  "version": "1.8.3",
   "dependencies": {
-    "angular": "1.8.2",
-    "angular-resource": "1.8.2",
-    "angular-route": "1.8.2",
-    "angular-cookies": "1.8.2",
-    "angular-sanitize": "1.8.2",
-    "angular-ui-bootstrap": "0.12.1",
-    "angular-bootstrap": "0.4.0",
     "jquery": "3.7.1"
   },
   "homepage": "https://github.com/laffer1/midnightbsd-app-store",

@@ -1,100 +1,76 @@
 <!doctype html>
-<html class="no-js" ng-app="wwwApp" xmlns:th="http://www.thymeleaf.org" lang="en-US">
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <title>MidnightBSD App Store</title>
-    <meta name="description" content="Find applications for the MidnightBSD operating system." />
-    <meta property="og:site_name" content="MidnightBSD App Store" />
-    <meta name="viewport" content="width=device-width" />
-    <meta http-equiv="content-language" content="en-us" />
-    <link rel="stylesheet" href="static/styles/17.css" th:href="@{static/styles/17.css}" />
-</head>
+<html xmlns:th="http://www.thymeleaf.org" lang="en-US">
+<head th:replace="~{fragments/layout :: head('Home')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header('home')}"></header>
 
-<body data-ng-controller="wwwAppCtrl">
+<div class="container max-width-container">
+    <div class="row top-padding border-bottom pb-4 mb-4">
+        <div class="col-12 col-md-12">
+            <h2>About the App Store</h2>
+            <p>The MidnightBSD app store helps you find software packages available for your OS version and architecture.</p>
 
-<!-- Header: Begin -->
-<header>
-    <div class="container">
-    <div id="header" class="row">
-        <div class="col-xs-12">
-        <h1><a href="#!/"><img src="https://www.midnightbsd.org/art/logo/MidnightBSDLogoText.png" alt="MidnightBSD" /></a></h1>
+            <div class="row mt-4">
+                <div class="col-12 col-md-6">
+                    <h3>Search For Packages</h3>
+                    <form th:action="@{/search}" method="get" class="row g-2">
+                        <fieldset>
+                            <div class="col-12 mb-2">
+                                <input type="text" name="term" id="term" value="" class="form-control" placeholder="Package name or keyword" />
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">Find</button>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+
+                <div class="col-12 col-md-6 mt-4 mt-md-0">
+                    <h3>Installing Packages</h3>
+                    <p>MidnightBSD software packages can be installed using the <a href="http://linuxconfig.net/manual-howto/how-to-mport-the-midnightbsd-package-management-tools.html">mport</a> CLI tool or the <a href="https://github.com/MidnightBSD/mport-manager">mport manager</a>, a graphical package manager.</p>
+                    <p>mport manager can be installed using <code>mport install mport-manager</code></p>
+                    <p>
+                        <img src="https://www.midnightbsd.org/images/mport_pkg_mgr/available.png"
+                             alt="mport manager screenshot" style="max-width: 100%; height: auto;" />
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
 
-    <nav class="navbar navbar-inverse">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="#!/">App Store</a>
+    <div class="row">
+        <div class="col-12 col-md-12 mb-4">
+            <h2>Find by Categories</h2>
+            <ul class="multi-column-list">
+                <li th:each="category : ${categories}">
+                    <a th:href="@{/category/{id}(id=${category.id})}" th:text="${category.name}">Category</a>
+                </li>
+            </ul>
         </div>
-        <ul class="nav navbar-nav">
-          <li class="active"><a href="#!/">Home</a></li>
-          <li><a href="#!/search">Search</a></li>
-        </ul>
-      </div>
-    </nav>
     </div>
-</header>
-<!-- Header: End -->
 
-<!-- Add your site or application content here -->
-<div class="container" data-ng-view=""></div>
+    <div class="row">
+        <div class="col-12 col-md-12 mb-4">
+            <h2>Find by OS</h2>
+            <ul class="multi-column-list" style="column-count: 3;">
+                <li th:each="os : ${operatingSystems}">
+                    <span th:text="${os.version}">3.0</span>
+                    <span th:each="arch : ${architectures}">
+                        <a th:href="@{/os/{os}/arch/{arch}(os=${os.version}, arch=${arch.name})}" th:text="${arch.name}">amd64</a>
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </div>
 
-<!-- Footer: Begin -->
-<div class="container">
-<footer>
-<div id="footer" class="row">
-    <div class="col-xs-12">
-    <p id="copyright">&#169; 2017-2025 Lucas Holt. All rights reserved.</p>
-
-    <p><a href="/#!/privacy" title="Privacy Policy">Privacy</a> |
-        <a href="/#!/search" title="Search">Search</a></p>
+    <div class="row border-top pt-4 text-center">
+        <div class="col-12">
+            <p>Looking for software by its open source license? <a th:href="@{/licenses}">Browse our full list of licenses</a>.</p>
+        </div>
     </div>
 </div>
-</footer>
-</div>
-<!-- Footer: End -->
 
-<script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
-
-<script th:src="@{/webjars/angular/1.8.2/angular.min.js}"></script>
-<script th:src="@{/webjars/angular-resource/1.8.2/angular-resource.min.js}"></script>
-<script th:src="@{/webjars/angular-route/1.8.2/angular-route.min.js}"></script>
-<script th:src="@{/webjars/angular-cookies/1.8.2/angular-cookies.min.js}"></script>
-<script th:src="@{/webjars/angular-sanitize/1.8.2/angular-sanitize.min.js}"></script>
-
-<script type="text/javascript" th:src="@{js/bootstrap.min.js}" src="static/js/bootstrap.min.js"></script>
-
-<script th:src="@{/webjars/angular-ui-bootstrap/1.3.3/ui-bootstrap-tpls.min.js}"></script>
-<script th:src="@{/webjars/angular-ui-bootstrap/1.3.3/ui-bootstrap.min.js}"></script>
-
-<!-- build:js scripts/scripts.js -->
-<script type="text/javascript" src="static/scripts/app.js" th:src="@{scripts/app.js}"></script>
-<script type="text/javascript" src="static/scripts/controllers/wwwApp.js" th:src="@{scripts/controllers/wwwApp.js}"></script>
-<script type="text/javascript" src="static/scripts/controllers/main.js" th:src="@{scripts/controllers/main.js}"></script>
-<script type="text/javascript" src="static/scripts/controllers/category.js" th:src="@{scripts/controllers/category.js}"></script>
-<script type="text/javascript" src="static/scripts/controllers/license.js" th:src="@{scripts/controllers/license.js}"></script>
-<script type="text/javascript" src="static/scripts/controllers/os.js" th:src="@{scripts/controllers/os.js}"></script>
-<script type="text/javascript" src="static/scripts/controllers/privacy.js" th:src="@{scripts/controllers/privacy.js}"></script>
-<script type="text/javascript" src="static/scripts/controllers/search.js" th:src="@{scripts/controllers/search.js}"></script>
-
-<script type="text/javascript" src="static/scripts/services/ArchitectureService.js" th:src="@{scripts/services/ArchitectureService.js}"></script>
-<script type="text/javascript" src="static/scripts/services/CategoryService.js" th:src="@{scripts/services/CategoryService.js}"></script>
-<script type="text/javascript" src="static/scripts/services/LicenseService.js" th:src="@{scripts/services/LicenseService.js}"></script>
-<script type="text/javascript" src="static/scripts/services/OperatingSystemService.js" th:src="@{scripts/services/OperatingSystemService.js}"></script>
-<script type="text/javascript" src="static/scripts/services/PackageService.js" th:src="@{scripts/services/PackageService.js}"></script>
-<script type="text/javascript" src="static/scripts/services/SearchService.js" th:src="@{scripts/services/SearchService.js}"></script>
-<!-- endbuild -->
-
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-F8W6E2ZCV2"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-F8W6E2ZCV2');
-</script>
-
+<div th:replace="~{fragments/layout :: footer}"></div>
+<div th:replace="~{fragments/layout :: scripts}"></div>
 </body>
 </html>

@@ -1,0 +1,50 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en-US">
+<head th:replace="~{fragments/layout :: head(${osVersion + ' ' + architecture.name})}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header('home')}"></header>
+
+<div class="container max-width-container">
+    <div class="row top-padding">
+        <div class="col-md-10 offset-md-1">
+            <div class="page-header">
+                <h2 th:text="${'Packages for ' + osVersion + ' ' + architecture.name}">Packages for OS</h2>
+            </div>
+
+            <div th:if="${packages.totalElements == 0}" class="alert alert-warning">
+                <b>No packages were found for this operating system and architecture.</b>
+            </div>
+
+            <th:block th:each="pkg : ${packages.content}">
+                <div th:replace="~{fragments/packages :: packageCard(${pkg}, ${ratings[pkg.name]})}"></div>
+            </th:block>
+        </div>
+    </div>
+
+    <div class="row" th:if="${packages.totalPages > 1}">
+        <div class="col-md-10 offset-md-1">
+            <ul class="pagination pagination-sm">
+                <li class="page-item" th:classappend="${packages.first} ? ' disabled'">
+                    <a class="page-link" th:if="${!packages.first}"
+                       th:href="@{/os/{os}/arch/{arch}(os=${osVersion}, arch=${architecture.name}, page=${packages.number - 1}, size=${packages.size})}">Previous</a>
+                    <span class="page-link" th:if="${packages.first}">Previous</span>
+                </li>
+                <li class="page-item" th:each="pageNumber : ${#numbers.sequence(0, packages.totalPages - 1)}"
+                    th:classappend="${pageNumber == packages.number} ? ' active'">
+                    <a class="page-link" th:href="@{/os/{os}/arch/{arch}(os=${osVersion}, arch=${architecture.name}, page=${pageNumber}, size=${packages.size})}"
+                       th:text="${pageNumber + 1}">1</a>
+                </li>
+                <li class="page-item" th:classappend="${packages.last} ? ' disabled'">
+                    <a class="page-link" th:if="${!packages.last}"
+                       th:href="@{/os/{os}/arch/{arch}(os=${osVersion}, arch=${architecture.name}, page=${packages.number + 1}, size=${packages.size})}">Next</a>
+                    <span class="page-link" th:if="${packages.last}">Next</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+<div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+</html>

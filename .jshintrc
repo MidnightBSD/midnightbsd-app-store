@@ -1,0 +1,13 @@
+{
+  "browser": true,
+  "jquery": true,
+  "esversion": 6,
+  "strict": true,
+  "undef": true,
+  "unused": true,
+  "eqeqeq": true,
+  "curly": true,
+  "globals": {
+    "window": false
+  }
+}

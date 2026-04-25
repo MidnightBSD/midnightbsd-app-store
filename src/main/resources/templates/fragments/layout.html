@@ -1,0 +1,77 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en-US">
+<head th:fragment="head(title)">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title th:text="${title} + ' | MidnightBSD App Store'">MidnightBSD App Store</title>
+    <meta name="description" content="Find applications for the MidnightBSD operating system." />
+    <meta property="og:site_name" content="MidnightBSD App Store" />
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="content-language" content="en-us" />
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/dist/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/styles/app-store.css}" />
+</head>
+<body>
+<header th:fragment="header(activePage)">
+    <div class="container py-3">
+        <div id="header" class="row">
+            <div class="col-12 text-center text-md-start">
+                <h1><a th:href="@{/}"><img src="/images/appstore.png" alt="MidnightBSD App Store" /></a></h1>
+            </div>
+        </div>
+
+        <nav class="navbar navbar-expand-md app-navbar mt-3">
+            <div class="container-fluid px-0">
+                <a class="navbar-brand d-md-none" th:href="@{/}">App Store</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav"
+                        aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div id="main-nav" class="collapse navbar-collapse justify-content-center justify-content-md-end">
+                    <ul class="navbar-nav mb-2 mb-md-0">
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${activePage == 'home'} ? ' active'" th:href="@{/}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${activePage == 'search'} ? ' active'" th:href="@{/search}">Search</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:classappend="${activePage == 'privacy'} ? ' active'" th:href="@{/privacy}">Privacy</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<div th:fragment="footer">
+    <div class="container py-4">
+        <footer class="border-top pt-3">
+            <div id="footer" class="row">
+                <div class="col-12 text-center text-md-start">
+                    <p id="copyright" class="mb-1">&#169; 2017-2026 Lucas Holt. All rights reserved.</p>
+                    <p class="mb-0">
+                        <a th:href="@{/privacy}" title="Privacy Policy">Privacy</a> |
+                        <a th:href="@{/search}" title="Search">Search</a>
+                    </p>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+
+<div th:fragment="scripts">
+    <script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/5.3.8/dist/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/scripts/jquery-ratings.js}"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-F8W6E2ZCV2"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-F8W6E2ZCV2');
+    </script>
+</div>
+</body>
+</html>
