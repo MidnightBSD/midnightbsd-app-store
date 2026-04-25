@@ -1,7 +1,7 @@
 (function ($) {
     'use strict';
 
-    var labelClasses = 'text-bg-warning text-bg-info text-bg-success';
+    const labelClasses = 'text-bg-warning text-bg-info text-bg-success';
 
     function ratingClass(percent) {
         if (percent < 30) {
@@ -14,13 +14,13 @@
     }
 
     function render($widget, value) {
-        var rating = Math.max(0, Math.min(5, value || 0));
-        var percent = rating * 20;
+        const rating = Math.max(0, Math.min(5, value || 0));
+        const percent = rating * 20;
 
         $widget.find('.rating-star').each(function () {
-            var $star = $(this);
-            var starValue = Number($star.data('value'));
-            var $icon = $star.find('.rating-star-icon');
+            const $star = $(this);
+            const starValue = Number($star.data('value'));
+            const $icon = $star.find('.rating-star-icon');
             $icon.text(starValue <= rating ? '★' : '☆');
         });
 
@@ -43,8 +43,8 @@
 
     $(function () {
         $('.package-rating').each(function () {
-            var $widget = $(this);
-            var average = Number($widget.data('average')) || 0;
+            const $widget = $(this);
+            const average = Number($widget.data('average')) || 0;
 
             render($widget, average);
 
@@ -57,10 +57,10 @@
             });
 
             $widget.on('click', '.rating-star', function () {
-                var score = Number($(this).data('value'));
-                var packageName = String($widget.data('package-name'));
-                var encodedPackageName = encodeURIComponent(packageName);
-                var $message = $widget.find('.rating-message');
+                const score = Number($(this).data('value'));
+                const packageName = String($widget.data('package-name'));
+                const encodedPackageName = encodeURIComponent(packageName);
+                const $message = $widget.find('.rating-message');
 
                 $.ajax({
                     url: '/api/package/name/' + encodedPackageName + '/rating',
