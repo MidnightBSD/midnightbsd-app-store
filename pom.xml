@@ -25,6 +25,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <flyway.version>11.7.2</flyway.version>
         <tomcat.version>10.1.55</tomcat.version>
+        <logback.version>1.5.38</logback.version>
         <argLine>-Xmx786m</argLine>
     </properties>
 
