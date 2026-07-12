@@ -26,6 +26,7 @@
         <flyway.version>11.7.2</flyway.version>
         <tomcat.version>10.1.55</tomcat.version>
         <logback.version>1.5.38</logback.version>
+        <log4j2.version>2.25.3</log4j2.version>
         <argLine>-Xmx786m</argLine>
     </properties>
 
