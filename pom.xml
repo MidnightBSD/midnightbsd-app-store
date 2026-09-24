@@ -26,6 +26,9 @@
         <flyway.version>11.8.1</flyway.version>
         <env>test</env>
         <tomcat.version>10.1.60</tomcat.version>
+        <!-- CVE-2026-40984 (HTTP server instrumentation DoS) and CVE-2026-40983;
+             both patched in 1.15.12. Boot 3.5.14 manages 1.15.11. -->
+        <micrometer.version>1.15.12</micrometer.version>
         <logback.version>1.5.38</logback.version>
         <log4j2.version>2.25.3</log4j2.version>
         <argLine>-Xmx786m</argLine>
