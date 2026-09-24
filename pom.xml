@@ -124,6 +124,17 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
+            <exclusions>
+                <!-- CVE-2026-82596: LatencyUtils 2.0.3 is the final release of an
+                     abandoned project, so there is no version to upgrade to. It is a
+                     runtime-scoped transitive of micrometer-core and is only loaded
+                     when a ClockDriftPauseDetector is configured; the default is
+                     NoPauseDetector and we never configure one. -->
+                <exclusion>
+                    <groupId>org.latencyutils</groupId>
+                    <artifactId>LatencyUtils</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
