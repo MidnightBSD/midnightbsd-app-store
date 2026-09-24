@@ -23,7 +23,7 @@
     <properties>
         <java-version>17</java-version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <flyway.version>11.8.0</flyway.version>
+        <flyway.version>11.8.1</flyway.version>
         <env>test</env>
         <tomcat.version>10.1.60</tomcat.version>
         <logback.version>1.5.38</logback.version>
