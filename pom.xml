@@ -29,6 +29,11 @@
         <!-- CVE-2026-40984 (HTTP server instrumentation DoS) and CVE-2026-40983;
              both patched in 1.15.12. Boot 3.5.14 manages 1.15.11. -->
         <micrometer.version>1.15.12</micrometer.version>
+        <!-- Latest 6.2.x. Clears 14 of the 27 open Spring Framework CVEs
+             (the CVE-2026-41839..41854 family). The other 13 list 6.2.0-6.2.19
+             as affected: no 6.2.x fix exists yet, only 7.0.9 (= Boot 4).
+             Boot 3.5.14 manages 6.2.18. -->
+        <spring-framework.version>6.2.19</spring-framework.version>
         <logback.version>1.5.38</logback.version>
         <log4j2.version>2.25.3</log4j2.version>
         <argLine>-Xmx786m</argLine>
