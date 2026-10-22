@@ -25,7 +25,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <flyway.version>11.8.1</flyway.version>
         <env>test</env>
-        <tomcat.version>10.1.60</tomcat.version>
+        <tomcat.version>10.1.61</tomcat.version>
         <!-- CVE-2026-45292: unbounded memory allocation in W3C baggage
              propagation. Patched in 1.62.0; Boot 3.5.16 manages 1.49.0.
              Arrives transitively via spring-boot-starter-data-elasticsearch. -->
@@ -215,7 +215,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.7.12</version>
+            <version>42.7.13</version>
         </dependency>
 
         <dependency>
